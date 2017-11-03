@@ -1,0 +1,14 @@
+{
+  "title": "Description tag should longer than 5 chars",
+  "type": "CODE_SMELL",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [
+    "convention",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Minor"
+}
