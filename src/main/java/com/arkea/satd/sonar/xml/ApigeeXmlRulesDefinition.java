@@ -62,7 +62,7 @@ public final class ApigeeXmlRulesDefinition implements RulesDefinition {
 
   @Nullable
   private static String readRuleDefinitionResource(String fileName) {
-    URL resource = ApigeeXmlRulesDefinition.class.getResource("/org/sonar/l10n/xml/rules/xml/" + fileName);
+    URL resource = ApigeeXmlRulesDefinition.class.getResource("/org/sonar/l10n/xml/rules/" + fileName);
     if (resource == null) {
       return null;
     }
