@@ -1,7 +1,5 @@
 /*
- * SonarQube XML Plugin
- * Copyright (C) 2010-2017 SonarSource SA
- * mailto:info AT sonarsource DOT com
+ * SonarQube Apigee XML Plugin
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -23,6 +21,7 @@ import static org.sonar.plugins.xml.compat.CompatibilityHelper.wrap;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.fs.FilePredicate;
@@ -37,9 +36,14 @@ import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.measures.FileLinesContextFactory;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.api.utils.Version;
+import org.sonar.api.utils.log.Logger;
+import org.sonar.api.utils.log.Loggers;
+import org.sonar.plugins.xml.XmlSensor;
 import org.sonar.plugins.xml.checks.AbstractXmlCheck;
+import org.sonar.plugins.xml.checks.ParsingErrorCheck;
 import org.sonar.plugins.xml.checks.XmlFile;
 import org.sonar.plugins.xml.checks.XmlIssue;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
@@ -55,12 +59,17 @@ import com.google.common.annotations.VisibleForTesting;
 
 /**
  * ApigeeXmlSensor provides analysis of xml files.
- *
  * @author Matthijs Galesloot
+ * @author Nicolas Tisserand
  */
 public class ApigeeXmlSensor implements Sensor {
 
   private static final Version V6_0 = Version.create(6, 0);
+
+  /**
+   * Use Sonar logger instead of SL4FJ logger, in order to be able to unit test the logs.
+   */
+  private static final Logger LOG = Loggers.get(ApigeeXmlSensor.class);
 
   private final Checks<Object> checks;
   private final FileSystem fileSystem;
@@ -164,7 +173,7 @@ public class ApigeeXmlSensor implements Sensor {
       }
     }
   }
-/*
+
   private Optional<RuleKey> getParsingErrorKey() {
     for (Object obj : checks.all()) {
       AbstractXmlCheck check = (AbstractXmlCheck) obj;
@@ -192,7 +201,7 @@ public class ApigeeXmlSensor implements Sensor {
         .at(primaryLocation)
         .save();
     }
-  }*/
+  }
 
   private static void processException(RuntimeException e, SensorContext context, CompatibleInputFile inputFile) {
     reportAnalysisError(e, context, inputFile);

@@ -1,7 +1,5 @@
 /*
- * SonarQube Python Plugin
- * Copyright (C) 2011-2017 SonarSource SA
- * mailto:info AT sonarsource DOT com
+ * SonarQube Apigee Python Plugin
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,22 +17,19 @@
  */
 package com.arkea.satd.sonar.python.checks;
 
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.check.Rule;
-import org.sonar.plugins.xml.XmlSensor;
 import org.sonar.python.PythonCheck;
 
 import com.sonar.sslr.api.AstNode;
 
+/**
+ * @author Nicolas Tisserand
+ */
 @Rule(key = "FileExistsCheck")
 public class FileExistsCheck extends PythonCheck {
 
 	@Override
 	public void visitFile(AstNode node) {
-	    Logger LOG = Loggers.get(XmlSensor.class);
-	    LOG.error("##########FileExistsCheck visitFile : " + node);
-		
 		addFileIssue("Avoid Python language");
 	}
 

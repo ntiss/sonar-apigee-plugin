@@ -1,6 +1,5 @@
 /*
  * SonarQube Apigee XML Plugin
- * @author Nicolas Tisserand
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -33,6 +32,7 @@ import com.arkea.satd.sonar.xml.checks.CheckRepository;
  * Default XML profile.
  * 
  * @author Matthijs Galesloot
+ * @author Nicolas Tisserand
  */
 public final class XmlSonarWayProfile extends ProfileDefinition {
 

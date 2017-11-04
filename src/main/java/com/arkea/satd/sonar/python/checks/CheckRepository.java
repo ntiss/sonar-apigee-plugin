@@ -1,7 +1,5 @@
 /*
- * SonarQube Python Plugin
- * Copyright (C) 2010-2017 SonarSource SA
- * mailto:info AT sonarsource DOT com
+ * SonarQube Apigee Python Plugin
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -25,23 +23,23 @@ import org.sonar.python.PythonCheck;
 
 import com.google.common.collect.ImmutableList;
 
+/**
+ * @author Nicolas Tisserand
+ */
 public class CheckRepository {
 
-	  public static final String REPOSITORY_KEY = "apigee-python";
-	  public static final String REPOSITORY_NAME = "Apigee Python";
-	
-	
-  private CheckRepository() {
-  }
+	public static final String REPOSITORY_KEY = "apigee-python";
+	public static final String REPOSITORY_NAME = "Apigee Python";
+
+	private CheckRepository() {
+	}
 
 	public static List<Class> getChecks() {
 		return ImmutableList.<Class>builder().addAll(getClassesChecks()).build();
 	}
-  
+
 	public static List<Class<? extends PythonCheck>> getClassesChecks() {
-		return ImmutableList.<Class<? extends PythonCheck>>builder()
-				.add(FileExistsCheck.class)
-				.build();
+		return ImmutableList.<Class<? extends PythonCheck>>builder().add(FileExistsCheck.class).build();
 	}
 
 }

@@ -1,7 +1,5 @@
 /*
- * SonarQube Python Plugin
- * Copyright (C) 2011-2017 SonarSource SA
- * mailto:info AT sonarsource DOT com
+ * SonarQube Apigee Python Plugin
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -35,12 +33,9 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.issue.NoSonarFilter;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.python.Python;
 import org.sonar.plugins.python.PythonHighlighter;
 import org.sonar.plugins.python.SonarQubePythonFile;
-import org.sonar.plugins.xml.XmlSensor;
 import org.sonar.python.IssueLocation;
 import org.sonar.python.PythonCheck;
 import org.sonar.python.PythonCheck.PreciseIssue;
@@ -55,122 +50,93 @@ import com.sonar.sslr.api.Grammar;
 import com.sonar.sslr.api.RecognitionException;
 import com.sonar.sslr.impl.Parser;
 
+/**
+ * @author Nicolas Tisserand
+ */
 public final class ApigeePythonSensor implements Sensor {
 
-  private final Checks<PythonCheck> checks;
-  private final FileLinesContextFactory fileLinesContextFactory;
-  private final NoSonarFilter noSonarFilter;
+	private final Checks<PythonCheck> checks;
+	private final FileLinesContextFactory fileLinesContextFactory;
+	private final NoSonarFilter noSonarFilter;
 
+	public ApigeePythonSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory,
+			NoSonarFilter noSonarFilter) {
+		this.checks = checkFactory.<PythonCheck>create(CheckRepository.REPOSITORY_KEY)
+				.addAnnotatedChecks((Iterable<?>) CheckRepository.getChecks());
+		this.fileLinesContextFactory = fileLinesContextFactory;
+		this.noSonarFilter = noSonarFilter;
+	}
 
-  public ApigeePythonSensor(FileLinesContextFactory fileLinesContextFactory, CheckFactory checkFactory, NoSonarFilter noSonarFilter) {
-    this.checks = checkFactory
-      .<PythonCheck>create(CheckRepository.REPOSITORY_KEY)
-      .addAnnotatedChecks((Iterable<?>) CheckRepository.getChecks());
-    this.fileLinesContextFactory = fileLinesContextFactory;
-    this.noSonarFilter = noSonarFilter;
-  }
+	@Override
+	public void describe(SensorDescriptor descriptor) {
+		descriptor.onlyOnLanguage(Python.KEY).name("Apigee Python Sensor").onlyOnFileType(Type.MAIN);
+	}
 
-  @Override
-  public void describe(SensorDescriptor descriptor) {
-    descriptor
-      .onlyOnLanguage(Python.KEY)
-      .name("Apigee Python Sensor")
-      .onlyOnFileType(Type.MAIN);
-  }
+	@Override
+	public void execute(SensorContext context) {
+		FilePredicates p = context.fileSystem().predicates();
+		List<InputFile> inputFiles = ImmutableList.copyOf(
+				context.fileSystem().inputFiles(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(Python.KEY))));
+		Parser<Grammar> parser = PythonParser.create(new PythonConfiguration(context.fileSystem().encoding()));
 
-  @Override
-  public void execute(SensorContext context) {
-    FilePredicates p = context.fileSystem().predicates();
-    List<InputFile> inputFiles = ImmutableList.copyOf(context.fileSystem().inputFiles(p.and(p.hasType(InputFile.Type.MAIN), p.hasLanguage(Python.KEY))));
-    Parser<Grammar> parser = PythonParser.create(new PythonConfiguration(context.fileSystem().encoding()));
-    
-    Logger LOG = Loggers.get(XmlSensor.class);
-    LOG.error("##########Sensor execute(SensorContext context) : " + inputFiles);
-    
-    for (InputFile inputFile : inputFiles) {
-    	
-        PythonFile pythonFile = SonarQubePythonFile.create(inputFile, context);
-        PythonVisitorContext visitorContext;
-        try {
-            visitorContext = new PythonVisitorContext(parser.parse(pythonFile.content()), pythonFile);
-          } catch (RecognitionException e) {
-            visitorContext = new PythonVisitorContext(pythonFile, e);
-          }
+		for (InputFile inputFile : inputFiles) {
 
-        LOG.error("##########Sensor execute visitorContext.rootTree() : " + visitorContext.rootTree());
+			PythonFile pythonFile = SonarQubePythonFile.create(inputFile, context);
+			PythonVisitorContext visitorContext;
+			try {
+				visitorContext = new PythonVisitorContext(parser.parse(pythonFile.content()), pythonFile);
+			} catch (RecognitionException e) {
+				visitorContext = new PythonVisitorContext(pythonFile, e);
+			}
 
-	    
-        
-        for (PythonCheck check : checks.all()) {
-            LOG.error("##########Sensor execute(SensorContext context)/check : " + check);
-        	
-          saveIssues(context, inputFile, check, check.scanFileForIssues(visitorContext));
-        }
+			for (PythonCheck check : checks.all()) {
 
-        new PythonHighlighter(context, inputFile).scanFile(visitorContext);    	
-    }
-  }
+				saveIssues(context, inputFile, check, check.scanFileForIssues(visitorContext));
+			}
 
-  private void saveIssues(SensorContext context, InputFile inputFile, PythonCheck check, List<PreciseIssue> issues) {
-	    RuleKey ruleKey = checks.ruleKey(check);
-	    
-	    Logger LOG = Loggers.get(XmlSensor.class);
-	    LOG.error("##########Sensor saveIssues : " + issues);
+			new PythonHighlighter(context, inputFile).scanFile(visitorContext);
+		}
+	}
 
-	    for (PreciseIssue preciseIssue : issues) {
+	private void saveIssues(SensorContext context, InputFile inputFile, PythonCheck check, List<PreciseIssue> issues) {
+		RuleKey ruleKey = checks.ruleKey(check);
 
-	      NewIssue newIssue = context
-	        .newIssue()
-	        .forRule(ruleKey);
+		for (PreciseIssue preciseIssue : issues) {
 
-	      Integer cost = preciseIssue.cost();
-	      if (cost != null) {
-	        newIssue.gap(cost.doubleValue());
-	      }
+			NewIssue newIssue = context.newIssue().forRule(ruleKey);
 
-	      newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
+			Integer cost = preciseIssue.cost();
+			if (cost != null) {
+				newIssue.gap(cost.doubleValue());
+			}
 
-	      for (IssueLocation secondaryLocation : preciseIssue.secondaryLocations()) {
-	        newIssue.addLocation(newLocation(inputFile, newIssue, secondaryLocation));
-	      }
+			newIssue.at(newLocation(inputFile, newIssue, preciseIssue.primaryLocation()));
 
-	      newIssue.save();
-	    }
-	  }
-  
-  
-  private static NewIssueLocation newLocation(InputFile inputFile, NewIssue issue, IssueLocation location) {
-	    NewIssueLocation newLocation = issue.newLocation()
-	      .on(inputFile);
-	    if (location.startLine() != IssueLocation.UNDEFINED_LINE) {
-	      TextRange range;
-	      if (location.startLineOffset() == IssueLocation.UNDEFINED_OFFSET) {
-	        range = inputFile.selectLine(location.startLine());
-	      } else {
-	        range = inputFile.newRange(location.startLine(), location.startLineOffset(), location.endLine(), location.endLineOffset());
-	      }
-	      newLocation.at(range);
-	    }
+			for (IssueLocation secondaryLocation : preciseIssue.secondaryLocations()) {
+				newIssue.addLocation(newLocation(inputFile, newIssue, secondaryLocation));
+			}
 
-	    if (location.message() != null) {
-	      newLocation.message(location.message());
-	    }
-	    return newLocation;
-	  }  
-  /*
-  private void runChecks(SensorContext context, PythonFile pythonFile) {
-	    XmlSourceCode sourceCode = new XmlSourceCode(pythonFile);
+			newIssue.save();
+		}
+	}
 
-	    // Do not execute any XML rule when an XML file is corrupted (SONARXML-13)
-	    if (sourceCode.parseSource()) {
-	      for (Object check : checks.all()) {
-	        ((AbstractXmlCheck) check).setRuleKey(checks.ruleKey(check));
-	        ((AbstractXmlCheck) check).validate(sourceCode);
-	      }
-	      saveIssue(context, sourceCode);
+	private static NewIssueLocation newLocation(InputFile inputFile, NewIssue issue, IssueLocation location) {
+		NewIssueLocation newLocation = issue.newLocation().on(inputFile);
+		if (location.startLine() != IssueLocation.UNDEFINED_LINE) {
+			TextRange range;
+			if (location.startLineOffset() == IssueLocation.UNDEFINED_OFFSET) {
+				range = inputFile.selectLine(location.startLine());
+			} else {
+				range = inputFile.newRange(location.startLine(), location.startLineOffset(), location.endLine(),
+						location.endLineOffset());
+			}
+			newLocation.at(range);
+		}
 
-	    }
-	  }
-  */
-  
+		if (location.message() != null) {
+			newLocation.message(location.message());
+		}
+		return newLocation;
+	}
+
 }

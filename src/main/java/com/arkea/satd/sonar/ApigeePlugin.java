@@ -1,6 +1,5 @@
 /*
  * SonarQube Apigee Plugin
- * @author Nicolas Tisserand
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -27,6 +26,12 @@ import com.arkea.satd.sonar.xml.ApigeeXmlRulesDefinition;
 import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
 import com.arkea.satd.sonar.xml.XmlSonarWayProfile;
 
+
+/**
+ * Main class for the plugin
+ * @author Nicolas Tisserand
+ *
+ */
 public class ApigeePlugin implements Plugin {
 
 	  public static final String SONAR_WAY_PROFILE_NAME = "Sonar way";
