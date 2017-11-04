@@ -17,7 +17,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.arkea.satd.sonar.xml;
+package com.arkea.satd.sonar.python;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,10 +29,10 @@ import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.plugins.xml.language.Xml;
+import org.sonar.plugins.python.Python;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
-import com.arkea.satd.sonar.xml.checks.CheckRepository;
+import com.arkea.satd.sonar.python.checks.CheckRepository;
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
 import com.google.gson.Gson;
@@ -40,17 +40,17 @@ import com.google.gson.Gson;
 /**
  * Repository for XML rules.
  */
-public final class ApigeeXmlRulesDefinition implements RulesDefinition {
+public final class ApigeePythonRulesDefinition implements RulesDefinition {
 
   private final Gson gson = new Gson();
 
   @Override
   public void define(Context context) {
     NewRepository repository = context
-      .createRepository(CheckRepository.REPOSITORY_KEY, Xml.KEY)
-      .setName(CheckRepository.REPOSITORY_NAME);
+    	      .createRepository(CheckRepository.REPOSITORY_KEY, Python.KEY)
+    	      .setName(CheckRepository.REPOSITORY_NAME);
 
-    new AnnotationBasedRulesDefinition(repository, Xml.KEY).addRuleClasses(false, CheckRepository.getChecks());
+    new AnnotationBasedRulesDefinition(repository, Python.KEY).addRuleClasses(false, CheckRepository.getChecks());
 
     for (NewRule rule : repository.rules()) {
       String metadataKey = rule.key();
@@ -65,7 +65,7 @@ public final class ApigeeXmlRulesDefinition implements RulesDefinition {
 
   @Nullable
   private static String readRuleDefinitionResource(String fileName) {
-    URL resource = ApigeeXmlRulesDefinition.class.getResource("/org/sonar/l10n/xml/rules/" + fileName);
+    URL resource = ApigeePythonRulesDefinition.class.getResource("/org/sonar/l10n/python/rules/" + fileName);
     if (resource == null) {
       return null;
     }

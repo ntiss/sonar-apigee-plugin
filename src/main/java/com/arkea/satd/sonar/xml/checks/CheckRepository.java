@@ -27,9 +27,8 @@ import com.google.common.collect.ImmutableList;
 
 public class CheckRepository {
 
-  public static final String REPOSITORY_KEY = "apigee";
-  public static final String REPOSITORY_NAME = "SonarApigeeAnalyzer";
-  public static final String SONAR_WAY_PROFILE_NAME = "Sonar way";
+  public static final String REPOSITORY_KEY = "apigee-xml";
+  public static final String REPOSITORY_NAME = "Apigee XML";
 
   private CheckRepository() {
   }

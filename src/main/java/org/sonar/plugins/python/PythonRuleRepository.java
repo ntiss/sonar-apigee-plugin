@@ -1,6 +1,6 @@
 /*
- * SonarQube XML Plugin
- * Copyright (C) 2010-2017 SonarSource SA
+ * SonarQube Python Plugin
+ * Copyright (C) 2011-2017 SonarSource SA
  * mailto:info AT sonarsource DOT com
  *
  * This program is free software; you can redistribute it and/or
@@ -17,66 +17,77 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.arkea.satd.sonar.xml;
+package org.sonar.plugins.python;
 
+import com.google.common.io.Resources;
+import com.google.gson.Gson;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
-
+import java.util.Set;
 import javax.annotation.Nullable;
-
 import org.sonar.api.rule.RuleStatus;
 import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
-import org.sonar.plugins.xml.language.Xml;
+import org.sonar.api.utils.Version;
+import org.sonar.python.checks.CheckList;
 import org.sonar.squidbridge.annotations.AnnotationBasedRulesDefinition;
 
-import com.arkea.satd.sonar.xml.checks.CheckRepository;
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
-import com.google.gson.Gson;
+public class PythonRuleRepository implements RulesDefinition {
 
-/**
- * Repository for XML rules.
- */
-public final class ApigeeXmlRulesDefinition implements RulesDefinition {
+  private static final String REPOSITORY_NAME = "SonarAnalyzer";
 
   private final Gson gson = new Gson();
+  private final Version sonarRuntimeVersion;
+
+  public PythonRuleRepository(Version sonarRuntimeVersion) {
+    this.sonarRuntimeVersion = sonarRuntimeVersion;
+  }
 
   @Override
   public void define(Context context) {
     NewRepository repository = context
-      .createRepository(CheckRepository.REPOSITORY_KEY, Xml.KEY)
-      .setName(CheckRepository.REPOSITORY_NAME);
+        .createRepository(CheckList.REPOSITORY_KEY, Python.KEY)
+        .setName(REPOSITORY_NAME);
 
-    new AnnotationBasedRulesDefinition(repository, Xml.KEY).addRuleClasses(false, CheckRepository.getChecks());
+    new AnnotationBasedRulesDefinition(repository, "py").addRuleClasses(false, CheckList.getChecks());
 
     for (NewRule rule : repository.rules()) {
-      String metadataKey = rule.key();
-      // Setting internal key is essential for rule templates (see SONAR-6162), and it is not done by AnnotationBasedRulesDefinition from sslr-squid-bridge version 2.5.1:
-      rule.setInternalKey(metadataKey);
-      rule.setHtmlDescription(readRuleDefinitionResource(metadataKey + ".html"));
-      addMetadata(rule, metadataKey);
+      addMetadata(rule, rule.key());
     }
+
+    setupDefaultActivatedRules(repository);
 
     repository.done();
   }
 
+  private void setupDefaultActivatedRules(NewRepository repository) {
+    boolean shouldSetupSonarLintProfile = sonarRuntimeVersion.isGreaterThanOrEqual(Version.parse("6.0"));
+    if (shouldSetupSonarLintProfile) {
+      Set<String> activatedRuleKeys = PythonProfile.activatedRuleKeys();
+      for (NewRule rule : repository.rules()) {
+        rule.setActivatedByDefault(activatedRuleKeys.contains(rule.key()));
+      }
+    }
+  }
+
   @Nullable
   private static String readRuleDefinitionResource(String fileName) {
-    URL resource = ApigeeXmlRulesDefinition.class.getResource("/org/sonar/l10n/xml/rules/" + fileName);
+    URL resource = PythonRuleRepository.class.getResource("/org/sonar/l10n/py/rules/python/" + fileName);
     if (resource == null) {
       return null;
     }
     try {
-      return Resources.toString(resource, Charsets.UTF_8);
+      return Resources.toString(resource, StandardCharsets.UTF_8);
     } catch (IOException e) {
-      throw new IllegalStateException("Failed to read " + resource, e);
+      throw new IllegalStateException("Failed to read: " + resource, e);
     }
   }
 
   private void addMetadata(NewRule rule, String metadataKey) {
+    rule.setHtmlDescription(readRuleDefinitionResource(metadataKey + ".html"));
     String json = readRuleDefinitionResource(metadataKey + ".json");
     if (json != null) {
       RuleMetadata metadata = gson.fromJson(json, RuleMetadata.class);
@@ -98,7 +109,9 @@ public final class ApigeeXmlRulesDefinition implements RulesDefinition {
     String title;
     String status;
     String type;
-    @Nullable Remediation remediation;
+    @Nullable
+    Remediation remediation;
+
     String[] tags;
     String defaultSeverity;
   }
@@ -120,5 +133,4 @@ public final class ApigeeXmlRulesDefinition implements RulesDefinition {
       return drf.linearWithOffset(linearFactor.replace("mn", "min"), linearOffset.replace("mn", "min"));
     }
   }
-
 }
