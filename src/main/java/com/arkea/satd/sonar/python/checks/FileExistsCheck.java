@@ -23,6 +23,8 @@ import org.sonar.python.PythonCheck;
 import com.sonar.sslr.api.AstNode;
 
 /**
+ * Avoid Python language
+ * Code : PY500
  * @author Nicolas Tisserand
  */
 @Rule(key = "FileExistsCheck")

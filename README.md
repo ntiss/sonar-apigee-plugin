@@ -29,6 +29,7 @@ Thus, you can also have the measures for theses languages.
 
 ## Why this plugin ?
  * because companies, like mine, prefer using a centralized platform like Sonar, instead of an standalone tool
+ * because SonarQube provides a lot of tools, measures, issue management, ... out-of-the-box
  * because I'm mainly a java developper 
  
 ## Why are there packages `org.sonar.plugins.xml.*` and `org.sonar.plugins.python.*` ?
@@ -41,5 +42,102 @@ I could have add dependencies to these artefacts in the pom.xml but in this case
 
 ## Implemented Rules
 
-Work in progress.
+The codes of the rules come from the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter). (Some rules won't be implemented in Sonar.)
+Other rules start from "500" to not interfer with the first rules. Example : PD500.
+
+**Legend :**
+>
+>:heavy_check_mark: : implemented
+>
+>:heavy_multiplication_x: : not yet implemented
+>
+>:x: : won't be implemented. See details in Description column 
+
+
+### Bundle level
+| Status | Code | Severity | Name | Description |
+|:------:| ---- | -------- | ---- | ----------- |
+|:heavy_multiplication_x:| BN001 | &nbsp; | Bundle folder structure correctness. | Bundles have a clear structure. |
+|:heavy_multiplication_x:| BN002 | &nbsp; | Extraneous files. | Ensure each folder contains approrpriate resources in the bundle. |
+|:heavy_multiplication_x:| BN003 | &nbsp; | Cache Coherence | A bundle that includes cache reads should include cache writes with the same keys. |
+|:heavy_multiplication_x:| BN004 | &nbsp; | Unused variables. | Within a bundle variables created should be used in conditions, resource callouts, or policies. |
+|:heavy_multiplication_x:| BN005 | &nbsp; | Unattached policies. | Unattached policies are dead code and should be removed from production bundles. |
+|:heavy_multiplication_x:| BN006 | &nbsp; | Bundle size - policies. | Large bundles are a symptom of poor design. A high number of policies is predictive of an oversized bundle. |
+|:heavy_multiplication_x:| BN007 | &nbsp; | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. |
+|:heavy_multiplication_x:| BN008 | &nbsp; | IgnoreUnresolvedVariables and FaultRules | Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors. |
+|:heavy_multiplication_x:| BN009 | &nbsp; | Statistics Collector - duplicate policies | Warn on duplicate policies when no conditions are present or conditions are duplicates. |
+
+### Proxy Definition level
+| Status | Code | Severity | Name | Description |
+|:------:| ---- | -------- | ---- | ----------- |
+|:heavy_multiplication_x:| PD002 | &nbsp; | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
+|:heavy_multiplication_x:| PD003 | &nbsp; | Unreachable Route Rules | RouteRule without a condition should be last. |
+|:heavy_check_mark:| PD500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
+
+### Target Definition level
+| Status | Code | Severity | Name | Description |
+|:------:| ---- | -------- | ---- | ----------- |
+|:heavy_multiplication_x:| TD001 | &nbsp; | Mgmt Server as Target | Discourage calls to the Management Server from a Proxy via target. |
+|:heavy_multiplication_x:| TD002 | &nbsp; | Use Target Servers | Encourage the use of target servers |
+|:heavy_check_mark:| TD500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
+
+### Flow level
+| Status | Code | Severity | Name | Description |
+|:------:| ---- | -------- | ---- | ----------- |
+|:heavy_multiplication_x:| FL001 | &nbsp; | Unconditional Flows | Only one unconditional flow will get executed. Error if more than one was detected. |
+|:heavy_check_mark:| FL500 | Critical | Default flow | A default flow should be defined to catch all requests on undefined resources. |
+
+### Step level
+| Status | Code | Severity | Name | Description |
+|:------:| ---- | -------- | ---- | ----------- |
+|:heavy_multiplication_x:| ST001 | &nbsp; | Empty Step | Empty steps clutter the bundle. |
+
+### Policy level
+| Status | Code | Severity | Name | Description |
+|:------:| ---- | -------- | ---- | ----------- |
+|:heavy_multiplication_x:| PO001 | &nbsp; | JSON Threat Protection | A check for a body element must be performed before policy execution. |
+|:heavy_multiplication_x:| PO002 | &nbsp; | XML Threat Protection | A check for a body element must be performed before policy execution. |
+|:heavy_multiplication_x:| PO003 | &nbsp; | Extract Variables with JSONPayload | A check for a body element must be performed before policy execution. |
+|:heavy_multiplication_x:| PO004 | &nbsp; | Extract Variables with XMLPayload | A check for a body element must be performed before policy execution. |
+|:heavy_multiplication_x:| PO005 | &nbsp; | Extract Variables with FormParam | A check for a body element must be performed before policy execution. |
+|:heavy_multiplication_x:| PO006 | &nbsp; | Policy Naming Conventions - default name | Policy names should not be default. |
+|:heavy_multiplication_x:| PO007 | &nbsp; | Policy Naming Conventions - type indication | It is recommended that the policy name include an indicator of the policy type. |
+|:heavy_multiplication_x:| PO008 | &nbsp; | Policy Name Attribute Conventions | It is recommended that the policy name attribute match the display name of the policy. |
+|:heavy_multiplication_x:| PO009 | &nbsp; | Service Callout Target - Mgmt Server | Targeting management server may result in higher than expected latency use with caution. |
+|:heavy_multiplication_x:| PO010 | &nbsp; | Service Callout Target - Target Server | Encourage use of target servers. |
+|:heavy_multiplication_x:| PO011 | &nbsp; | Service Callout Target - Dynamic URLs | Error on dynamic URLs in target server URL tag. |
+|:heavy_multiplication_x:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. |
+|:x:| PO013 | &nbsp; | Resource Call Out - Javascript | Analyzed by sonar-javascript-plugin. |
+|:x:| PO014 | &nbsp; | Resource Call Out - Java |  Analyzed by sonar-java-plugin. |
+|:x:| PO015 | &nbsp; | Resource Call Out - Python |  Analyzed by sonar-python-plugin. |
+|:heavy_multiplication_x:| PO016 | &nbsp; | Statistics Collector - duplicate variables | Warn on duplicate variables. |
+|:heavy_multiplication_x:| PO017 | &nbsp; | Misconfigured - FaultRules/Fault Rule in Policy | FaultRules are configured in ProxyEndpoints and TargetEndpoints. |
+|:heavy_multiplication_x:| PO018 | &nbsp; | Regex Lookahead/Lookbehind are Expensive - Threat Protection Policy | Regular expressions that include lookahead or lookbehind perform slowly on large payloads and are typically not required.|
+|:heavy_multiplication_x:| PO019 | &nbsp; | Reserved words as variables - ServiceCallout Request | Using "request" as the name of a Request may cause unexpected side effects.|
+|:heavy_multiplication_x:| PO020 | &nbsp; | Reserved words as variables - ServiceCallout Response | Using "response" as the name of a Response may cause unexpected side effects.|
+|:heavy_multiplication_x:| PO021 | &nbsp; | Statistics Collector - reserved variables | Warn on insertion of duplicate variables. |
+|:heavy_multiplication_x:| PO022 | &nbsp; | Nondistributed Quota | When using nondistributed quota the number of allowed calls is influenced by the number of Message Processors (MPs) deployed. This may lead to higher than expected transactions for a given quota as MPs now autoscale. |
+|:heavy_multiplication_x:| PO023 | &nbsp; | Quota Policy Reuse | When the same Quota policy is used more than once you must ensure that the conditions of execution are mutually exclusive or that you intend for a call to count more than once per message processed. |
+|:heavy_multiplication_x:| PO024 | &nbsp; | Cache Error Responses | By default the ResponseCache policy will cache non 200 responses. Either create a condition or use policy configuration options to exclude non 200 responses. |
+
+### FaultRules level
+| Status | Code | Severity | Name | Description |
+|:------:| ---- | -------- | ---- | ----------- |
+|:heavy_multiplication_x:| FR001 | &nbsp; | No Condition on FaultRule | It's not a best practice to have a FaultRule without an outer condition, which automatically makes the FaultRule true. |
+
+### Conditional level
+| Status | Code | Severity | Name | Description |
+|:------:| ---- | -------- | ---- | ----------- |
+|:heavy_multiplication_x:| CC001 | &nbsp; | Literals in Conditionals | Warn on literals in any conditional statement. |
+|:heavy_multiplication_x:| CC002 | &nbsp; | Null Blank Checks | Blank checks should also check for null conditions. (to be reviewed) |
+|:heavy_multiplication_x:| CC003 | &nbsp; | Long condition statement | Conditions should not be long. |
+|:heavy_multiplication_x:| CC004 | &nbsp; | Overly complex condition | Condition complexity should be limited to fix number of variables and conjunctions. |
+|:heavy_multiplication_x:| CC006 | &nbsp; | Detect logical absurdities | Conditions should not have internal logic conflicts - warn when these are detected. |
+
+### Python
+| Status | Code | Severity | Name | Description |
+|:------:| ---- | -------- | ---- | ----------- |
+|:heavy_check_mark:| PY500 | Major | Avoid Python language | Python scripts can introduce performance bottlenecks for simple executions, as it is interpreted at runtime. |
+
+
 

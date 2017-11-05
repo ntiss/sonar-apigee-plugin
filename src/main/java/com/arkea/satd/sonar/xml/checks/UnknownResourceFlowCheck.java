@@ -25,6 +25,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
+ * A default flow should be defined.
+ * Code : FL500
  * @author Nicolas Tisserand
  */
 @Rule(key = "UnknownResourceFlowCheck")

@@ -24,11 +24,14 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
+ * Definition : The Description tag should have more than 5 chars to be useful.
+ * Codes : PD500, TD500
  * @author Nicolas Tisserand
  */
 @Rule(key = "DescriptionCheck")
 public class DescriptionCheck extends AbstractXmlCheck {
 
+	private static int MIN_LENGTH = 5; 
 	
 	@Override
 	public void validate(XmlSourceCode xmlSourceCode) {
@@ -42,7 +45,7 @@ public class DescriptionCheck extends AbstractXmlCheck {
 	    	while(node!=null && !found) {
 	    		if("Description".equals(node.getNodeName())) {
 	    			String desc = node.getTextContent();
-	    			if(desc == null || desc.isEmpty() || desc.length() <= 5) {
+	    			if(desc == null || desc.isEmpty() || desc.length() <= MIN_LENGTH) {
 	    				createViolation(getWebSourceCode().getLineForNode(node), "Description is too short.");
 	    			}
 	    			
