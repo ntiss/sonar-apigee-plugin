@@ -31,7 +31,7 @@ Thus, you can also have the measures for theses languages.
  * because companies, like mine, prefer using a centralized platform like Sonar, instead of an standalone tool
  * because I'm mainly a java developper 
  
-## Why are there packages `org.sonar.xml.*` and `org.sonar.python.*` ?
+## Why are there packages `org.sonar.plugins.xml.*` and `org.sonar.plugins.python.*` ?
  * Because Sonar plugins are isolated in their own classloader ([See here](https://docs.sonarqube.org/pages/viewpage.action?pageId=5312387))
  * Because XML and Python plugin doesn't export any classes in a package `org.sonar.plugins.<plugin key>.api.*` 
  * Because it's not possible to add custom rules in Java (not XPath) in existing plugin ([according to this thread](https://groups.google.com/forum/#!searchin/sonarqube/plugin/sonarqube/A5xyZuHpZO0/fALCTY9hAQAJ))
