@@ -19,6 +19,10 @@ package com.arkea.satd.sonar;
 
 import org.sonar.api.Plugin;
 
+import com.arkea.satd.sonar.measures.ComputeSizeAverage;
+import com.arkea.satd.sonar.measures.ComputeSizeRating;
+import com.arkea.satd.sonar.measures.ExampleMetrics;
+import com.arkea.satd.sonar.measures.SetSizeOnFilesSensor;
 import com.arkea.satd.sonar.python.ApigeePythonRulesDefinition;
 import com.arkea.satd.sonar.python.ApigeePythonSensor;
 import com.arkea.satd.sonar.python.PythonSonarWayProfile;
@@ -48,7 +52,14 @@ public class ApigeePlugin implements Plugin {
 			//Python.class, // Already imported by sonar-python-plugin
 			ApigeePythonSensor.class,
 			ApigeePythonRulesDefinition.class,
-			PythonSonarWayProfile.class
+			PythonSonarWayProfile.class,
+			
+		    // Measures
+		    ExampleMetrics.class, 
+		    SetSizeOnFilesSensor.class, 
+		    ComputeSizeAverage.class, 
+		    ComputeSizeRating.class
+			
 		);
 	}
 
