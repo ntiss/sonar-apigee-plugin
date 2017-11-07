@@ -47,7 +47,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 
 **Legend :**
 >
->:heavy_check_mark: : implemented
+>:white_check_mark: : implemented
 >
 >:heavy_multiplication_x: : not yet implemented
 >
@@ -72,20 +72,20 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| PD002 | &nbsp; | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
 |:heavy_multiplication_x:| PD003 | &nbsp; | Unreachable Route Rules | RouteRule without a condition should be last. |
-|:heavy_check_mark:| PD500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
+|:white_check_mark:| PD500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
 
 ### Target Definition level
 | Status | Code | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| TD001 | &nbsp; | Mgmt Server as Target | Discourage calls to the Management Server from a Proxy via target. |
 |:heavy_multiplication_x:| TD002 | &nbsp; | Use Target Servers | Encourage the use of target servers |
-|:heavy_check_mark:| TD500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
+|:white_check_mark:| TD500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
 
 ### Flow level
 | Status | Code | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| FL001 | &nbsp; | Unconditional Flows | Only one unconditional flow will get executed. Error if more than one was detected. |
-|:heavy_check_mark:| FL500 | Critical | Default flow | A default flow should be defined to catch all requests on undefined resources. |
+|:white_check_mark:| FL500 | Critical | Default flow | A default flow should be defined to catch all requests on undefined resources. |
 
 ### Step level
 | Status | Code | Severity | Name | Description |
@@ -137,7 +137,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 ### Python
 | Status | Code | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
-|:heavy_check_mark:| PY500 | Major | Avoid Python language | Python scripts can introduce performance bottlenecks for simple executions, as it is interpreted at runtime. |
+|:white_check_mark:| PY500 | Major | Avoid Python language | Python scripts can introduce performance bottlenecks for simple executions, as it is interpreted at runtime. |
 
 
 
