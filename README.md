@@ -42,7 +42,7 @@ I could have add dependencies to these artefacts in the pom.xml but in this case
 
 ## Implemented Rules
 
-The codes of the rules come from the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter). (Some rules won't be implemented in Sonar.)
+The rule IDs come from the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter). (Some rules won't be implemented in Sonar.)
 Other rules start from "500" to not interfer with the first rules. Example : PD500.
 
 **Legend :**
@@ -55,7 +55,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 
 
 ### Bundle level
-| Status | Code | Severity | Name | Description |
+| Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| BN001 | &nbsp; | Bundle folder structure correctness. | Bundles have a clear structure. |
 |:heavy_multiplication_x:| BN002 | &nbsp; | Extraneous files. | Ensure each folder contains approrpriate resources in the bundle. |
@@ -66,34 +66,34 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| BN007 | &nbsp; | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. |
 |:heavy_multiplication_x:| BN008 | &nbsp; | IgnoreUnresolvedVariables and FaultRules | Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors. |
 |:heavy_multiplication_x:| BN009 | &nbsp; | Statistics Collector - duplicate policies | Warn on duplicate policies when no conditions are present or conditions are duplicates. |
+|:white_check_mark:| BN500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
 
 ### Proxy Definition level
-| Status | Code | Severity | Name | Description |
+| Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| PD002 | &nbsp; | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
 |:heavy_multiplication_x:| PD003 | &nbsp; | Unreachable Route Rules | RouteRule without a condition should be last. |
-|:white_check_mark:| PD500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
+
 
 ### Target Definition level
-| Status | Code | Severity | Name | Description |
+| Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| TD001 | &nbsp; | Mgmt Server as Target | Discourage calls to the Management Server from a Proxy via target. |
 |:heavy_multiplication_x:| TD002 | &nbsp; | Use Target Servers | Encourage the use of target servers |
-|:white_check_mark:| TD500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
 
 ### Flow level
-| Status | Code | Severity | Name | Description |
+| Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| FL001 | &nbsp; | Unconditional Flows | Only one unconditional flow will get executed. Error if more than one was detected. |
 |:white_check_mark:| FL500 | Critical | Default flow | A default flow should be defined to catch all requests on undefined resources. |
 
 ### Step level
-| Status | Code | Severity | Name | Description |
+| Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
-|:heavy_multiplication_x:| ST001 | &nbsp; | Empty Step | Empty steps clutter the bundle. |
+|:white_check_mark:| ST001 | &nbsp; | Empty Step | Empty steps clutter the bundle. |
 
 ### Policy level
-| Status | Code | Severity | Name | Description |
+| Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| PO001 | &nbsp; | JSON Threat Protection | A check for a body element must be performed before policy execution. |
 |:heavy_multiplication_x:| PO002 | &nbsp; | XML Threat Protection | A check for a body element must be performed before policy execution. |
@@ -121,12 +121,12 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| PO024 | &nbsp; | Cache Error Responses | By default the ResponseCache policy will cache non 200 responses. Either create a condition or use policy configuration options to exclude non 200 responses. |
 
 ### FaultRules level
-| Status | Code | Severity | Name | Description |
+| Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| FR001 | &nbsp; | No Condition on FaultRule | It's not a best practice to have a FaultRule without an outer condition, which automatically makes the FaultRule true. |
 
 ### Conditional level
-| Status | Code | Severity | Name | Description |
+| Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| CC001 | &nbsp; | Literals in Conditionals | Warn on literals in any conditional statement. |
 |:heavy_multiplication_x:| CC002 | &nbsp; | Null Blank Checks | Blank checks should also check for null conditions. (to be reviewed) |
@@ -135,7 +135,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| CC006 | &nbsp; | Detect logical absurdities | Conditions should not have internal logic conflicts - warn when these are detected. |
 
 ### Python
-| Status | Code | Severity | Name | Description |
+| Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:white_check_mark:| PY500 | Major | Avoid Python language | Python scripts can introduce performance bottlenecks for simple executions, as it is interpreted at runtime. |
 
