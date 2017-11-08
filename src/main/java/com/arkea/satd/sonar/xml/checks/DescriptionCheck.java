@@ -25,7 +25,7 @@ import org.w3c.dom.Node;
 
 /**
  * Definition : The Description tag should have more than 5 chars to be useful.
- * Codes : PD500, TD500
+ * Code : BN500
  * @author Nicolas Tisserand
  */
 @Rule(key = "DescriptionCheck")
