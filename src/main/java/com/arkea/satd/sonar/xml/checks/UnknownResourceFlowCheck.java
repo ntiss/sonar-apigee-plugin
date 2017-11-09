@@ -54,6 +54,7 @@ public class UnknownResourceFlowCheck extends AbstractXmlCheck {
 		    			int loop = 0;
 		    			while(!"Flow".equals(lastFlowNode.getNodeName()) && loop < flowsNode.getChildNodes().getLength()) {
 		    				lastFlowNode = lastFlowNode.getPreviousSibling();
+		    				loop++;
 		    			}
 		    		
 		    			// Search and test Condition value
