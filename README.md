@@ -84,7 +84,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 ### Flow level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
-|:heavy_multiplication_x:| FL001 | &nbsp; | Unconditional Flows | Only one unconditional flow will get executed. Error if more than one was detected. |
+|:white_check_mark:| FL001 | Critical | Unconditional Flows | Only one unconditional flow will get executed. Error if more than one was detected. |
 |:white_check_mark:| FL500 | Critical | Default flow | A default flow should be defined to catch all requests on undefined resources. |
 
 ### Step level
