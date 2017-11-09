@@ -40,47 +40,15 @@ public class CheckRepository {
   
 	public static List<Class<? extends AbstractXmlCheck>> getClassesChecks() {
 		return ImmutableList.<Class<? extends AbstractXmlCheck>>builder()
-				.add(UnknownResourceFlowCheck.class)
 				.add(DescriptionCheck.class)
+				.add(EmptyStepCheck.class)
+				.add(UnconditionalFlowCheck.class)
+				.add(UnknownResourceFlowCheck.class)
+				.add(UnreachableFlowCheck.class)
+				.add(UseTargetServersCheck.class)
 				.build();
 	}
 	
-  /*
-  
-  public static List<Class<? extends AbstractXmlCheck>> getChecks() {
-    return Arrays.asList(
-//      new IllegalTabCheck(),
-//      new IndentCheck(),
-//      new NewlineCheck(),
-//      new XmlSchemaCheck(),
-//      new CharBeforePrologCheck(),
-//      new ParsingErrorCheck(),
-		new UnknownResourceFlowCheck(),
-		new DescriptionCheck()
-      );
-  }
-/*
-	public static List<Class> getChecks() {
-		return ImmutableList.<Class>builder().addAll(getJavaChecks()).addAll(getJavaTestChecks()).build();
-	}
 
-	public static List<Class<? extends JavaCheck>> getJavaChecks() {
-		return ImmutableList.<Class<? extends JavaCheck>>builder()
-				.add(MyFirstCustomCheck.class)
-				.build();
-	}  
-  */
-  /*
-  public static List<Class> getCheckClasses() {
-	return ImmutableList.<AbstractXmlCheck>builder().addAll(getChecks()).build();
-    //return getChecks().stream().map(AbstractXmlCheck::getClass).collect(Collectors.toList());
-	  
-	  /*
-	List<Class> list = new ArrayList<Class>();
-	for(AbstractXmlCheck check : getChecks()) {
-		list.add(check.getClass());
-	}
-	return list;
-  }*/
 
 }

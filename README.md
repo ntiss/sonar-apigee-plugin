@@ -79,7 +79,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| TD001 | &nbsp; | Mgmt Server as Target | Discourage calls to the Management Server from a Proxy via target. |
-|:heavy_multiplication_x:| TD002 | &nbsp; | Use Target Servers | Encourage the use of target servers |
+|:white_check_mark:| TD002 | Major | Use Target Servers | Encourage the use of target servers |
 
 ### Flow level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
