@@ -1,0 +1,13 @@
+{
+  "title": "Flow without a condition should be last.",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "bug"
+  ],
+  "defaultSeverity": "Major"
+}
