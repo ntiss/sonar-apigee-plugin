@@ -139,5 +139,3 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:------:| ---- | -------- | ---- | ----------- |
 |:white_check_mark:| PY500 | Major | Avoid Python language | Python scripts can introduce performance bottlenecks for simple executions, as it is interpreted at runtime. |
 
-
-
