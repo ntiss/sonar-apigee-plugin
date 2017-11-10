@@ -9,6 +9,10 @@ All rules are not yet implemented ([see below](#implemented-rules))
 
 ## Usage
 
+### Dependencies
+To work, this plugin needs sonar-xml-plugin and sonar-python-plugin installed.
+Thus, you can also have the measures for theses languages.
+
 ### Build
 
     mvn clean install
@@ -23,9 +27,6 @@ Like any Sonar plugin :
 And :
  * activate all rules in the sonar way profile
  
-## Dependencies
-To work, this plugin needs sonar-xml-plugin and sonar-python-plugin installed.
-Thus, you can also have the measures for theses languages.
 
 ## Why this plugin ?
  * because companies, like mine, prefer using a centralized platform like Sonar, instead of an standalone tool
