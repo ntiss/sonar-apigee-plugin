@@ -92,7 +92,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 ### Step level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
-|:white_check_mark:| ST001 | &nbsp; | Empty Step | Empty steps clutter the bundle. |
+|:white_check_mark:| ST001 | &nbsp; | Empty Step | Empty steps clutter the bundle. (Should never happen, Apigee already blocks this error form occuring.) |
 
 ### Policy level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
