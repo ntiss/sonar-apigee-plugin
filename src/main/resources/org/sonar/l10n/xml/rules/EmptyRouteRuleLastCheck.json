@@ -1,0 +1,13 @@
+{
+  "title": "Unreachable Route Rules - empty conditions go last",
+  "type": "BUG",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "bug"
+  ],
+  "defaultSeverity": "Major"
+}

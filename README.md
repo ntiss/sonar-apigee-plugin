@@ -73,7 +73,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| PD002 | &nbsp; | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
-|:heavy_multiplication_x:| PD003 | &nbsp; | Unreachable Route Rules | RouteRule without a condition should be last. |
+|:white_check_mark:| PD003 | Major | Unreachable Route Rules | RouteRule without a condition should be last. |
 
 
 ### Target Definition level

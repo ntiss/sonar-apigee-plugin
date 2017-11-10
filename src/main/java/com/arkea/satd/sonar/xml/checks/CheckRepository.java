@@ -46,6 +46,7 @@ public class CheckRepository {
 				.add(UnknownResourceFlowCheck.class)
 				.add(UnreachableFlowCheck.class)
 				.add(UseTargetServersCheck.class)
+				.add(EmptyRouteRuleLastCheck.class)
 				.build();
 	}
 	
