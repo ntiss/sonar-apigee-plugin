@@ -41,12 +41,14 @@ public class CheckRepository {
 	public static List<Class<? extends AbstractXmlCheck>> getClassesChecks() {
 		return ImmutableList.<Class<? extends AbstractXmlCheck>>builder()
 				.add(DescriptionCheck.class)
+				.add(EmptyRouteRuleLastCheck.class)
 				.add(EmptyStepCheck.class)
+				.add(PolicyNameConventionCheck.class)
 				.add(UnconditionalFlowCheck.class)
 				.add(UnknownResourceFlowCheck.class)
 				.add(UnreachableFlowCheck.class)
 				.add(UseTargetServersCheck.class)
-				.add(EmptyRouteRuleLastCheck.class)
+				
 				.build();
 	}
 	

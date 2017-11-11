@@ -102,7 +102,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| PO003 | &nbsp; | Extract Variables with JSONPayload | A check for a body element must be performed before policy execution. |
 |:heavy_multiplication_x:| PO004 | &nbsp; | Extract Variables with XMLPayload | A check for a body element must be performed before policy execution. |
 |:heavy_multiplication_x:| PO005 | &nbsp; | Extract Variables with FormParam | A check for a body element must be performed before policy execution. |
-|:heavy_multiplication_x:| PO006 | &nbsp; | Policy Naming Conventions - default name | Policy names should not be default. |
+|:white_check_mark:| PO006 | Minor | Policy Naming Conventions - default name | Policy names should not be default. |
 |:heavy_multiplication_x:| PO007 | &nbsp; | Policy Naming Conventions - type indication | It is recommended that the policy name include an indicator of the policy type. |
 |:heavy_multiplication_x:| PO008 | &nbsp; | Policy Name Attribute Conventions | It is recommended that the policy name attribute match the display name of the policy. |
 |:heavy_multiplication_x:| PO009 | &nbsp; | Service Callout Target - Mgmt Server | Targeting management server may result in higher than expected latency use with caution. |

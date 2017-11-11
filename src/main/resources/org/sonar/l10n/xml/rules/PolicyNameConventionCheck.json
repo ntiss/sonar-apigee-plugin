@@ -1,0 +1,14 @@
+{
+  "title": "Policy Naming Conventions - type indication",
+  "type": "CODE_SMELL",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "convention",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Minor"
+}
