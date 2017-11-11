@@ -22,6 +22,7 @@ import org.sonar.plugins.xml.checks.AbstractXmlCheck;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Definition : The Description tag should have more than 5 chars to be useful.
@@ -39,19 +40,16 @@ public class DescriptionCheck extends AbstractXmlCheck {
 	    
 	    Document document = getWebSourceCode().getDocument(false);
 	    if (document.getDocumentElement() != null) {
-	    	Node node = document.getDocumentElement().getFirstChild();
     	
-	    	boolean found = false;
-	    	while(node!=null && !found) {
-	    		if("Description".equals(node.getNodeName())) {
-	    			String desc = node.getTextContent();
+	    	NodeList descriptionNodeList = document.getDocumentElement().getElementsByTagName("Description");
+	    	
+	    	if(descriptionNodeList!=null && descriptionNodeList.getLength() > 0) {
+	    		for(int i=0 ; i < descriptionNodeList.getLength(); i++) {
+	    	    	Node node = descriptionNodeList.item(i);
+	    	    	String desc = node.getTextContent();
 	    			if(desc == null || desc.isEmpty() || desc.length() <= MIN_LENGTH) {
 	    				createViolation(getWebSourceCode().getLineForNode(node), "Description is too short.");
 	    			}
-	    			
-	    			found = true;
-	    		} else {
-	    			node = node.getNextSibling();
 	    		}
 	    	}
 	    }
