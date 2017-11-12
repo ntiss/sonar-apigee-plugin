@@ -43,6 +43,7 @@ public class CheckRepository {
 				.add(DescriptionCheck.class)
 				.add(EmptyRouteRuleLastCheck.class)
 				.add(EmptyStepCheck.class)
+				.add(PolicyDisplayNameCheck.class)
 				.add(PolicyNameConventionCheck.class)
 				.add(UnconditionalFlowCheck.class)
 				.add(UnknownResourceFlowCheck.class)
