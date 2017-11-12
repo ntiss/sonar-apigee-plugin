@@ -2,14 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	
+
 	<groupId>com.arkea.satd.sonar.apigee</groupId>
 	<artifactId>sonar-apigee-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<name>sonar-apigee-plugin</name>
 	<packaging>sonar-plugin</packaging>
 	<description>Sonar Plugin for Apigee</description>
-
 	<inceptionYear>2017</inceptionYear>
 
 	<licenses>
@@ -20,6 +19,12 @@
 		</license>
 	</licenses>
 
+	<developers>
+		<developer>
+			<id>ntiss</id>
+			<name>Nicolas Tisserand</name>
+		</developer>
+	</developers>
 
 	<properties>
 		<license.title>SonarQube XML Plugin</license.title>
@@ -28,20 +33,16 @@
 		<java.plugin.version>4.7.1.9272</java.plugin.version>
 		<maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-		<gson.version>2.8.0</gson.version>
 		<sonar.version>6.2</sonar.version>
 		<sslr.version>1.21</sslr.version>
-		<sslr-squid-bridge.version>2.6.1</sslr-squid-bridge.version>
 
 		<!-- Release: enable publication to Bintray -->
 		<artifactsToPublish>${project.groupId}:sonar-apigee-plugin:jar</artifactsToPublish>
 
-		<commons-lang.version>2.6</commons-lang.version>
-		<commons-io.version>2.5</commons-io.version>
 	</properties>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>org.sonarsource.sonarqube</groupId>
 			<artifactId>sonar-plugin-api</artifactId>
@@ -49,66 +50,39 @@
 			<scope>provided</scope>
 		</dependency>
 
-
-	    <dependency>
-	      <groupId>org.sonarsource.python</groupId>
-	      <artifactId>python-squid</artifactId>
-	      <version>1.8.0.1496</version>
-	    </dependency>
-
-	    <dependency>
-	      <groupId>org.sonarsource.python</groupId>
-	      <artifactId>python-checks</artifactId>
-	      <version>1.8.0.1496</version>
-	    </dependency>
-
-
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.sonarsource.xml</groupId> -->
-<!-- 			<artifactId>sonar-xml-plugin</artifactId> -->
-<!-- 			<version>1.4.3.1027</version> -->
-<!--  			<scope>provided</scope> --> 
-<!-- 		</dependency>		 -->
+		<dependency>
+			<groupId>org.sonarsource.xml</groupId>
+			<artifactId>sonar-xml-plugin</artifactId>
+			<version>1.4.3.1027</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.sonarsource.java</groupId>
 			<artifactId>java-frontend</artifactId>
 			<version>${java.plugin.version}</version>
+			<scope>provided</scope>
 		</dependency>
-  
+
 		<dependency>
 			<groupId>com.google.guava</groupId>
 			<artifactId>guava</artifactId>
 			<version>10.0.1</version>
+			<scope>provided</scope>
 		</dependency>
-  
-      <dependency>
-        <groupId>commons-lang</groupId>
-        <artifactId>commons-lang</artifactId>
-        <version>${commons-lang.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-        <version>${commons-io.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>xalan</groupId>
-        <artifactId>xalan</artifactId>
-        <version>2.7.2</version>
-      </dependency>
-      <dependency>
-        <groupId>xerces</groupId>
-        <artifactId>xercesImpl</artifactId>
-        <version>2.8.1</version>
-      </dependency>
-      <dependency>
-        <groupId>com.google.code.gson</groupId>
-        <artifactId>gson</artifactId>
-        <version>${gson.version}</version>
-      </dependency>    
-    
-    
+
+		<dependency>
+			<groupId>org.sonarsource.python</groupId>
+			<artifactId>python-squid</artifactId>
+			<version>1.8.0.1496</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.sonarsource.python</groupId>
+			<artifactId>python-checks</artifactId>
+			<version>1.8.0.1496</version>
+		</dependency>
+
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.sonarsource.sslr-squid-bridge</groupId> -->
 <!-- 			<artifactId>sslr-squid-bridge</artifactId> -->
@@ -140,12 +114,19 @@
 
 		<!-- Test dependencies -->
 		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
 			<groupId>org.sonarsource.sslr</groupId>
 			<artifactId>sslr-testing-harness</artifactId>
 			<version>${sslr.version}</version>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.sonarsource.sonarqube</groupId>
 			<artifactId>sonar-testing-harness</artifactId>
@@ -161,16 +142,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.6.1</version>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-		    <groupId>org.assertj</groupId>
-		    <artifactId>assertj-core</artifactId>
-		    <version>3.6.1</version>
-			<scope>test</scope>		    
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -193,12 +168,14 @@
 					<pluginKey>apigee-custom</pluginKey>
 					<pluginName>SonarApigee</pluginName>
 					<pluginClass>com.arkea.satd.sonar.ApigeePlugin</pluginClass>
+					<pluginUrl>https://github.com/ntiss/sonar-apigee-plugin</pluginUrl>
+					<basePlugin>xml</basePlugin>
 					<skipDependenciesPackaging>false</skipDependenciesPackaging>
 					<sonarLintSupported>false</sonarLintSupported>
 					<sonarQubeMinVersion>${sonarQubeMinVersion}</sonarQubeMinVersion>
 				</configuration>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -209,7 +186,7 @@
 				</configuration>
 			</plugin>
 
-	
+
 		</plugins>
 	</build>
 

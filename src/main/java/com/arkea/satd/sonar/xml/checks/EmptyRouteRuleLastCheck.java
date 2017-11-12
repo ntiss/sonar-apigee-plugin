@@ -20,7 +20,6 @@ package com.arkea.satd.sonar.xml.checks;
 import com.arkea.satd.sonar.helpers.XMLHelper;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.xml.checks.AbstractXmlCheck;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -40,7 +39,7 @@ public class EmptyRouteRuleLastCheck extends AbstractXmlCheck {
 	public void validate(XmlSourceCode xmlSourceCode) {
 	    setWebSourceCode(xmlSourceCode);
 
-	    Document document = getWebSourceCode().getDocument(false);
+	    Document document = getDocument(false);
 	    if (document.getDocumentElement() != null) {
 	    	
 	    	// Search for last Flow of an ProxyEndpoint document
