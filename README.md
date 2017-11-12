@@ -33,13 +33,12 @@ And :
  * because SonarQube provides a lot of tools, measures, issue management, ... out-of-the-box
  * because I'm mainly a java developper 
  
-## Why are there packages `org.sonar.plugins.xml.*` and `org.sonar.plugins.python.*` ?
- * Because Sonar plugins are isolated in their own classloader ([See here](https://docs.sonarqube.org/pages/viewpage.action?pageId=5312387))
- * Because XML and Python plugin doesn't export any classes in a package `org.sonar.plugins.<plugin key>.api.*` 
- * Because it's not possible to add custom rules in Java (not XPath) in existing plugin ([according to this thread](https://groups.google.com/forum/#!searchin/sonarqube/plugin/sonarqube/A5xyZuHpZO0/fALCTY9hAQAJ))
- * Because I found this easier to do and I have no idea on how to do better for the moment
+## Why is there package `org.sonar.plugins.python.*` ?
+ * Because Sonar plugins are isolated in their own classloader ([See here](https://docs.sonarqube.org/pages/viewpage.action?pageId=5312387)) and this plugin is already sharing the classloader of sonar-xml-plugin
+ * Because Python plugin doesn't export any classes in a package `org.sonar.plugins.<plugin key>.api.*` 
+ * Because I have no idea on how to do better for the moment
  
-I could have add dependencies to these artefacts in the pom.xml but in this case, the plugin growth and become too big (almost 20MB)
+I could have add dependencies to the sonar-python-plugin artefact in the pom.xml but in this case, the plugin growth and become far bigger (almost 5MB instead of 1MB)
 
 ## Implemented Rules
 
