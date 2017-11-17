@@ -20,6 +20,15 @@ package com.arkea.satd.sonar.xml.checks;
 import java.util.List;
 
 import org.sonar.plugins.xml.checks.AbstractXmlCheck;
+import org.sonar.plugins.xml.checks.DescriptionCheck;
+import org.sonar.plugins.xml.checks.EmptyRouteRuleLastCheck;
+import org.sonar.plugins.xml.checks.EmptyStepCheck;
+import org.sonar.plugins.xml.checks.PolicyDisplayNameCheck;
+import org.sonar.plugins.xml.checks.PolicyNameConventionCheck;
+import org.sonar.plugins.xml.checks.UnconditionalFlowCheck;
+import org.sonar.plugins.xml.checks.UnknownResourceFlowCheck;
+import org.sonar.plugins.xml.checks.UnreachableFlowCheck;
+import org.sonar.plugins.xml.checks.UseTargetServersCheck;
 
 import com.google.common.collect.ImmutableList;
 

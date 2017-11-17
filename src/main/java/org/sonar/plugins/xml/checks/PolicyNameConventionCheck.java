@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.arkea.satd.sonar.xml.checks;
+package org.sonar.plugins.xml.checks;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -28,6 +28,7 @@ import org.sonar.check.Rule;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+
 
 /**
  * Policy Naming Conventions - type indication
@@ -83,7 +84,7 @@ public class PolicyNameConventionCheck extends AbstractXmlCheck {
 	public void validate(XmlSourceCode xmlSourceCode) {
 	    setWebSourceCode(xmlSourceCode);
 
-	    Document document = getDocument(false);
+	    Document document = getWebSourceCode().getDocument(false);
 	    Node rootNode = document.getDocumentElement();
 	    if (rootNode != null) {
 	    	

@@ -6,10 +6,9 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
+import org.sonar.plugins.xml.checks.DescriptionCheck;
 import org.sonar.plugins.xml.checks.XmlIssue;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
-
-import com.arkea.satd.sonar.xml.checks.DescriptionCheck;
 
 public class DescriptionCheckTest extends AbstractCheckTester {
 

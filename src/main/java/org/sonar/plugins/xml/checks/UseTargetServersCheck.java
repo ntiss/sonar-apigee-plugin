@@ -15,7 +15,7 @@
  * along with this program; if not, write to the Free Software Foundation,
  * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
-package com.arkea.satd.sonar.xml.checks;
+package org.sonar.plugins.xml.checks;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,6 +25,7 @@ import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 
 /**
  * Encourage the use of target servers.
@@ -38,7 +39,7 @@ public class UseTargetServersCheck extends AbstractXmlCheck {
 	public void validate(XmlSourceCode xmlSourceCode) {
 	    setWebSourceCode(xmlSourceCode);
 
-	    Document document = getDocument(false);
+	    Document document = getWebSourceCode().getDocument(false);
 	    if (document.getDocumentElement() != null) {
 
 	    	// Search for last Flow of an ProxyEndpoint document
