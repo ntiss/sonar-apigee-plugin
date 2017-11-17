@@ -50,20 +50,15 @@ public class PolicyDisplayNameCheck extends AbstractXmlCheck {
 		try {
 			XPathExpression exprName = xpath.compile("//@name");
 		    String nameAttr = (String)exprName.evaluate(document, XPathConstants.STRING);
-
-		    XPathExpression exprDisplayName = xpath.compile("//DisplayName");
-		    Node displayName = (Node)exprDisplayName.evaluate(document, XPathConstants.NODE);
+			
+			XPathExpression exprDisplayName = xpath.compile("//DisplayName[text() = //@name]");
+		    Node displayNameNode = (Node)exprDisplayName.evaluate(document, XPathConstants.NODE);
 	
-		    if(nameAttr!=null && displayName!=null) {
-			    	
-			    String displayNameText = displayName.getTextContent();
+		    if(displayNameNode!=null) {
+			    String displayNameText = displayNameNode.getTextContent();
 			    
-			    if(displayNameText!=null) {
-			    	if( !displayNameText.equals(nameAttr)) {
-						// Create a violation for the root node
-						createViolation(getWebSourceCode().getLineForNode(displayName), "It is recommended that the policy name attribute ("+nameAttr+") match the display name of the policy ("+displayNameText+").");
-			    	}
-	    		}
+				// Create a violation for the root node
+				createViolation(getWebSourceCode().getLineForNode(displayNameNode), "It is recommended that the policy name attribute ("+nameAttr+") match the display name of the policy ("+displayNameText+").");
 		    }
 		} catch (XPathExpressionException e) {
 		}

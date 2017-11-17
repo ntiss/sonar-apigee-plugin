@@ -17,6 +17,12 @@
  */
 package org.sonar.plugins.xml.checks;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.sonar.check.Rule;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
@@ -37,36 +43,24 @@ public class EmptyStepCheck extends AbstractXmlCheck {
 	    setWebSourceCode(xmlSourceCode);
 
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
-	    	
-	    	// Search for <Step> nodes in a ProxyEndpoint document
-	    	NodeList stepNodeList = document.getDocumentElement().getElementsByTagName("Step");
-	    	
-	    	if(stepNodeList != null) {
-	    		for(int i=0; i < stepNodeList.getLength(); i++) {
-		    		Node stepNode = stepNodeList.item(i);
+	    
+	    XPathFactory xPathfactory = XPathFactory.newInstance();
+	    XPath xpath = xPathfactory.newXPath();
+	    
+	    try {
+	    	// Select in one shot the Step nodes which are empty
+		    XPathExpression exprDisplayName = xpath.compile("//ProxyEndpoint//Step[not(normalize-space())]");
+		    NodeList descriptionNodeList = (NodeList)exprDisplayName.evaluate(document, XPathConstants.NODESET);
 
-		    		// if the node has no child : throw an issue
-	    			boolean hasElement = false;
-		    		if(stepNode != null) {
-		    			
-		    			NodeList stepChildrenNodes = stepNode.getChildNodes();
-		    			for(int j=0; j < stepChildrenNodes.getLength(); j++) {
-		    				Node childNode = stepChildrenNodes.item(j);
-		    				if(childNode.getNodeType() == Node.ELEMENT_NODE) {
-		    					hasElement = true;
-		    					break;
-		    				}
-		    			}
-		    		}
-	    			
-	    			if(!hasElement) {
-	    				createViolation(getWebSourceCode().getLineForNode(stepNode), "Empty steps clutter a bundle. Performance is not degraded.");
-	    			}
-		    		
+	    	if(descriptionNodeList!=null) {
+	    		for(int i=0 ; i < descriptionNodeList.getLength(); i++) {
+	    	    	Node stepNode = descriptionNodeList.item(i);
+    				createViolation(getWebSourceCode().getLineForNode(stepNode), "Empty steps clutter a bundle. Performance is not degraded.");
 	    		}
 	    	}
-	    }
+		} catch (XPathExpressionException e) {
+		}
+
 	}
 
 }
