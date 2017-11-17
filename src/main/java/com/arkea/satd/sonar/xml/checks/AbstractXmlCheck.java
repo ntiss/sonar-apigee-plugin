@@ -17,9 +17,6 @@
  */
 package com.arkea.satd.sonar.xml.checks;
 
-import java.io.IOException;
-
-import org.sonar.plugins.xml.parsers.SaxParser;
 import org.w3c.dom.Document;
 
 /**
@@ -32,11 +29,6 @@ import org.w3c.dom.Document;
 public abstract class AbstractXmlCheck extends org.sonar.plugins.xml.checks.AbstractXmlCheck {
 
 	protected Document getDocument(boolean namespaceAware) {
-		try {
-			return new SaxParser().parseDocument(getWebSourceCode().getInputFile().inputStream(), namespaceAware);
-		} catch (IOException e) {
-			return null;
-		}
+		return getDocument(namespaceAware);
 	}
-	
 }
