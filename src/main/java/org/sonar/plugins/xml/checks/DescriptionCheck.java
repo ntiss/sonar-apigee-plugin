@@ -17,6 +17,12 @@
  */
 package org.sonar.plugins.xml.checks;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.sonar.check.Rule;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
@@ -41,18 +47,24 @@ public class DescriptionCheck extends AbstractXmlCheck {
 	    Document document = getWebSourceCode().getDocument(false);
 	    if (document.getDocumentElement() != null) {
     	
-	    	NodeList descriptionNodeList = document.getDocumentElement().getElementsByTagName("Description");
-	    	
-	    	if(descriptionNodeList!=null && descriptionNodeList.getLength() > 0) {
-	    		for(int i=0 ; i < descriptionNodeList.getLength(); i++) {
-	    	    	Node node = descriptionNodeList.item(i);
-	    	    	String desc = node.getTextContent();
-	    			if(desc == null || desc.isEmpty() || desc.length() <= MIN_LENGTH) {
+		    XPathFactory xPathfactory = XPathFactory.newInstance();
+		    XPath xpath = xPathfactory.newXPath();
+		    
+		    try {
+		    	// Select in one shot the Description which are too short
+			    XPathExpression exprDisplayName = xpath.compile("//Description[string-length(text())<="+MIN_LENGTH+"]");
+			    NodeList descriptionNodeList = (NodeList)exprDisplayName.evaluate(document, XPathConstants.NODESET);
+
+		    	if(descriptionNodeList!=null) {
+		    		for(int i=0 ; i < descriptionNodeList.getLength(); i++) {
+		    	    	Node node = descriptionNodeList.item(i);
 	    				createViolation(getWebSourceCode().getLineForNode(node), "Description is too short.");
-	    			}
-	    		}
-	    	}
+		    		}
+		    	}
+			} catch (XPathExpressionException e) {
+			}
 	    }
+		    
 	}
 
 }
