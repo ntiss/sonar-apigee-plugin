@@ -36,7 +36,7 @@ public class PolicyDisplayNameCheckTest extends AbstractCheckTester {
 
 	
 	@Test
-	public void test_bad_displayName() throws Exception {
+	public void test_bad_displayName1() throws Exception {
 		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<RaiseFault async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Raise-Fault-1\">\r\n" + 
 				"    <DisplayName>Raise Fault 1</DisplayName>\r\n" + 
@@ -44,5 +44,22 @@ public class PolicyDisplayNameCheckTest extends AbstractCheckTester {
 		assertEquals(1, issues.size());
 	}
 	
+	@Test
+	public void test_bad_displayName2() throws Exception {
+		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<RaiseFault async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Raise-Fault-1\">\r\n" + 
+				"    <DisplayName>Raise:Fault:1</DisplayName>\r\n" + 
+				"</RaiseFault>");
+		assertEquals(1, issues.size());
+	}
 	
+	@Test
+	public void test_bad_displayName3() throws Exception {
+		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<RaiseFault async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Raise:Fault:1\">\r\n" + 
+				"    <DisplayName>Raise-Fault-1</DisplayName>\r\n" + 
+				"</RaiseFault>");
+		assertEquals(1, issues.size());
+	}
+		
 }
