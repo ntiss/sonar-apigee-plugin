@@ -33,12 +33,10 @@ And :
  * because SonarQube provides a lot of tools, measures, issue management, ... out-of-the-box
  * because I'm mainly a java developper 
  
-## Why is there package `org.sonar.plugins.python.*` ?
- * Because Sonar plugins are isolated in their own classloader ([See here](https://docs.sonarqube.org/pages/viewpage.action?pageId=5312387)) and this plugin is already sharing the classloader of sonar-xml-plugin
- * Because Python plugin doesn't export any classes in a package `org.sonar.plugins.<plugin key>.api.*` 
- * Because I have no idea on how to do better for the moment
- 
-I could have add dependencies to the sonar-python-plugin artefact in the pom.xml but in this case, the plugin growth and become far bigger (almost 5MB instead of 1MB)
+## Why is there package `org.sonar.plugins.xml.checks` ?
+
+This plugin shares the classloader of sonar-xml-plugin thanks to the usage of `<basePlugin>`.
+Adding the check classes in the package `org.sonar.plugins.xml.checks` is the only way to be able to use XmlSourceCode.getDocument(boolean) since this method is `protected`.
 
 ## Implemented Rules
 

@@ -64,25 +64,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>10.0.1</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.sonarsource.python</groupId>
-			<artifactId>python-squid</artifactId>
-			<version>1.8.0.1496</version>
-		</dependency>
-
-		<dependency>
-			<groupId>org.sonarsource.python</groupId>
-			<artifactId>python-checks</artifactId>
-			<version>1.8.0.1496</version>
-		</dependency>
-
 <!-- 		<dependency> -->
 <!-- 			<groupId>org.sonarsource.sslr-squid-bridge</groupId> -->
 <!-- 			<artifactId>sslr-squid-bridge</artifactId> -->
