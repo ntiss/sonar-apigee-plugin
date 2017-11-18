@@ -10,8 +10,8 @@ All rules are not yet implemented ([see below](#implemented-rules))
 ## Usage
 
 ### Dependencies
-To work, this plugin needs sonar-xml-plugin and sonar-python-plugin installed.
-Thus, you can also have the measures for theses languages.
+To work, th plugin sonar-xml-plugin MUST be installed.
+As Apigee also deals with Javascript and Python, it would be pertinent to install sonar-python-plugin and sonar-javascript-plugin, but it's not mandatory.
 
 ### Build
 
@@ -23,15 +23,14 @@ You'll get a jar file in the target directory
 Like any Sonar plugin :
  * put the file sonar-apigee-plugin-X.X.X.jar in the directory $SONARQUBE_HOME/extensions/plugins.
  * restart the server
-
-And :
+Finally :
  * activate all rules in the sonar way profile
  
 
 ## Why this plugin ?
  * because companies, like mine, prefer using a centralized platform like Sonar, instead of an standalone tool
  * because SonarQube provides a lot of tools, measures, issue management, ... out-of-the-box
- * because I'm mainly a java developper 
+ * because SonarQube is well integrated with CI platform like Jenkins. It's part of continuous delivery.
  
 ## Why is there package `org.sonar.plugins.xml.checks` ?
 
@@ -40,7 +39,8 @@ Adding the check classes in the package `org.sonar.plugins.xml.checks` is the on
 
 ## Implemented Rules
 
-The rule IDs come from the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter). (Some rules won't be implemented in Sonar.)
+The rule IDs come from the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter).
+Some rules won't be implemented in this plugin due to SonarQube limitations. Mainly, SonarQube scanner works file by file without saying when the scan is finished. Therefore, it's not possible to check rules over the whole bundle. 
 Other rules start from "500" to not interfer with the first rules. Example : PD500.
 
 **Legend :**
