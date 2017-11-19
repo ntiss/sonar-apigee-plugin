@@ -106,13 +106,13 @@ public class JSONThreatProtectionCheck extends AbstractXmlCheck {
 							}
 						}
 						
-						
 						// Finally : Create issue if needed
 						if(hasIssue) {
-							ApigeeXmlSensor.createAndSaveExternalIssue(getRuleKey(), currentXml, currentStep, "A check for a body element must be performed before policy JSONThreatProtection execution.");
+							
+							XmlIssue issue = new XmlIssue(getRuleKey(), currentXml.getLineForNode(currentStep), "A check for a body element must be performed before policy JSONThreatProtection execution.");
+							currentXml.addViolation(issue); // Useful for JUnit test
+							ApigeeXmlSensor.saveIssue(ApigeeXmlSensor.getContext(), currentXml); // Mandatory to "commit" the issue in the final report
 						}
-						
-						
 					}
 			    }
 		    }

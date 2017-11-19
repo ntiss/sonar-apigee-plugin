@@ -140,15 +140,17 @@ public class ApigeeXmlSensor implements Sensor {
 	}
 
 	@VisibleForTesting
-	protected void saveIssue(SensorContext context, XmlSourceCode sourceCode) {
-		for (XmlIssue xmlIssue : sourceCode.getXmlIssues()) {
-			NewIssue newIssue = context.newIssue().forRule(xmlIssue.getRuleKey());
-			NewIssueLocation location = newIssue.newLocation().on(sourceCode.getInputFile().wrapped())
-					.message(xmlIssue.getMessage());
-			if (xmlIssue.getLine() != null) {
-				location.at(sourceCode.getInputFile().selectLine(xmlIssue.getLine()));
+	public static void saveIssue(SensorContext context, XmlSourceCode sourceCode) {
+		if(context!=null) {
+			for (XmlIssue xmlIssue : sourceCode.getXmlIssues()) {
+				NewIssue newIssue = context.newIssue().forRule(xmlIssue.getRuleKey());
+				NewIssueLocation location = newIssue.newLocation().on(sourceCode.getInputFile().wrapped())
+						.message(xmlIssue.getMessage());
+				if (xmlIssue.getLine() != null) {
+					location.at(sourceCode.getInputFile().selectLine(xmlIssue.getLine()));
+				}
+				newIssue.at(location).save();
 			}
-			newIssue.at(location).save();
 		}
 	}
 
@@ -200,25 +202,6 @@ public class ApigeeXmlSensor implements Sensor {
 			}
 		}
 		return Optional.empty();
-	}
-
-	/**
-	 * Create and save an issue in a XmlSourceCode which is not the one from the current file analyzed
-	 * @param theRuleKey
-	 * @param xmlSourceCode
-	 * @param theNode
-	 * @param message
-	 */
-	public static void createAndSaveExternalIssue(RuleKey theRuleKey, XmlSourceCode xmlSourceCode, Node theNode, String message) {
-		XmlIssue xmlIssue = new XmlIssue(theRuleKey, xmlSourceCode.getLineForNode(theNode), message);
-		NewIssue newIssue = getContext().newIssue().forRule(theRuleKey);
-		NewIssueLocation location = newIssue.newLocation()
-											.on(xmlSourceCode.getInputFile().wrapped())
-											.message(message);
-		if (xmlIssue.getLine() != null) {
-			location.at(xmlSourceCode.getInputFile().selectLine(xmlIssue.getLine()));
-		}
-		newIssue.at(location).save();
 	}
 
 	private static void processParseException(ParseException e, SensorContext context, CompatibleInputFile inputFile,
