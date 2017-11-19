@@ -38,6 +38,8 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 
   @org.junit.Rule
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
+  
+  private DefaultFileSystem filesystem = null;
 
   XmlSourceCode parseAndCheck(File file, AbstractXmlCheck check) {
     XmlSourceCode xmlSourceCode = new XmlSourceCode(new XmlFile(newInputFile(file), createFileSystem()));
@@ -49,6 +51,11 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
     return xmlSourceCode;
   }
 
+  XmlSourceCode parse(File file) {
+	    XmlSourceCode xmlSourceCode = new XmlSourceCode(new XmlFile(newInputFile(file), createFileSystem()));
+	    return xmlSourceCode;
+	  }  
+  
   private CompatibleInputFile newInputFile(File file) {
     return wrap(new DefaultInputFile("modulekey", file.getName())
       .setModuleBaseDir(file.getParentFile().toPath())
@@ -57,24 +64,30 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 
   protected DefaultFileSystem createFileSystem() {
 	  
+	  if(filesystem!=null) {
+		  return filesystem;
+	  }
+
 	try {
 		File workDir = temporaryFolder.newFolder("temp");
 	
-	    DefaultFileSystem fs = new DefaultFileSystem(workDir);
-	    fs.setEncoding(Charset.defaultCharset());
-	    fs.setWorkDir(workDir);
+	    filesystem = new DefaultFileSystem(workDir);
+	    filesystem.setEncoding(Charset.defaultCharset());
+	    filesystem.setWorkDir(workDir);
 	
-	    return fs;
+	    return filesystem;
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		//e.printStackTrace();
 	}
 	return null;
     
   }
 
   File createTempFile(String content) throws IOException {
-    File f = temporaryFolder.newFile("file.xml");
+	  
+    //File f = temporaryFolder.newFile("file.xml");
+	File f = File.createTempFile("temp-file-name", ".xml", createFileSystem().workDir());
     FileUtils.write(f, content, Charset.defaultCharset());
 
     return f;
