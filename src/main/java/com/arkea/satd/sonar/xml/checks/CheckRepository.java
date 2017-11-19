@@ -24,6 +24,7 @@ import org.sonar.plugins.xml.checks.AvoidPythonCheck;
 import org.sonar.plugins.xml.checks.DescriptionCheck;
 import org.sonar.plugins.xml.checks.EmptyRouteRuleLastCheck;
 import org.sonar.plugins.xml.checks.EmptyStepCheck;
+import org.sonar.plugins.xml.checks.JSONThreatProtectionCheck;
 import org.sonar.plugins.xml.checks.PolicyDisplayNameCheck;
 import org.sonar.plugins.xml.checks.PolicyNameConventionCheck;
 import org.sonar.plugins.xml.checks.UnconditionalFlowCheck;
@@ -54,6 +55,7 @@ public class CheckRepository {
 				.add(DescriptionCheck.class)
 				.add(EmptyRouteRuleLastCheck.class)
 				.add(EmptyStepCheck.class)
+				.add(JSONThreatProtectionCheck.class)
 				.add(PolicyDisplayNameCheck.class)
 				.add(PolicyNameConventionCheck.class)
 				.add(UnconditionalFlowCheck.class)

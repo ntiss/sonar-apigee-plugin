@@ -41,8 +41,8 @@ import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
-import org.sonar.plugins.xml.XmlSensor;
 import org.sonar.plugins.xml.checks.AbstractXmlCheck;
+import org.sonar.plugins.xml.checks.BundleRecorder;
 import org.sonar.plugins.xml.checks.ParsingErrorCheck;
 import org.sonar.plugins.xml.checks.XmlFile;
 import org.sonar.plugins.xml.checks.XmlIssue;
@@ -53,169 +53,200 @@ import org.sonar.plugins.xml.highlighting.XMLHighlighting;
 import org.sonar.plugins.xml.language.Xml;
 import org.sonar.plugins.xml.parsers.ParseException;
 import org.sonar.squidbridge.api.AnalysisException;
+import org.w3c.dom.Node;
 
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 import com.google.common.annotations.VisibleForTesting;
 
 /**
  * ApigeeXmlSensor provides analysis of xml files.
+ * 
  * @author Matthijs Galesloot
  * @author Nicolas Tisserand
  */
 public class ApigeeXmlSensor implements Sensor {
 
-  private static final Version V6_0 = Version.create(6, 0);
+	private static final Version V6_0 = Version.create(6, 0);
 
-  /**
-   * Use Sonar logger instead of SL4FJ logger, in order to be able to unit test the logs.
-   */
-  private static final Logger LOG = Loggers.get(ApigeeXmlSensor.class);
+	/**
+	 * Use Sonar logger instead of SL4FJ logger, in order to be able to unit test
+	 * the logs.
+	 */
+	private static final Logger LOG = Loggers.get(ApigeeXmlSensor.class);
 
-  private final Checks<Object> checks;
-  private final FileSystem fileSystem;
-  private final FilePredicate mainFilesPredicate;
-  private final FileLinesContextFactory fileLinesContextFactory;
+	private final Checks<Object> checks;
+	private final FileSystem fileSystem;
+	private final FilePredicate mainFilesPredicate;
+	private final FileLinesContextFactory fileLinesContextFactory;
 
-  private static String annotatedEngineKey(Object annotatedClassOrObject) {
-	    String key = null;
-	    org.sonar.check.Rule ruleAnnotation = AnnotationUtils.getAnnotation(annotatedClassOrObject, org.sonar.check.Rule.class);
-	    if (ruleAnnotation != null) {
-	      key = ruleAnnotation.key();
-	    }
-	    Class clazz = annotatedClassOrObject.getClass();
-	    if (annotatedClassOrObject instanceof Class) {
-	      clazz = (Class) annotatedClassOrObject;
-	    }
-	    return StringUtils.defaultIfEmpty(key, clazz.getCanonicalName());
-	  }
-  
-  
-  
-  public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory) {
-    this.fileLinesContextFactory = fileLinesContextFactory;
-    this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY).addAnnotatedChecks((Iterable<?>) CheckRepository.getChecks());
-    this.fileSystem = fileSystem;
-    this.mainFilesPredicate = fileSystem.predicates().and(
-      fileSystem.predicates().hasType(InputFile.Type.MAIN),
-      fileSystem.predicates().hasLanguage(Xml.KEY));
-  }
+	private static SensorContext CONTEXT;
 
-  public void analyse(SensorContext sensorContext) {
-    execute(sensorContext);
-  }
+	private static String annotatedEngineKey(Object annotatedClassOrObject) {
+		String key = null;
+		org.sonar.check.Rule ruleAnnotation = AnnotationUtils.getAnnotation(annotatedClassOrObject,
+				org.sonar.check.Rule.class);
+		if (ruleAnnotation != null) {
+			key = ruleAnnotation.key();
+		}
+		Class clazz = annotatedClassOrObject.getClass();
+		if (annotatedClassOrObject instanceof Class) {
+			clazz = (Class) annotatedClassOrObject;
+		}
+		return StringUtils.defaultIfEmpty(key, clazz.getCanonicalName());
+	}
 
+	public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory,
+			FileLinesContextFactory fileLinesContextFactory) {
+		this.fileLinesContextFactory = fileLinesContextFactory;
+		this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY)
+				.addAnnotatedChecks((Iterable<?>) CheckRepository.getChecks());
+		this.fileSystem = fileSystem;
+		this.mainFilesPredicate = fileSystem.predicates().and(fileSystem.predicates().hasType(InputFile.Type.MAIN),
+				fileSystem.predicates().hasLanguage(Xml.KEY));
+	}
 
-  private void runChecks(SensorContext context, XmlFile xmlFile) {
-    XmlSourceCode sourceCode = new XmlSourceCode(xmlFile);
+	public void analyse(SensorContext sensorContext) {
+		execute(sensorContext);
+	}
 
-    // Do not execute any XML rule when an XML file is corrupted (SONARXML-13)
-    if (sourceCode.parseSource()) {
-      for (Object check : checks.all()) {
-        ((AbstractXmlCheck) check).setRuleKey(checks.ruleKey(check));
-        ((AbstractXmlCheck) check).validate(sourceCode);
-      }
-      saveIssue(context, sourceCode);
-      try {
-        saveSyntaxHighlighting(context, new XMLHighlighting(xmlFile).getHighlightingData(), xmlFile.getInputFile().wrapped());
-      } catch (IOException e) {
-        throw new IllegalStateException("Could not analyze file " + xmlFile.getAbsolutePath(), e);
-      }
-    }
-  }
+	private void runChecks(SensorContext context, XmlFile xmlFile) {
+		XmlSourceCode sourceCode = new XmlSourceCode(xmlFile);
 
-  private static void saveSyntaxHighlighting(SensorContext context, List<HighlightingData> highlightingDataList, InputFile inputFile) {
-    NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
+		// Do not execute any XML rule when an XML file is corrupted (SONARXML-13)
+		if (sourceCode.parseSource()) {
+			for (Object check : checks.all()) {
+				((AbstractXmlCheck) check).setRuleKey(checks.ruleKey(check));
+				((AbstractXmlCheck) check).validate(sourceCode);
+			}
+			saveIssue(context, sourceCode);
+			try {
+				saveSyntaxHighlighting(context, new XMLHighlighting(xmlFile).getHighlightingData(),
+						xmlFile.getInputFile().wrapped());
+			} catch (IOException e) {
+				throw new IllegalStateException("Could not analyze file " + xmlFile.getAbsolutePath(), e);
+			}
+		}
+	}
 
-    for (HighlightingData highlightingData : highlightingDataList) {
-      highlighting.highlight(highlightingData.startOffset(), highlightingData.endOffset(), highlightingData.highlightCode());
-    }
-    highlighting.save();
-  }
+	private static void saveSyntaxHighlighting(SensorContext context, List<HighlightingData> highlightingDataList,
+			InputFile inputFile) {
+		NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
 
-  @VisibleForTesting
-  protected void saveIssue(SensorContext context, XmlSourceCode sourceCode) {
-    for (XmlIssue xmlIssue : sourceCode.getXmlIssues()) {
-      NewIssue newIssue = context.newIssue().forRule(xmlIssue.getRuleKey());
-      NewIssueLocation location = newIssue.newLocation()
-        .on(sourceCode.getInputFile().wrapped())
-        .message(xmlIssue.getMessage());
-      if (xmlIssue.getLine() != null) {
-        location.at(sourceCode.getInputFile().selectLine(xmlIssue.getLine()));
-      }
-      newIssue.at(location).save();
-    }
-  }
+		for (HighlightingData highlightingData : highlightingDataList) {
+			highlighting.highlight(highlightingData.startOffset(), highlightingData.endOffset(),
+					highlightingData.highlightCode());
+		}
+		highlighting.save();
+	}
 
-  @Override
-  public String toString() {
-    return getClass().getSimpleName();
-  }
+	@VisibleForTesting
+	protected void saveIssue(SensorContext context, XmlSourceCode sourceCode) {
+		for (XmlIssue xmlIssue : sourceCode.getXmlIssues()) {
+			NewIssue newIssue = context.newIssue().forRule(xmlIssue.getRuleKey());
+			NewIssueLocation location = newIssue.newLocation().on(sourceCode.getInputFile().wrapped())
+					.message(xmlIssue.getMessage());
+			if (xmlIssue.getLine() != null) {
+				location.at(sourceCode.getInputFile().selectLine(xmlIssue.getLine()));
+			}
+			newIssue.at(location).save();
+		}
+	}
 
-  @Override
-  public void describe(SensorDescriptor descriptor) {
-    descriptor
-      .onlyOnLanguage(Xml.KEY)
-      .name("Apigee XML Sensor");
-  }
+	@Override
+	public String toString() {
+		return getClass().getSimpleName();
+	}
 
-  @Override
-  public void execute(SensorContext context) {
-    //Optional<RuleKey> parsingErrorKey = getParsingErrorKey();
-	  
-    for (CompatibleInputFile inputFile : wrap(fileSystem.inputFiles(mainFilesPredicate), context)) {
-      XmlFile xmlFile = new XmlFile(inputFile, fileSystem);
-      try {
-        runChecks(context, xmlFile);
-      } catch (ParseException e) {
-//        processParseException(e, context, inputFile, parsingErrorKey);
-      } catch (RuntimeException e) {
-        processException(e, context, inputFile);
-      }
-    }
-  }
+	@Override
+	public void describe(SensorDescriptor descriptor) {
+		descriptor.onlyOnLanguage(Xml.KEY).name("Apigee XML Sensor");
+	}
 
-  private Optional<RuleKey> getParsingErrorKey() {
-    for (Object obj : checks.all()) {
-      AbstractXmlCheck check = (AbstractXmlCheck) obj;
-      if (check instanceof ParsingErrorCheck) {
-        return Optional.of(checks.ruleKey(check));
-      }
-    }
-    return Optional.empty();
-  }
+	@Override
+	public void execute(SensorContext context) {
+		// Optional<RuleKey> parsingErrorKey = getParsingErrorKey();
 
-  private static void processParseException(ParseException e, SensorContext context, CompatibleInputFile inputFile, Optional<RuleKey> parsingErrorKey) {
-    reportAnalysisError(e, context, inputFile);
+		CONTEXT = context;
+		
+		// First loop to store ALL files.
+		for (CompatibleInputFile inputFile : wrap(fileSystem.inputFiles(mainFilesPredicate), context)) {
+			XmlFile xmlFile = new XmlFile(inputFile, fileSystem);
+			XmlSourceCode xmlSourceCode = new XmlSourceCode(xmlFile);
+			BundleRecorder.storeFile(xmlSourceCode);
+		}
+		
+		// Second loop to checks files one by one.
+		for (CompatibleInputFile inputFile : wrap(fileSystem.inputFiles(mainFilesPredicate), context)) {
+			XmlFile xmlFile = new XmlFile(inputFile, fileSystem);
+			try {
+				runChecks(context, xmlFile);
+			} catch (ParseException e) {
+				// processParseException(e, context, inputFile, parsingErrorKey);
+			} catch (RuntimeException e) {
+				processException(e, context, inputFile);
+			}
+		}
+	}
 
-    LOG.warn("Unable to parse file {}", inputFile.absolutePath());
-    LOG.warn("Cause: {}", e.getMessage());
+	public static SensorContext getContext() {
+		return CONTEXT;
+	}
 
-    if (parsingErrorKey.isPresent()) {
-      // the ParsingErrorCheck rule is activated: we create a beautiful issue
-      NewIssue newIssue = context.newIssue();
-      NewIssueLocation primaryLocation = newIssue.newLocation()
-        .message("Parse error: " + e.getMessage())
-        .on(inputFile.wrapped());
-      newIssue
-        .forRule(parsingErrorKey.get())
-        .at(primaryLocation)
-        .save();
-    }
-  }
+	private Optional<RuleKey> getParsingErrorKey() {
+		for (Object obj : checks.all()) {
+			AbstractXmlCheck check = (AbstractXmlCheck) obj;
+			if (check instanceof ParsingErrorCheck) {
+				return Optional.of(checks.ruleKey(check));
+			}
+		}
+		return Optional.empty();
+	}
 
-  private static void processException(RuntimeException e, SensorContext context, CompatibleInputFile inputFile) {
-    reportAnalysisError(e, context, inputFile);
+	/**
+	 * Create and save an issue in a XmlSourceCode which is not the one from the current file analyzed
+	 * @param theRuleKey
+	 * @param xmlSourceCode
+	 * @param theNode
+	 * @param message
+	 */
+	public static void createAndSaveExternalIssue(RuleKey theRuleKey, XmlSourceCode xmlSourceCode, Node theNode, String message) {
+		XmlIssue xmlIssue = new XmlIssue(theRuleKey, xmlSourceCode.getLineForNode(theNode), message);
+		NewIssue newIssue = getContext().newIssue().forRule(theRuleKey);
+		NewIssueLocation location = newIssue.newLocation()
+											.on(xmlSourceCode.getInputFile().wrapped())
+											.message(message);
+		if (xmlIssue.getLine() != null) {
+			location.at(xmlSourceCode.getInputFile().selectLine(xmlIssue.getLine()));
+		}
+		newIssue.at(location).save();
+	}
 
-    throw new AnalysisException("Unable to analyse file " + inputFile.absolutePath(), e);
-  }
+	private static void processParseException(ParseException e, SensorContext context, CompatibleInputFile inputFile,
+			Optional<RuleKey> parsingErrorKey) {
+		reportAnalysisError(e, context, inputFile);
 
-  private static void reportAnalysisError(RuntimeException e, SensorContext context, CompatibleInputFile inputFile) {
-    if (context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0)) {
-      context.newAnalysisError()
-        .onFile(inputFile.wrapped())
-        .message(e.getMessage())
-        .save();
-    }
-  }
+		LOG.warn("Unable to parse file {}", inputFile.absolutePath());
+		LOG.warn("Cause: {}", e.getMessage());
+
+		if (parsingErrorKey.isPresent()) {
+			// the ParsingErrorCheck rule is activated: we create a beautiful issue
+			NewIssue newIssue = context.newIssue();
+			NewIssueLocation primaryLocation = newIssue.newLocation().message("Parse error: " + e.getMessage())
+					.on(inputFile.wrapped());
+			newIssue.forRule(parsingErrorKey.get()).at(primaryLocation).save();
+		}
+	}
+
+	private static void processException(RuntimeException e, SensorContext context, CompatibleInputFile inputFile) {
+		reportAnalysisError(e, context, inputFile);
+
+		throw new AnalysisException("Unable to analyse file " + inputFile.absolutePath(), e);
+	}
+
+	private static void reportAnalysisError(RuntimeException e, SensorContext context, CompatibleInputFile inputFile) {
+		if (context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0)) {
+			context.newAnalysisError().onFile(inputFile.wrapped()).message(e.getMessage()).save();
+		}
+	}
 
 }
