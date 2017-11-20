@@ -122,7 +122,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 ### FaultRules level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
-|:heavy_multiplication_x:| FR001 | Major | No Condition on FaultRule | It's not a best practice to have a FaultRule without an outer condition, which automatically makes the FaultRule true. |
+|:white_check_mark:| FR001 | Major | No Condition on FaultRule | It's not a best practice to have a FaultRule without an outer condition, which automatically makes the FaultRule true. |
 
 ### Conditional level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
