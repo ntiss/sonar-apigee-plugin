@@ -64,6 +64,7 @@ public class PolicyNameConventionCheck extends AbstractXmlCheck {
 		supportedPolicies.put("MessageValidation", Arrays.asList("messagevalidation", "mv", "messval") );
 		supportedPolicies.put("OAuthV1", Arrays.asList("oauthv1", "oauth", "oa", "accesstoken", "verify") );
 		supportedPolicies.put("OAuthV2", Arrays.asList("oauthv2", "oauth", "oa", "accesstoken", "verify") );
+		supportedPolicies.put("GetOAuthV1Info", Arrays.asList("oauthv1", "getoauth", "getoa") );
 		supportedPolicies.put("GetOAuthV2Info", Arrays.asList("oauthv2info", "oauthinfo", "oai", "accesstoken") );
 		supportedPolicies.put("VerifyAPIKey", Arrays.asList("verifyapikey", "apikey", "va", "verify") );
 		supportedPolicies.put("SpikeArrest", Arrays.asList("spikearrest", "spike", "sa") );
