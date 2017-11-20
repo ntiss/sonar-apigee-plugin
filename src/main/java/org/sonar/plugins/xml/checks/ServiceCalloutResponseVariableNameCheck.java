@@ -32,7 +32,7 @@ import org.w3c.dom.Node;
  * Code : PO020
  * @author Nicolas Tisserand
  */
-@Rule(key = "ServiceCalloutRequestVariableNameCheck")
+@Rule(key = "ServiceCalloutResponseVariableNameCheck")
 public class ServiceCalloutResponseVariableNameCheck extends AbstractXmlCheck {
 
 	@Override
