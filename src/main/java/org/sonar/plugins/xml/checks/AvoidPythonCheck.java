@@ -29,7 +29,7 @@ import org.w3c.dom.Node;
 
 /**
  * Avoid Python language
- * Code : PY500
+ * Code : PO500
  * @author Nicolas Tisserand
  */
 @Rule(key = "AvoidPythonCheck")
