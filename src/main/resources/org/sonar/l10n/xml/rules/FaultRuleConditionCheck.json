@@ -1,0 +1,13 @@
+{
+  "title": "No Condition on FaultRule",
+  "type": "BUG",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major"
+}

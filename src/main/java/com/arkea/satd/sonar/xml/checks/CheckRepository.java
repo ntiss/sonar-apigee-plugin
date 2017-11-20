@@ -24,11 +24,12 @@ import org.sonar.plugins.xml.checks.AvoidPythonCheck;
 import org.sonar.plugins.xml.checks.DescriptionCheck;
 import org.sonar.plugins.xml.checks.EmptyRouteRuleLastCheck;
 import org.sonar.plugins.xml.checks.EmptyStepCheck;
-import org.sonar.plugins.xml.checks.ThreatProtectionCheck;
+import org.sonar.plugins.xml.checks.FaultRuleConditionCheck;
 import org.sonar.plugins.xml.checks.PolicyDisplayNameCheck;
 import org.sonar.plugins.xml.checks.PolicyNameConventionCheck;
 import org.sonar.plugins.xml.checks.ServiceCalloutRequestVariableNameCheck;
 import org.sonar.plugins.xml.checks.ServiceCalloutResponseVariableNameCheck;
+import org.sonar.plugins.xml.checks.ThreatProtectionCheck;
 import org.sonar.plugins.xml.checks.UnconditionalFlowCheck;
 import org.sonar.plugins.xml.checks.UnknownResourceFlowCheck;
 import org.sonar.plugins.xml.checks.UnreachableFlowCheck;
@@ -57,6 +58,7 @@ public class CheckRepository {
 				.add(DescriptionCheck.class)
 				.add(EmptyRouteRuleLastCheck.class)
 				.add(EmptyStepCheck.class)
+				.add(FaultRuleConditionCheck.class)
 				.add(PolicyDisplayNameCheck.class)
 				.add(PolicyNameConventionCheck.class)
 				.add(ServiceCalloutRequestVariableNameCheck.class)
