@@ -1,0 +1,13 @@
+{
+  "title": "Using request for the Request name causes unexpected side effects.",
+  "type": "CODE_SMELL",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major"
+}
