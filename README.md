@@ -40,7 +40,6 @@ Adding the check classes in the package `org.sonar.plugins.xml.checks` is the on
 ## Implemented Rules
 
 The rule IDs come from the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter).
-Some rules won't be implemented in this plugin due to SonarQube limitations. Mainly, SonarQube scanner works file by file without saying when the scan is finished. Therefore, it's not possible to check rules over the whole bundle. 
 Other rules start from "500" to not interfer with the first rules. Example : PD500.
 
 **Legend :**
