@@ -37,13 +37,13 @@ import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
 
 
 /**
- * JSON Threat Protection
+ * JSON Threat Protection or XML Threat Protection
  * A check for a body element must be performed before policy execution.
- * Code : PO001
+ * Code : PO001 & PO002
  * @author Nicolas Tisserand
  */
-@Rule(key = "JSONThreatProtectionCheck")
-public class JSONThreatProtectionCheck extends AbstractXmlCheck {
+@Rule(key = "ThreatProtectionCheck")
+public class ThreatProtectionCheck extends AbstractXmlCheck {
 
 	@Override
 	public void validate(XmlSourceCode xmlSourceCode) {
@@ -54,10 +54,10 @@ public class JSONThreatProtectionCheck extends AbstractXmlCheck {
 	    XPathFactory xPathfactory = XPathFactory.newInstance();
 	    XPath xpath = xPathfactory.newXPath();
 	    
-	    Pattern pattern = Pattern.compile("(response.content|response.form|request.content|request.form|message.content|message.form|message.verb|request.verb|request.header.Content-Length)");
+	    Pattern pattern = Pattern.compile("(response.content|response.form|request.content|request.form|message.content|message.form|message.verb|request.verb|request.header.Content-Length|response.header.Content-Length)");
 
 	    try {
-			XPathExpression exprName = xpath.compile("/JSONThreatProtection/@name");
+			XPathExpression exprName = xpath.compile("//*[name() = 'JSONThreatProtection' or name() = 'XMLThreatProtection']/@name");
 		    String nameAttr = (String)exprName.evaluate(document, XPathConstants.STRING);
 			
 		    if(nameAttr!=null && !nameAttr.isEmpty()) {
@@ -67,8 +67,6 @@ public class JSONThreatProtectionCheck extends AbstractXmlCheck {
 			    if(listProxiesEndpoint.isEmpty()) {
 			    	// It means that the policy is unused is no condition at all
 					// Create a violation for the root node
-			    	//createViolation(document);
-					//createViolation(getWebSourceCode().getLineForNode(document.getDocumentElement()), "A check for a body element must be performed before policy execution.");		    	
 			    }
 			    
 			    // Now check the Condition of the matching Steps
@@ -97,7 +95,7 @@ public class JSONThreatProtectionCheck extends AbstractXmlCheck {
 						if(hasIssue) {
 							
 							// Search the condition of the parent Node (Flow, but not PreFlow or PostFlow
-							XPathExpression exprFlowCondition = xpath.compile("../../Condition/text()");
+							XPathExpression exprFlowCondition = xpath.compile("../../../*[name() = 'Flow']/Condition/text()");
 							String flowCondition = (String)exprFlowCondition.evaluate(currentStep, XPathConstants.STRING);
 							
 							Matcher matcher = pattern.matcher(flowCondition);	    
@@ -109,7 +107,7 @@ public class JSONThreatProtectionCheck extends AbstractXmlCheck {
 						// Finally : Create issue if needed
 						if(hasIssue) {
 							
-							XmlIssue issue = new XmlIssue(getRuleKey(), currentXml.getLineForNode(currentStep), "A check for a body element must be performed before policy JSONThreatProtection execution.");
+							XmlIssue issue = new XmlIssue(getRuleKey(), currentXml.getLineForNode(currentStep), "An appropriate check for a message body was not found on the enclosing Step or Flow.");
 							currentXml.addViolation(issue); // Useful for JUnit test
 							ApigeeXmlSensor.saveIssue(ApigeeXmlSensor.getContext(), currentXml); // Mandatory to "commit" the issue in the final report
 						}
