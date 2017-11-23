@@ -39,7 +39,7 @@ import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
 /**
  * ExtractVariables XML or JSON Payload
  * A check for a body element must be performed before policy execution.
- * Code : PO003 & PO004
+ * Code : PO003 & PO004 & PO005
  * @author Nicolas Tisserand
  */
 @Rule(key = "ExtractVariablesCheck")
@@ -58,7 +58,7 @@ public class ExtractVariablesCheck extends AbstractXmlCheck {
 
 	    try {
 			String nameAttr = (String)xpath.evaluate("/ExtractVariables/@name", document, XPathConstants.STRING);
-			Boolean hasPayloadExtraction = (Boolean)xpath.evaluate("count(/ExtractVariables/*[(name()='JSONPayload' or name()='XMLPayload')]/Variable) > 0", document, XPathConstants.BOOLEAN);
+			Boolean hasPayloadExtraction = (Boolean)xpath.evaluate("count(/ExtractVariables/*[(name()='JSONPayload' or name()='XMLPayload')]/Variable) + count(/ExtractVariables/FormParam) > 0", document, XPathConstants.BOOLEAN);
 
 		    if(nameAttr!=null && !nameAttr.isEmpty() && hasPayloadExtraction.booleanValue()) {
 			    // Search for the associated step in the full storage

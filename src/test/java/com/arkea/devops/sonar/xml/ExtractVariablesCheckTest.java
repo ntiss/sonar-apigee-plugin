@@ -36,6 +36,7 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
@@ -63,7 +64,7 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
 				"        <Request>\r\n" + 
 				"            <Step>\r\n" + 
-				"                <Name>EV-Extract-XMLThings</Name>\r\n" + 
+				"                <Name>EV-Extract-Things</Name>\r\n" + 
 				"                <Condition>(request.header.Content-Type Matches \"application/xml*\") and (request.header.Content-Length != 0)</Condition>\r\n" + 
 				"            </Step>\r\n" + 
 				"        </Request>\r\n" + 
@@ -71,6 +72,7 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
@@ -88,6 +90,40 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 
+	@Test
+	public void test_form_ok1() throws Exception {
+		
+		// Fake ProxyEndpoint file
+		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <Description/>\r\n" + 
+				"    <PreFlow name=\"PreFlow\">\r\n" + 
+				"        <Request>\r\n" + 
+				"            <Step>\r\n" + 
+				"                <Name>EV-Extract-Things</Name>\r\n" + 
+				"                <Condition>(request.header.Content-Type Matches \"application/x-www-form-urlencoded\") and (request.header.Content-Length != 0)</Condition>\r\n" + 
+				"            </Step>\r\n" + 
+				"        </Request>\r\n" + 
+				"        <Response/>\r\n" + 
+				"    </PreFlow>\r\n" +  
+				"</ProxyEndpoint>" 
+				));
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(proxyEndpointXML);
+
+		List<XmlIssue> issues = getIssues(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+					"<ExtractVariables async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"EV-Extract-Things\">\r\n" + 
+					"    <FormParam name=\"var\">\r\n" + 
+					"        <Pattern>hello {user}</Pattern>\r\n" + 
+					"    </FormParam>\r\n" + 
+					"</ExtractVariables>"
+				);
+	
+		assertEquals(0, issues.size());
+		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
+	}
+	
 	@Test
 	public void test_json_ok2() throws Exception {
 		
@@ -114,6 +150,7 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 		
 		List<XmlIssue> issues = getIssues(
@@ -155,6 +192,7 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
@@ -195,6 +233,7 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
@@ -225,6 +264,7 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
@@ -284,6 +324,7 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(

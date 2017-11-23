@@ -39,6 +39,12 @@ public class BundleRecorder {
 	private static Map<String, XmlSourceCode> storage = new HashMap<String, XmlSourceCode>();
 	private static Map<String, XmlSourceCode> proxiesEndpoint = new HashMap<String, XmlSourceCode>();
 	
+	public static void clear() {
+			storage.clear();
+			proxiesEndpoint.clear();
+	}
+	
+	
 	public static void storeFile(XmlSourceCode xmlSourceCode) {
 		
 		// Full storage
