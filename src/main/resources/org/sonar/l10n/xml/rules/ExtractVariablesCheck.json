@@ -1,0 +1,13 @@
+{
+  "title": "A check for a body element must be performed before the execution of policy ExtractVariables.",
+  "type": "BUG",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [
+    "bug"
+  ],
+  "defaultSeverity": "Major"
+}

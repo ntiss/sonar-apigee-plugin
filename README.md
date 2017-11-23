@@ -95,8 +95,8 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:------:| ---- | -------- | ---- | ----------- |
 |:white_check_mark:| PO001 | Major | JSON Threat Protection | A check for a body element must be performed before policy execution. |
 |:white_check_mark:| PO002 | Major | XML Threat Protection | A check for a body element must be performed before policy execution. |
-|:heavy_multiplication_x:| PO003 | &nbsp; | Extract Variables with JSONPayload | A check for a body element must be performed before policy execution. |
-|:heavy_multiplication_x:| PO004 | &nbsp; | Extract Variables with XMLPayload | A check for a body element must be performed before policy execution. |
+|:white_check_mark:| PO003 | Major | Extract Variables with JSONPayload | A check for a body element must be performed before policy execution. |
+|:white_check_mark:| PO004 | Major | Extract Variables with XMLPayload | A check for a body element must be performed before policy execution. |
 |:heavy_multiplication_x:| PO005 | &nbsp; | Extract Variables with FormParam | A check for a body element must be performed before policy execution. |
 |:heavy_multiplication_x:| PO006 | &nbsp; | Policy Naming Conventions - default name | Policy names should not be default. |
 |:white_check_mark:| PO007 | Minor | Policy Naming Conventions - type indication | It is recommended that the policy name include an indicator of the policy type. |
