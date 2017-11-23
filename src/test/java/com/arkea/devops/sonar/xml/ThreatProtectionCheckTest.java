@@ -36,6 +36,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
@@ -67,6 +68,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
@@ -106,6 +108,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 		
 		List<XmlIssue> issues = getIssues(
@@ -143,6 +146,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
@@ -172,6 +176,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
@@ -226,6 +231,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
 				));
+		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
 		List<XmlIssue> issues = getIssues(
