@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.sonar.plugins.xml.checks.AbstractXmlCheck;
 import org.sonar.plugins.xml.checks.AvoidPythonCheck;
+import org.sonar.plugins.xml.checks.ConditionLengthCheck;
 import org.sonar.plugins.xml.checks.DescriptionCheck;
 import org.sonar.plugins.xml.checks.EmptyRouteRuleLastCheck;
 import org.sonar.plugins.xml.checks.EmptyStepCheck;
@@ -56,6 +57,7 @@ public class CheckRepository {
 	public static List<Class<? extends AbstractXmlCheck>> getClassesChecks() {
 		return ImmutableList.<Class<? extends AbstractXmlCheck>>builder()
 				.add(AvoidPythonCheck.class)
+				.add(ConditionLengthCheck.class)
 				.add(DescriptionCheck.class)
 				.add(EmptyRouteRuleLastCheck.class)
 				.add(EmptyStepCheck.class)

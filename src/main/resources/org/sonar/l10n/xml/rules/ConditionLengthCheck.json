@@ -1,0 +1,13 @@
+{
+  "title": "Overly long conditions on Steps are difficult to debug and maintain",
+  "type": "CODE_SMELL",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [
+    "bad-practice"
+  ],
+  "defaultSeverity": "Minor"
+}

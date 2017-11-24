@@ -129,7 +129,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| CC001 | &nbsp; | Literals in Conditionals | Warn on literals in any conditional statement. |
 |:heavy_multiplication_x:| CC002 | &nbsp; | Null Blank Checks | Blank checks should also check for null conditions. (to be reviewed) |
-|:heavy_multiplication_x:| CC003 | &nbsp; | Long condition statement | Conditions should not be long. |
+|:white_check_mark:| CC003 | Minor | Long condition statement | Conditions should not be long. |
 |:heavy_multiplication_x:| CC004 | &nbsp; | Overly complex condition | Condition complexity should be limited to fix number of variables and conjunctions. |
 |:heavy_multiplication_x:| CC006 | &nbsp; | Detect logical absurdities | Conditions should not have internal logic conflicts - warn when these are detected. |
 
