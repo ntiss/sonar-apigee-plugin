@@ -17,10 +17,12 @@
  */
 package org.sonar.plugins.xml.checks;
 
-import com.arkea.satd.sonar.helpers.XMLHelper;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -40,29 +42,34 @@ public class EmptyRouteRuleLastCheck extends AbstractXmlCheck {
 	    setWebSourceCode(xmlSourceCode);
 
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null) {
+    	// Search for last Flow of an ProxyEndpoint document
+	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 	    	
-	    	// Search for last Flow of an ProxyEndpoint document
-	    	if("ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 
-		    	NodeList flowNodeList = document.getDocumentElement().getElementsByTagName("RouteRule");
+			    XPathFactory xPathfactory = XPathFactory.newInstance();
+			    XPath xpath = xPathfactory.newXPath();
+	    		
+				try {
+					NodeList flowNodeList = (NodeList)xpath.evaluate("//RouteRule", document, XPathConstants.NODESET);
 		    	
-		    	if(flowNodeList!=null && flowNodeList.getLength() >= 2) {
-		    		
-		    		// Reversed loop
-		    		for(int i=flowNodeList.getLength()-2; i>=0; i--) {
-		    			Node routeRuleNode = flowNodeList.item(i);
-
-		    			// Search Condition value
-		    			Node condition = XMLHelper.getFirstChildByTagName(routeRuleNode, "Condition");
-		    			
-		    			if(condition==null || condition.getTextContent().isEmpty() || "true".equals(condition.getTextContent())) {
-		    				// Issue detected
-		    				createViolation(getWebSourceCode().getLineForNode(routeRuleNode), "Unreachable Route Rules - empty conditions go last");
-		    			}
-		    		}
-		    	}
-	    	}
+			    	if(flowNodeList!=null && flowNodeList.getLength() >= 2) {
+			    		
+			    		// Reversed loop
+			    		for(int i=flowNodeList.getLength()-2; i>=0; i--) {
+			    			Node routeRuleNode = flowNodeList.item(i);
+	
+			    			// Search Condition value
+			    			Node condition = (Node)xpath.evaluate("Condition", routeRuleNode, XPathConstants.NODE);
+			    			
+			    			if(condition==null || condition.getTextContent().isEmpty() || "true".equals(condition.getTextContent())) {
+			    				// Issue detected
+			    				createViolation(getWebSourceCode().getLineForNode(routeRuleNode), "Unreachable Route Rules - empty conditions go last");
+			    			}
+			    		}
+			    	}
+				} catch (XPathExpressionException e) {
+				}
+	    	
 	    }
 	}
 
