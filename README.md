@@ -102,7 +102,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| PO006 | &nbsp; | Policy Naming Conventions - default name | Policy names should not be default. |
 |:white_check_mark:| PO007 | Minor | Policy Naming Conventions - type indication | It is recommended that the policy name include an indicator of the policy type. |
 |:white_check_mark:| PO008 | Minor | Policy Name Attribute Conventions | It is recommended that the policy name attribute match the display name of the policy. |
-|:heavy_multiplication_x:| PO009 | &nbsp; | Service Callout Target - Mgmt Server | Targeting management server may result in higher than expected latency use with caution. |
+|:white_check_mark:| PO009 | Critical | Service Callout Target - Mgmt Server | Targeting management server may result in higher than expected latency use with caution. |
 |:heavy_multiplication_x:| PO010 | &nbsp; | Service Callout Target - Target Server | Encourage use of target servers. |
 |:heavy_multiplication_x:| PO011 | &nbsp; | Service Callout Target - Dynamic URLs | Error on dynamic URLs in target server URL tag. |
 |:heavy_multiplication_x:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. |

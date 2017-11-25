@@ -29,7 +29,7 @@ import org.w3c.dom.Node;
 
 /**
  * Definition : Discourage accessing management server from a proxy.
- * Code : TD001
+ * Code : TD001 & PO009
  * @author Nicolas Tisserand
  */
 @Rule(key = "UseManagementServerCheck")
