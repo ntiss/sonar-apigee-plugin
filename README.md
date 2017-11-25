@@ -56,7 +56,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_multiplication_x:| BN001 | &nbsp; | Bundle folder structure correctness. | Bundles have a clear structure. |
 |:heavy_multiplication_x:| BN002 | &nbsp; | Extraneous files. | Ensure each folder contains approrpriate resources in the bundle. |
-|:heavy_multiplication_x:| BN003 | &nbsp; | Cache Coherence | A bundle that includes cache reads should include cache writes with the same keys. |
+|:white_check_mark:| BN003 | Major | Cache Coherence | A bundle that includes cache reads should include cache writes with the same keys. |
 |:heavy_multiplication_x:| BN004 | &nbsp; | Unused variables. | Within a bundle variables created should be used in conditions, resource callouts, or policies. |
 |:heavy_multiplication_x:| BN005 | &nbsp; | Unattached policies. | Unattached policies are dead code and should be removed from production bundles. |
 |:heavy_multiplication_x:| BN006 | &nbsp; | Bundle size - policies. | Large bundles are a symptom of poor design. A high number of policies is predictive of an oversized bundle. |

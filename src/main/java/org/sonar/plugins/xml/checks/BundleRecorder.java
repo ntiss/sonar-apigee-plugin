@@ -24,7 +24,6 @@ import java.util.Map;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
@@ -88,8 +87,7 @@ public class BundleRecorder {
 			    XPathFactory xPathfactory = XPathFactory.newInstance();
 			    XPath xpath = xPathfactory.newXPath();
 				
-				XPathExpression exprName = xpath.compile("boolean( //Step/Name[text() = '"+stepName+"'])");
-				boolean hasMatchingStep = (boolean)exprName.evaluate(document, XPathConstants.BOOLEAN);
+				boolean hasMatchingStep = (boolean)xpath.evaluate("boolean( //Step/Name[text() = '"+stepName+"'])", document, XPathConstants.BOOLEAN);
 			    if(hasMatchingStep) {
 			    	matchingXmlSourceCode.add(currentXml);
 			    }
@@ -99,4 +97,31 @@ public class BundleRecorder {
 		
 		return matchingXmlSourceCode;
 	}
+	
+	
+	/**
+	 * Returns all XmlSourceCode containing a Policy of type policyType
+	 * @param policyType
+	 * @return
+	 */
+	public static List<XmlSourceCode> searchPoliciesByType(String policyType) {
+		
+		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<XmlSourceCode>();
+		
+		for(XmlSourceCode currentXml : policies.values()) {
+			Document document = currentXml.getDocument(false);
+			try {
+			    XPathFactory xPathfactory = XPathFactory.newInstance();
+			    XPath xpath = xPathfactory.newXPath();
+				
+				boolean isMatchingType = (boolean)xpath.evaluate("boolean(/"+policyType+")", document, XPathConstants.BOOLEAN);
+			    if(isMatchingType) {
+			    	matchingXmlSourceCode.add(currentXml);
+			    }
+			} catch (XPathExpressionException e) {
+			}			
+		}
+		
+		return matchingXmlSourceCode;
+	}	
 }
