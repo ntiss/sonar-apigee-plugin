@@ -19,7 +19,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 	}
 	
 	@Test
-	public void test_json_ok1() throws Exception {
+	public void test_json_ok1_condition_in_step() throws Exception {
 		
 		// Fake ProxyEndpoint file
 		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
@@ -51,7 +51,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 	}
 	
 	@Test
-	public void test_xml_ok1() throws Exception {
+	public void test_xml_ok1_condition_in_step() throws Exception {
 		
 		// Fake ProxyEndpoint file
 		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
@@ -83,7 +83,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 	}
 
 	@Test
-	public void test_json_ok2() throws Exception {
+	public void test_json_ok2_condition_in_step() throws Exception {
 		
 		// Fake ProxyEndpoint file
 		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
@@ -122,7 +122,7 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 	}
 	
 	@Test
-	public void test_json_ok3() throws Exception {
+	public void test_json_ok3_condition_in_proxyEndpoint() throws Exception {
 		
 		// Fake ProxyEndpoint file
 		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
@@ -159,6 +159,43 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 
+	@Test
+	public void test_json_ok4_condition_in_targetEnpoint() throws Exception {
+		
+		// Fake ProxyEndpoint file
+		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<TargetEndpoint name=\"default\">\r\n" + 
+				"    <Description/>\r\n" + 
+				"    <PreFlow/>\r\n" + 
+				"    <Flows>\r\n" + 
+				"        <Flow name=\"list resources\">\r\n" + 
+				"            <Condition>(proxy.pathsuffix MatchesPath \"/resources\") and (request.verb = \"POST\") and (request.header.Content-Length != 0)</Condition>\r\n" + 
+				"            <Description>CREATE the resource</Description>\r\n" + 
+				"            <Request>\r\n" + 
+				"                <Step>\r\n" + 
+				"                    <Name>JSON-Threat-Protection-1</Name>\r\n" + 
+				"                </Step>\r\n" + 
+				"            </Request>\r\n" + 
+				"            <Response/>\r\n" + 
+				"        </Flow>\r\n" + 
+				"    </Flows>\r\n" + 
+				"</TargetEndpoint>" 
+				));
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(proxyEndpointXML);
+
+		List<XmlIssue> issues = getIssues(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+			"<JSONThreatProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"JSON-Threat-Protection-1\">\r\n" + 
+			"    <DisplayName>JSON-Threat-Protection-1</DisplayName>\r\n" + 
+			"</JSONThreatProtection>"
+		);
+		assertEquals(0, issues.size());
+		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
+	}
+	
+	
+	
 	@Test
 	public void test_json_ko1() throws Exception {
 		

@@ -30,32 +30,44 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 
+import com.google.common.collect.Iterables;
+
 /**
  * This class records each files discovered in the bundle directory
  * @author Nicolas Tisserand
  */
 public class BundleRecorder {
 
-	private static Map<String, XmlSourceCode> storage = new HashMap<String, XmlSourceCode>();
 	private static Map<String, XmlSourceCode> proxiesEndpoint = new HashMap<String, XmlSourceCode>();
+	private static Map<String, XmlSourceCode> targetsEndpoint = new HashMap<String, XmlSourceCode>();
+	private static Map<String, XmlSourceCode> policies = new HashMap<String, XmlSourceCode>();
 	
 	public static void clear() {
-			storage.clear();
 			proxiesEndpoint.clear();
+			targetsEndpoint.clear();
+			policies.clear();
 	}
 	
-	
+	/**
+	 * Stores the xmlSourceCode in static Maps depending on their type
+	 * @param xmlSourceCode
+	 */
 	public static void storeFile(XmlSourceCode xmlSourceCode) {
-		
-		// Full storage
-		String fileName = xmlSourceCode.getInputFile().wrapped().relativePath();
-		storage.put(fileName, xmlSourceCode);
-		
-		// ProxyEndpoint storage
+
+		// Force parsing at the beginning
 		xmlSourceCode.parseSource();
 		Document document = xmlSourceCode.getDocument(false);
+		String fileName = xmlSourceCode.getInputFile().wrapped().relativePath();
+		
 	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
+			// ProxyEndpoint storage
 	    	proxiesEndpoint.put(fileName, xmlSourceCode);
+    	} else if (document.getDocumentElement() != null && "TargetEndpoint".equals(document.getDocumentElement().getNodeName())) {
+			// TargetEndpoint storage
+	    	targetsEndpoint.put(fileName, xmlSourceCode);
+    	} else {
+    		// Policy storage
+    		policies.put(fileName, xmlSourceCode);
     	}
 	}
 	
@@ -69,8 +81,8 @@ public class BundleRecorder {
 		
 		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<XmlSourceCode>();
 		
-		for(XmlSourceCode currentXml : proxiesEndpoint.values()) {
-			
+		// Search for "stepName" in both ProxyEndpoint and TargetEndpoint
+		for(XmlSourceCode currentXml : Iterables.concat(proxiesEndpoint.values(), targetsEndpoint.values())) {
 			Document document = currentXml.getDocument(false);
 			try {
 			    XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -86,11 +98,5 @@ public class BundleRecorder {
 		}
 		
 		return matchingXmlSourceCode;
-		
-		
 	}
-
-		
-		
-	
 }
