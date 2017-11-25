@@ -1,0 +1,14 @@
+{
+  "title": "Discourage accessing management server from a proxy.",
+  "type": "CODE_SMELL",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "30min"
+  },
+  "tags": [
+    "performance",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Critical"
+}

@@ -36,6 +36,7 @@ import org.sonar.plugins.xml.checks.ThreatProtectionCheck;
 import org.sonar.plugins.xml.checks.UnconditionalFlowCheck;
 import org.sonar.plugins.xml.checks.UnknownResourceFlowCheck;
 import org.sonar.plugins.xml.checks.UnreachableFlowCheck;
+import org.sonar.plugins.xml.checks.UseManagementServerCheck;
 import org.sonar.plugins.xml.checks.UseTargetServersCheck;
 
 import com.google.common.collect.ImmutableList;
@@ -73,6 +74,7 @@ public class CheckRepository {
 				.add(UnconditionalFlowCheck.class)
 				.add(UnknownResourceFlowCheck.class)
 				.add(UnreachableFlowCheck.class)
+				.add(UseManagementServerCheck.class)
 				.add(UseTargetServersCheck.class)
 				
 				.build();
