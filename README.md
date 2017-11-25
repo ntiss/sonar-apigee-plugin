@@ -68,6 +68,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 ### Proxy Definition level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
+|:heavy_multiplication_x:| PD001 | &nbsp; | RouteRules to Targets | RouteRules should map to defined Targets |
 |:heavy_multiplication_x:| PD002 | &nbsp; | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
 |:white_check_mark:| PD003 | Blocker | Unreachable Route Rules | RouteRule without a condition should be last. |
 
