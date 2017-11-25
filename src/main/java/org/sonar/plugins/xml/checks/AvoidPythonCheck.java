@@ -19,7 +19,6 @@ package org.sonar.plugins.xml.checks;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
@@ -47,8 +46,7 @@ public class AvoidPythonCheck extends AbstractXmlCheck {
 		    
 		    try {
 		    	// Select in one shot the Description which are too short
-			    XPathExpression exprDisplayName = xpath.compile("//Script//ResourceURL[starts-with(., 'py://')]");
-			    Node resourceURLNode = (Node)exprDisplayName.evaluate(document, XPathConstants.NODE);
+			    Node resourceURLNode = (Node)xpath.evaluate("//Script//ResourceURL[starts-with(., 'py://')]", document, XPathConstants.NODE);
 
 		    	if(resourceURLNode!=null) {
 	    			createViolation(getWebSourceCode().getLineForNode(resourceURLNode), "Avoid Python language.");
