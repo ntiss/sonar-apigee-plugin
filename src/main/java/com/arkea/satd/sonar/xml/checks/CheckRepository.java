@@ -29,6 +29,7 @@ import org.sonar.plugins.xml.checks.ExtractVariablesCheck;
 import org.sonar.plugins.xml.checks.FaultRuleConditionCheck;
 import org.sonar.plugins.xml.checks.PolicyDisplayNameCheck;
 import org.sonar.plugins.xml.checks.PolicyNameConventionCheck;
+import org.sonar.plugins.xml.checks.RegexLookAroundCheck;
 import org.sonar.plugins.xml.checks.ServiceCalloutRequestVariableNameCheck;
 import org.sonar.plugins.xml.checks.ServiceCalloutResponseVariableNameCheck;
 import org.sonar.plugins.xml.checks.ThreatProtectionCheck;
@@ -65,6 +66,7 @@ public class CheckRepository {
 				.add(FaultRuleConditionCheck.class)
 				.add(PolicyDisplayNameCheck.class)
 				.add(PolicyNameConventionCheck.class)
+				.add(RegexLookAroundCheck.class)
 				.add(ServiceCalloutRequestVariableNameCheck.class)
 				.add(ServiceCalloutResponseVariableNameCheck.class)
 				.add(ThreatProtectionCheck.class)
