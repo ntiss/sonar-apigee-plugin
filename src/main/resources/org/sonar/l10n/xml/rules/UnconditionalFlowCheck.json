@@ -9,5 +9,5 @@
   "tags": [
     "bug"
   ],
-  "defaultSeverity": "Critical"
+  "defaultSeverity": "Blocker"
 }
