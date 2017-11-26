@@ -48,10 +48,10 @@ public class PolicyDisplayNameCheck extends AbstractXmlCheck {
 	    XPath xpath = xPathfactory.newXPath();
 	    
 		try {
-			XPathExpression exprName = xpath.compile("//@name");
+			XPathExpression exprName = xpath.compile("/*/@name");
 		    String nameAttr = (String)exprName.evaluate(document, XPathConstants.STRING);
 			
-			XPathExpression exprDisplayName = xpath.compile("//DisplayName[text() != //@name]");
+			XPathExpression exprDisplayName = xpath.compile("//DisplayName[text() != /*/@name]");
 		    Node displayNameNode = (Node)exprDisplayName.evaluate(document, XPathConstants.NODE);
 	
 		    if(displayNameNode!=null) {
