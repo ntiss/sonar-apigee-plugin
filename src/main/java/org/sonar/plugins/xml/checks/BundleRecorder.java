@@ -123,5 +123,31 @@ public class BundleRecorder {
 		}
 		
 		return matchingXmlSourceCode;
-	}	
+	}
+	
+	/**
+	 * Returns the XmlSourceCode containing the Policy of name policyName
+	 * Policy names are unique
+	 * @param policyType
+	 * @return
+	 */
+	public static XmlSourceCode searchPoliciesByName(String policyName) {
+		
+		for(XmlSourceCode currentXml : policies.values()) {
+			Document document = currentXml.getDocument(false);
+			try {
+			    XPathFactory xPathfactory = XPathFactory.newInstance();
+			    XPath xpath = xPathfactory.newXPath();
+				
+				String attrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
+			    if(policyName!=null && policyName.equals(attrName)) {
+			    	return currentXml;
+			    }
+			} catch (XPathExpressionException e) {
+			}			
+		}
+		
+		return null;
+	}		
+	
 }
