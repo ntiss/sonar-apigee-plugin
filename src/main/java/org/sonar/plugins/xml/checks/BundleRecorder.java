@@ -58,16 +58,24 @@ public class BundleRecorder {
 		Document document = xmlSourceCode.getDocument(false);
 		String fileName = xmlSourceCode.getInputFile().wrapped().relativePath();
 		
-	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
-			// ProxyEndpoint storage
-	    	proxiesEndpoint.put(fileName, xmlSourceCode);
-    	} else if (document.getDocumentElement() != null && "TargetEndpoint".equals(document.getDocumentElement().getNodeName())) {
-			// TargetEndpoint storage
-	    	targetsEndpoint.put(fileName, xmlSourceCode);
-    	} else {
-    		// Policy storage
-    		policies.put(fileName, xmlSourceCode);
-    	}
+	    if (document.getDocumentElement() != null) {
+	    	
+	    	String rootNodeName = document.getDocumentElement().getNodeName();
+	    	
+	    	if("ProxyEndpoint".equals(rootNodeName)) {
+				// ProxyEndpoint storage
+		    	proxiesEndpoint.put(fileName, xmlSourceCode);
+	    	} else if ("TargetEndpoint".equals(rootNodeName)) {
+				// TargetEndpoint storage
+		    	targetsEndpoint.put(fileName, xmlSourceCode);
+	    	} else if ("APIProxy".equals(rootNodeName)) {
+				// APIProxy storage
+		    	// No need to store for the moment 
+	    	} else {
+	    		// Policy storage
+	    		policies.put(fileName, xmlSourceCode);
+	    	}
+	    }
 	}
 	
 	
