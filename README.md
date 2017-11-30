@@ -63,7 +63,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| BN007 | &nbsp; | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. |
 |:heavy_multiplication_x:| BN008 | &nbsp; | IgnoreUnresolvedVariables and FaultRules | Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors. |
 |:heavy_multiplication_x:| BN009 | &nbsp; | Statistics Collector - duplicate policies | Warn on duplicate policies when no conditions are present or conditions are duplicates. |
-|:white_check_mark:| BN500 | Minor | Description length | The Description tag should have more than 5 chars to be useful. |
+|:white_check_mark:| BN500 | Info | Description length | The Description tag should have more than 5 chars to be useful. |
 
 ### Proxy Definition level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
