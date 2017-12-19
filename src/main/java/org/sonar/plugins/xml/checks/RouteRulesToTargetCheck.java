@@ -15,8 +15,6 @@
  */
 package org.sonar.plugins.xml.checks;
 
-import java.util.List;
-
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -24,43 +22,45 @@ import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
- * Unattached policies are dead code and should be removed from production bundles.
- * Code : BN005
+ * RouteRules should map to defined Targets
+ * (Apigee UI already prevent this from happening)
+ * Code : PD001
  * @author Nicolas Tisserand
  */
-@Rule(key = "UnattachedPolicyCheck")
-public class UnattachedPolicyCheck extends AbstractXmlCheck {
+@Rule(key = "RouteRulesToTargetCheck")
+public class RouteRulesToTargetCheck extends AbstractXmlCheck {
 
 	@Override
 	public void validate(XmlSourceCode xmlSourceCode) {
 	    setWebSourceCode(xmlSourceCode);
 	    
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null) {
+	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
     	
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
 		    XPath xpath = xPathfactory.newXPath();
 		    
 		    try {
-		    	// Select in one shot the name attribute
-		    	String attrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
+		    	// Select in one shot all the target endpoints
+		    	NodeList targetList = (NodeList)xpath.evaluate("//TargetEndpoint", document, XPathConstants.NODESET);
 		    	
-		    	// Verify that this is a policy :
-		    	if(BundleRecorder.searchPoliciesByName(attrName) != null) {
-		    		
-		    		// Search for a step with the same name
-		    		List<XmlSourceCode> stepsList = BundleRecorder.searchByStepName(attrName);
-		    		if(stepsList==null || stepsList.isEmpty()) {
-		    			createViolation(1, "This policy is not attached to a Step in the bundle.");
-		    		}
-		    	}
-		    	
+	    		for(int i=0; i<targetList.getLength(); i++) {
+	    			Node targetNode = targetList.item(i);
+	    			String targetName = targetNode.getTextContent();
+
+			    	// Verify that there is an existing target
+			    	if(BundleRecorder.searchTargetEndpointByName(targetName) == null) {
+	    				// Issue detected
+		    			createViolation(getWebSourceCode().getLineForNode(targetNode), "RouteRules should map to defined Targets.");
+			    		
+			    	}
+	    		}
 			} catch (XPathExpressionException e) {
 			}
 	    }
-		    
 	}
-
 }

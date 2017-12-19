@@ -4,13 +4,15 @@
 This SonarQube Plugin is designed to test Apigee apiproxies.
 The goals is to help  API developpers in doing a static analysis and providing issues to the Sonar engine.
 
-The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter) and on this [document about best-practices](https://docs.apigee.com/api-services/content/best-practices-api-proxy-design-and-development)
-All rules are not yet implemented ([see below](#implemented-rules))
+The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter) and on this [document about best-practices](https://docs.apigee.com/api-services/content/best-practices-api-proxy-design-and-development).
+
+All rules are not yet implemented ([see below](#implemented-rules)).
+Apigee Shared Flows are not yet supported.
 
 ## Usage
 
 ### Dependencies
-To work, th plugin sonar-xml-plugin MUST be installed.
+To work, the plugin sonar-xml-plugin MUST be installed.
 As Apigee also deals with Javascript and Python, it would be pertinent to install sonar-python-plugin and sonar-javascript-plugin, but it's not mandatory.
 
 ### Build
@@ -58,7 +60,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| BN002 | &nbsp; | Extraneous files. | Ensure each folder contains approrpriate resources in the bundle. |
 |:white_check_mark:| BN003 | Major | Cache Coherence | A bundle that includes cache reads should include cache writes with the same keys. |
 |:heavy_multiplication_x:| BN004 | &nbsp; | Unused variables. | Within a bundle variables created should be used in conditions, resource callouts, or policies. |
-|:heavy_multiplication_x:| BN005 | &nbsp; | Unattached policies. | Unattached policies are dead code and should be removed from production bundles. |
+|:white_check_mark:| BN005 | Minor | Unattached policies. | Unattached policies are dead code and should be removed from production bundles. |
 |:heavy_multiplication_x:| BN006 | &nbsp; | Bundle size - policies. | Large bundles are a symptom of poor design. A high number of policies is predictive of an oversized bundle. |
 |:heavy_multiplication_x:| BN007 | &nbsp; | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. |
 |:heavy_multiplication_x:| BN008 | &nbsp; | IgnoreUnresolvedVariables and FaultRules | Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors. |
@@ -68,7 +70,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 ### Proxy Definition level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
-|:heavy_multiplication_x:| PD001 | &nbsp; | RouteRules to Targets | RouteRules should map to defined Targets |
+|:white_check_mark:| PD001 | Blocker | RouteRules to Targets | RouteRules should map to defined Targets |
 |:white_check_mark:| PD002 | Blocker | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
 |:white_check_mark:| PD003 | Blocker | Unreachable Route Rules | RouteRule without a condition should be last. |
 
@@ -133,6 +135,3 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:white_check_mark:| CC003 | Minor | Long condition statement | Conditions should not be long. (i.e. less than 256 characters) |
 |:heavy_multiplication_x:| CC004 | &nbsp; | Overly complex condition | Condition complexity should be limited to fix number of variables and conjunctions. |
 |:heavy_multiplication_x:| CC006 | &nbsp; | Detect logical absurdities | Conditions should not have internal logic conflicts - warn when these are detected. |
-
-
-+
