@@ -64,6 +64,41 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 		List<XmlIssue> issues = getIssues(thePolicy);
 		assertEquals(0, issues.size());
 	}
+
+	@Test
+	public void test_ok_inFaultRule() throws Exception {
+		
+		// Fake ProxyEndpoint file
+		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <Description/>\r\n" + 
+				"    <FaultRules>\r\n" + 
+				"        <FaultRule name=\"error403\">\r\n" + 
+				"            <Condition>message.status.code=403</Condition>\r\n" + 
+				"            <Step>\r\n" + 
+				"                <Name>Assign-Message-UsedInFaultRule</Name>\r\n" + 
+				"            </Step>\r\n" + 
+				"            <Step>\r\n" + 
+				"                <Name>Raise-Fault-1</Name>\r\n" + 
+				"            </Step>\r\n" + 
+				"        </FaultRule>\r\n" + 
+				"    </FaultRules>" +
+				"</ProxyEndpoint>" 
+				));
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(proxyEndpointXML);
+
+		String thePolicy = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<AssignMessage async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Assign-Message-UsedInFaultRule\">\r\n" + 
+				"    <DisplayName>Assign Message-UsedInFaultRule</DisplayName>\r\n" + 
+				"    <Properties/>\r\n" + 
+				"</AssignMessage>";
+		BundleRecorder.storeFile(parse(createTempFile(thePolicy)));
+		
+		List<XmlIssue> issues = getIssues(thePolicy);
+		assertEquals(0, issues.size());
+	}
+		
 	
 	@Test
 	public void test_ko() throws Exception {

@@ -44,7 +44,7 @@ public class UnattachedPolicyCheck extends AbstractXmlCheck {
 		    XPath xpath = xPathfactory.newXPath();
 		    
 		    try {
-		    	// Select in one shot the Description which are too short
+		    	// Select in one shot the name attribute
 		    	String attrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
 		    	
 		    	// Verify that this is a policy :
