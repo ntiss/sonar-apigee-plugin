@@ -154,6 +154,31 @@ public class BundleRecorder {
 		}
 		
 		return null;
-	}		
+	}
+	
+	/**
+	 * Returns the XmlSourceCode containing the TargetEndpoint of name targetName
+	 * TargetEndpoint names are unique
+	 * @param targetName
+	 * @return
+	 */
+	public static XmlSourceCode searchTargetEndpointByName(String targetName) {
+		
+		for(XmlSourceCode currentXml : targetsEndpoint.values()) {
+			Document document = currentXml.getDocument(false);
+			try {
+			    XPathFactory xPathfactory = XPathFactory.newInstance();
+			    XPath xpath = xPathfactory.newXPath();
+				
+				String attrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
+			    if(targetName!=null && targetName.equals(attrName)) {
+			    	return currentXml;
+			    }
+			} catch (XPathExpressionException e) {
+			}			
+		}
+		
+		return null;
+	}			
 	
 }

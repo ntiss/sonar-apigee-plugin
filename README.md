@@ -4,13 +4,15 @@
 This SonarQube Plugin is designed to test Apigee apiproxies.
 The goals is to help  API developpers in doing a static analysis and providing issues to the Sonar engine.
 
-The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter) and on this [document about best-practices](https://docs.apigee.com/api-services/content/best-practices-api-proxy-design-and-development)
-All rules are not yet implemented ([see below](#implemented-rules))
+The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter) and on this [document about best-practices](https://docs.apigee.com/api-services/content/best-practices-api-proxy-design-and-development).
+
+All rules are not yet implemented ([see below](#implemented-rules)).
+Apigee Shared Flows are not yet supported.
 
 ## Usage
 
 ### Dependencies
-To work, th plugin sonar-xml-plugin MUST be installed.
+To work, the plugin sonar-xml-plugin MUST be installed.
 As Apigee also deals with Javascript and Python, it would be pertinent to install sonar-python-plugin and sonar-javascript-plugin, but it's not mandatory.
 
 ### Build
@@ -68,7 +70,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 ### Proxy Definition level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
-|:heavy_multiplication_x:| PD001 | &nbsp; | RouteRules to Targets | RouteRules should map to defined Targets |
+|:white_check_mark:| PD001 | Blocker | RouteRules to Targets | RouteRules should map to defined Targets |
 |:white_check_mark:| PD002 | Blocker | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
 |:white_check_mark:| PD003 | Blocker | Unreachable Route Rules | RouteRule without a condition should be last. |
 
