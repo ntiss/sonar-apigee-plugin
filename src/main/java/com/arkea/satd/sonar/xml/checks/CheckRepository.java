@@ -22,6 +22,7 @@ import org.sonar.plugins.xml.checks.AvoidPythonCheck;
 import org.sonar.plugins.xml.checks.CacheCoherenceCheck;
 import org.sonar.plugins.xml.checks.ConditionLengthCheck;
 import org.sonar.plugins.xml.checks.DescriptionCheck;
+import org.sonar.plugins.xml.checks.DescriptionPatternCheck;
 import org.sonar.plugins.xml.checks.EmptyRouteRuleLastCheck;
 import org.sonar.plugins.xml.checks.EmptyStepCheck;
 import org.sonar.plugins.xml.checks.ExtractVariablesCheck;
@@ -65,6 +66,7 @@ public class CheckRepository {
 				.add(CacheCoherenceCheck.class)
 				.add(ConditionLengthCheck.class)
 				.add(DescriptionCheck.class)
+				.add(DescriptionPatternCheck.class)
 				.add(EmptyRouteRuleLastCheck.class)
 				.add(EmptyStepCheck.class)
 				.add(ExtractVariablesCheck.class)
