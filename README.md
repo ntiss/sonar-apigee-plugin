@@ -23,7 +23,7 @@ You'll get a jar file in the target directory
 
 ### Installation
 Like any Sonar plugin :
- * put the file sonar-apigee-plugin-X.X.X.jar in the directory $SONARQUBE_HOME/extensions/plugins.
+ * put the file sonar-apigee-plugin-X.X.X.jar in the directory $SONARQUBE_HOME/extensions/plugins. (the jar is also avalaible in the release section)
  * restart the server
 Finally :
  * activate all rules in the sonar way profile
