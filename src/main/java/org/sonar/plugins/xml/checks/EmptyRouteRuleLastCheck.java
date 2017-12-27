@@ -43,30 +43,30 @@ public class EmptyRouteRuleLastCheck extends AbstractXmlCheck {
     	// Search for last Flow of an ProxyEndpoint document
 	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 	    	
+		    XPathFactory xPathfactory = XPathFactory.newInstance();
+		    XPath xpath = xPathfactory.newXPath();
+    		
+			try {
+				NodeList flowNodeList = (NodeList)xpath.evaluate("//RouteRule", document, XPathConstants.NODESET);
+	    	
+		    	if(flowNodeList!=null && flowNodeList.getLength() >= 2) {
+		    		
+		    		// Reversed loop
+		    		for(int i=flowNodeList.getLength()-2; i>=0; i--) {
+		    			Node routeRuleNode = flowNodeList.item(i);
 
-			    XPathFactory xPathfactory = XPathFactory.newInstance();
-			    XPath xpath = xPathfactory.newXPath();
-	    		
-				try {
-					NodeList flowNodeList = (NodeList)xpath.evaluate("//RouteRule", document, XPathConstants.NODESET);
-		    	
-			    	if(flowNodeList!=null && flowNodeList.getLength() >= 2) {
-			    		
-			    		// Reversed loop
-			    		for(int i=flowNodeList.getLength()-2; i>=0; i--) {
-			    			Node routeRuleNode = flowNodeList.item(i);
-	
-			    			// Search Condition value
-			    			Node condition = (Node)xpath.evaluate("Condition", routeRuleNode, XPathConstants.NODE);
-			    			
-			    			if(condition==null || condition.getTextContent().isEmpty() || "true".equals(condition.getTextContent())) {
-			    				// Issue detected
-			    				createViolation(getWebSourceCode().getLineForNode(routeRuleNode), "Unreachable Route Rules - empty conditions go last");
-			    			}
-			    		}
-			    	}
-				} catch (XPathExpressionException e) {
-				}
+		    			// Search Condition value
+		    			Node condition = (Node)xpath.evaluate("Condition", routeRuleNode, XPathConstants.NODE);
+		    			
+		    			if(condition==null || condition.getTextContent().isEmpty() || "true".equals(condition.getTextContent())) {
+		    				// Issue detected
+		    				createViolation(getWebSourceCode().getLineForNode(routeRuleNode), "Unreachable Route Rules - empty conditions go last");
+		    			}
+		    		}
+		    	}
+			} catch (XPathExpressionException e) {
+				// Nothing to do
+			}
 	    	
 	    }
 	}

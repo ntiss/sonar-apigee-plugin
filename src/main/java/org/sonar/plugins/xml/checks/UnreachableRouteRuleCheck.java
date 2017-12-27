@@ -39,30 +39,26 @@ public class UnreachableRouteRuleCheck extends AbstractXmlCheck {
 	    setWebSourceCode(xmlSourceCode);
 
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null) {
+	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 
-	    	// Search for last Flow of an ProxyEndpoint document
-	    	if("ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
+		    XPathFactory xPathfactory = XPathFactory.newInstance();
+		    XPath xpath = xPathfactory.newXPath();
+		    
+		    try {
+		    	// Select the RouteRule without Condition (or "true")
+			    NodeList routeRuleList = (NodeList)xpath.evaluate("//RouteRule[not(Condition) or Condition/text()='true' or string-length(Condition/text())=0]", document, XPathConstants.NODESET);
+		    	if(routeRuleList!=null && routeRuleList.getLength()>1) {
+		    		for(int i=0; i<routeRuleList.getLength(); i++) {
+		    			Node routeRuleNode = routeRuleList.item(i);
 
-			    XPathFactory xPathfactory = XPathFactory.newInstance();
-			    XPath xpath = xPathfactory.newXPath();
-			    
-			    try {
-			    	// Select the RouteRule without Condition (or "true")
-				    NodeList routeRuleList = (NodeList)xpath.evaluate("//RouteRule[not(Condition) or Condition/text()='true' or string-length(Condition/text())=0]", document, XPathConstants.NODESET);
-			    	if(routeRuleList!=null && routeRuleList.getLength()>1) {
-			    		for(int i=0; i<routeRuleList.getLength(); i++) {
-			    			Node routeRuleNode = routeRuleList.item(i);
-	
-		    				// Create a violation if flow node is not the last one
-			    			createViolation(getWebSourceCode().getLineForNode(routeRuleNode), "Only one RouteRule should be present without a condition.");
-			    		}
-			    	}
+	    				// Create a violation if flow node is not the last one
+		    			createViolation(getWebSourceCode().getLineForNode(routeRuleNode), "Only one RouteRule should be present without a condition.");
+		    		}
+		    	}
 
-				} catch (XPathExpressionException e) {
-				}	    		
-			    	
-	    	}
+			} catch (XPathExpressionException e) {
+				// Nothing to do
+			}			    	
 	    }
 	}
 

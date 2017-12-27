@@ -57,6 +57,7 @@ public class EmptyStepCheck extends AbstractXmlCheck {
 	    		}
 	    	}
 		} catch (XPathExpressionException e) {
+			// Nothing to do
 		}
 
 	}

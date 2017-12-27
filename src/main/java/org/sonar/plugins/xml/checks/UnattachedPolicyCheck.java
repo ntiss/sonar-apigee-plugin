@@ -58,6 +58,7 @@ public class UnattachedPolicyCheck extends AbstractXmlCheck {
 		    	}
 		    	
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		    

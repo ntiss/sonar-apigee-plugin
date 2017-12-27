@@ -34,39 +34,35 @@ public class UnknownResourceFlowCheck extends AbstractXmlCheck {
 	    setWebSourceCode(xmlSourceCode);
 
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null) {
+	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
+
+	    	NodeList flowsNodeList = document.getDocumentElement().getElementsByTagName("Flows");
 	    	
-	    	// Search for last Flow of an ProxyEndpoint document
-	    	if("ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
+	    	if(flowsNodeList != null && flowsNodeList.getLength()>0) {
+	    		Node flowsNode = flowsNodeList.item(0);
+	    		if(flowsNode != null) {
+	    			// Go to the last defined flow
+	    			Node lastFlowNode = flowsNode.getLastChild();
 
-		    	NodeList flowsNodeList = document.getDocumentElement().getElementsByTagName("Flows");
-		    	
-		    	if(flowsNodeList != null && flowsNodeList.getLength()>0) {
-		    		Node flowsNode = flowsNodeList.item(0);
-		    		if(flowsNode != null) {
-		    			// Go to the last defined flow
-		    			Node lastFlowNode = flowsNode.getLastChild();
-
-		    			// Loop to get rid of #text nodes
-		    			int loop = 0;
-		    			while(!"Flow".equals(lastFlowNode.getNodeName()) && loop < flowsNode.getChildNodes().getLength()) {
-		    				lastFlowNode = lastFlowNode.getPreviousSibling();
-		    				loop++;
-		    			}
-		    		
-		    			// Search and test Condition value
-		    			NodeList lastFlowChilds = lastFlowNode.getChildNodes();
-		    			for(int i = 0; i < lastFlowChilds.getLength(); i++) {
-		    				Node currentChild = lastFlowChilds.item(i);
-		    				if("Condition".equals(currentChild.getNodeName())) {
-		    					String cond = currentChild.getTextContent();
-		    					if(!"true".equalsIgnoreCase(cond)) {
-		    						createViolation(getWebSourceCode().getLineForNode(flowsNode.getNextSibling()) - 1, "There is no default flow in this proxy endpoint.");
-		    					}
-		    				}
-		    			}
-		    		}
-		    	}
+	    			// Loop to get rid of #text nodes
+	    			int loop = 0;
+	    			while(!"Flow".equals(lastFlowNode.getNodeName()) && loop < flowsNode.getChildNodes().getLength()) {
+	    				lastFlowNode = lastFlowNode.getPreviousSibling();
+	    				loop++;
+	    			}
+	    		
+	    			// Search and test Condition value
+	    			NodeList lastFlowChilds = lastFlowNode.getChildNodes();
+	    			for(int i = 0; i < lastFlowChilds.getLength(); i++) {
+	    				Node currentChild = lastFlowChilds.item(i);
+	    				if("Condition".equals(currentChild.getNodeName())) {
+	    					String cond = currentChild.getTextContent();
+	    					if(!"true".equalsIgnoreCase(cond)) {
+	    						createViolation(getWebSourceCode().getLineForNode(flowsNode.getNextSibling()) - 1, "There is no default flow in this proxy endpoint.");
+	    					}
+	    				}
+	    			}
+	    		}
 	    	}
 	    }
 	}

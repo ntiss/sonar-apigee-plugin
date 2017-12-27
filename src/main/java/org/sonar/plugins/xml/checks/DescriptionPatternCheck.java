@@ -75,6 +75,7 @@ public class DescriptionPatternCheck extends AbstractXmlCheck {
 		    		}
 		    	}
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		    

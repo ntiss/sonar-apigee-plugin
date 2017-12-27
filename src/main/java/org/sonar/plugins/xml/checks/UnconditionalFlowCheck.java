@@ -72,9 +72,6 @@ public class UnconditionalFlowCheck extends AbstractXmlCheck {
 		    		}
 		    	}
 	    	}
-	    	
-	    	
-	    	
 	    }
 	}
 

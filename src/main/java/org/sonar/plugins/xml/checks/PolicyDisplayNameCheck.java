@@ -59,6 +59,7 @@ public class PolicyDisplayNameCheck extends AbstractXmlCheck {
 				createViolation(getWebSourceCode().getLineForNode(displayNameNode), "It is recommended that the policy name attribute ("+nameAttr+") match the display name of the policy ("+displayNameText+").");
 		    }
 		} catch (XPathExpressionException e) {
+			// Nothing to do
 		}
 	}
 	

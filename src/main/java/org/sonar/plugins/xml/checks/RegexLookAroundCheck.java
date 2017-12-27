@@ -55,6 +55,7 @@ public class RegexLookAroundCheck extends AbstractXmlCheck {
 		    		}
 		    	}
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		    

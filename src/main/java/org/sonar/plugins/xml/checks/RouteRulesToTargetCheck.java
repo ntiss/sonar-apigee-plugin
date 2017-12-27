@@ -60,6 +60,7 @@ public class RouteRulesToTargetCheck extends AbstractXmlCheck {
 			    	}
 	    		}
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 	}
