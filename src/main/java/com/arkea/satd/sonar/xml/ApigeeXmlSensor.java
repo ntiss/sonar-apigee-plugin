@@ -129,15 +129,17 @@ public class ApigeeXmlSensor implements Sensor {
 		}
 	}
 
-	private static void saveSyntaxHighlighting(SensorContext context, List<HighlightingData> highlightingDataList,
-			InputFile inputFile) {
-		NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
-
-		for (HighlightingData highlightingData : highlightingDataList) {
-			highlighting.highlight(highlightingData.startOffset(), highlightingData.endOffset(),
-					highlightingData.highlightCode());
+	private static void saveSyntaxHighlighting(SensorContext context, List<HighlightingData> highlightingDataList, InputFile inputFile) {
+		
+		if(context!=null) {
+			NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
+	
+			for (HighlightingData highlightingData : highlightingDataList) {
+				highlighting.highlight(highlightingData.startOffset(), highlightingData.endOffset(),
+						highlightingData.highlightCode());
+			}
+			highlighting.save();
 		}
-		highlighting.save();
 	}
 
 	@VisibleForTesting
