@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<APIProxy revision="3" name="MyAwfulProxy">
+    <ConfigurationVersion majorVersion="4" minorVersion="0"/>
+    <CreatedAt>1513763491458</CreatedAt>
+    <CreatedBy>nicolas.tisserand@arkea.com</CreatedBy>
+    <Description>short</Description>
+    <DisplayName>MyAwfulProxy</DisplayName>
+</APIProxy>

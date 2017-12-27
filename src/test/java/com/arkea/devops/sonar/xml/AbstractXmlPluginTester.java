@@ -17,9 +17,6 @@ package com.arkea.devops.sonar.xml;
 
 import javax.xml.XMLConstants;
 
-/**
- * @author Matthijs Galesloot
- */
 public class AbstractXmlPluginTester {
 
   static {

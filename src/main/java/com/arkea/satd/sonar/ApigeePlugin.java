@@ -17,10 +17,6 @@ package com.arkea.satd.sonar;
 
 import org.sonar.api.Plugin;
 
-import com.arkea.satd.sonar.measures.ComputeSizeAverage;
-import com.arkea.satd.sonar.measures.ComputeSizeRating;
-import com.arkea.satd.sonar.measures.ExampleMetrics;
-import com.arkea.satd.sonar.measures.SetSizeOnFilesSensor;
 import com.arkea.satd.sonar.xml.ApigeeXmlRulesDefinition;
 import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
 import com.arkea.satd.sonar.xml.XmlSonarWayProfile;
@@ -42,13 +38,7 @@ public class ApigeePlugin implements Plugin {
 			//Xml.class, // Already imported by sonar-xml-plugin
 			ApigeeXmlRulesDefinition.class,
 			ApigeeXmlSensor.class,
-			XmlSonarWayProfile.class,
-
-		    // Measures
-		    ExampleMetrics.class, 
-		    SetSizeOnFilesSensor.class, 
-		    ComputeSizeAverage.class, 
-		    ComputeSizeRating.class
+			XmlSonarWayProfile.class
 			
 		);
 	}

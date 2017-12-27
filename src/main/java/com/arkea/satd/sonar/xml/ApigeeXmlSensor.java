@@ -74,7 +74,7 @@ public class ApigeeXmlSensor implements Sensor {
 
 	private static SensorContext staticContext;
 
-	private static void setContext(SensorContext ctx) {
+	public static void setContext(SensorContext ctx) {
 		staticContext = ctx;
 	}
 	
@@ -149,7 +149,7 @@ public class ApigeeXmlSensor implements Sensor {
 	public void execute(SensorContext context) {
 		Optional<RuleKey> parsingErrorKey = getParsingErrorKey();
 		
-		// Forcing context
+		// Catch the context
 		ApigeeXmlSensor.setContext(context);
 		
 		// First loop to store ALL files.
