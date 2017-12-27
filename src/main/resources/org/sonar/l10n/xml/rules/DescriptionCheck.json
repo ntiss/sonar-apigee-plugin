@@ -1,5 +1,5 @@
 {
-  "title": "Description tag should longer than 5 chars",
+  "title": "Description tag should longer than N chars",
   "type": "CODE_SMELL",
   "status": "ready",	
   "remediation": {
