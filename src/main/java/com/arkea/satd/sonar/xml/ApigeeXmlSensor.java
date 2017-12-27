@@ -78,6 +78,10 @@ public class ApigeeXmlSensor implements Sensor {
 
 	private static SensorContext CONTEXT;
 
+	private static void setContext(SensorContext ctx) {
+		CONTEXT = ctx;
+	}
+	
 	private static String annotatedEngineKey(Object annotatedClassOrObject) {
 		String key = null;
 		org.sonar.check.Rule ruleAnnotation = AnnotationUtils.getAnnotation(annotatedClassOrObject,
@@ -165,7 +169,8 @@ public class ApigeeXmlSensor implements Sensor {
 	public void execute(SensorContext context) {
 		// Optional<RuleKey> parsingErrorKey = getParsingErrorKey();
 
-		CONTEXT = context;
+		// Forcing context
+		ApigeeXmlSensor.setContext(context);
 		
 		// First loop to store ALL files.
 		for (CompatibleInputFile inputFile : wrap(fileSystem.inputFiles(mainFilesPredicate), context)) {
