@@ -114,6 +114,7 @@ public class ExtractVariablesCheck extends AbstractXmlCheck {
 			    }
 		    }
 		} catch (XPathExpressionException e) {
+			// Nothing to do
 		}
 	}
 	

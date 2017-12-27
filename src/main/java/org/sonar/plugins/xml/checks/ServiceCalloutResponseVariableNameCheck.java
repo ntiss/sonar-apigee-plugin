@@ -51,6 +51,7 @@ public class ServiceCalloutResponseVariableNameCheck extends AbstractXmlCheck {
 		    	}
 			    
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		    

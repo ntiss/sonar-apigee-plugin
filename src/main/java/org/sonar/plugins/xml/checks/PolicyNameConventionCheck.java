@@ -40,7 +40,7 @@ public class PolicyNameConventionCheck extends AbstractXmlCheck {
 	/**
 	 * Definition of supported policies, and naming convention
 	 */
-	private static Map<String, List<String>> supportedPolicies = new HashMap<String, List<String>>();
+	private static Map<String, List<String>> supportedPolicies = new HashMap<>();	
 	static {
 		supportedPolicies.put("AccessControl", Arrays.asList("accesscontrol", "ac", "accessc") );
 		supportedPolicies.put("AccessEntity", Arrays.asList("accessentity", "ae", "accesse") );

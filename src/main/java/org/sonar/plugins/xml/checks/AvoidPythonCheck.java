@@ -50,6 +50,7 @@ public class AvoidPythonCheck extends AbstractXmlCheck {
 	    			createViolation(getWebSourceCode().getLineForNode(resourceURLNode), "Avoid Python language.");
 		    	}
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		    

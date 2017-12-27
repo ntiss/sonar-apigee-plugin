@@ -35,9 +35,13 @@ import com.google.common.collect.Iterables;
  */
 public class BundleRecorder {
 
-	private static Map<String, XmlSourceCode> proxiesEndpoint = new HashMap<String, XmlSourceCode>();
-	private static Map<String, XmlSourceCode> targetsEndpoint = new HashMap<String, XmlSourceCode>();
-	private static Map<String, XmlSourceCode> policies = new HashMap<String, XmlSourceCode>();
+	private static Map<String, XmlSourceCode> proxiesEndpoint = new HashMap<>();
+	private static Map<String, XmlSourceCode> targetsEndpoint = new HashMap<>();
+	private static Map<String, XmlSourceCode> policies = new HashMap<>();
+	
+	private BundleRecorder() {
+		// Private constructor
+	}
 	
 	public static void clear() {
 			proxiesEndpoint.clear();
@@ -84,7 +88,7 @@ public class BundleRecorder {
 	 */
 	public static List<XmlSourceCode> searchByStepName(String stepName) {
 		
-		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<XmlSourceCode>();
+		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<>();
 		
 		// Search for "stepName" in both ProxyEndpoint and TargetEndpoint
 		for(XmlSourceCode currentXml : Iterables.concat(proxiesEndpoint.values(), targetsEndpoint.values())) {
@@ -98,7 +102,8 @@ public class BundleRecorder {
 			    	matchingXmlSourceCode.add(currentXml);
 			    }
 			} catch (XPathExpressionException e) {
-			}			
+				// Nothing to do
+			}
 		}
 		
 		return matchingXmlSourceCode;
@@ -112,7 +117,7 @@ public class BundleRecorder {
 	 */
 	public static List<XmlSourceCode> searchPoliciesByType(String policyType) {
 		
-		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<XmlSourceCode>();
+		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<>();
 		
 		for(XmlSourceCode currentXml : policies.values()) {
 			Document document = currentXml.getDocument(false);
@@ -125,6 +130,7 @@ public class BundleRecorder {
 			    	matchingXmlSourceCode.add(currentXml);
 			    }
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}			
 		}
 		
@@ -146,10 +152,11 @@ public class BundleRecorder {
 			    XPath xpath = xPathfactory.newXPath();
 				
 				String attrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
-			    if(policyName!=null && policyName.equals(attrName)) {
+			    if(attrName!=null && attrName.equals(policyName)) {
 			    	return currentXml;
 			    }
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}			
 		}
 		
@@ -171,10 +178,11 @@ public class BundleRecorder {
 			    XPath xpath = xPathfactory.newXPath();
 				
 				String attrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
-			    if(targetName!=null && targetName.equals(attrName)) {
+			    if(attrName!=null && attrName.equals(targetName)) {
 			    	return currentXml;
 			    }
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}			
 		}
 		

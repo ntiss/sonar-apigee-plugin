@@ -50,6 +50,7 @@ public class ServiceCalloutRequestVariableNameCheck extends AbstractXmlCheck {
     				createViolation(getWebSourceCode().getLineForNode(requestNode), "Using request for the Request name causes unexepected side effects.");
 		    	}
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		    

@@ -34,36 +34,33 @@ public class UnreachableFlowCheck extends AbstractXmlCheck {
 	    setWebSourceCode(xmlSourceCode);
 
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null) {
+	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 
 	    	// Search for last Flow of an ProxyEndpoint document
-	    	if("ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
+	    	NodeList flowNodeList = document.getDocumentElement().getElementsByTagName("Flow");
+	    	
+	    	if(flowNodeList!=null) {
+	    		for(int i=0; i<flowNodeList.getLength(); i++) {
+	    			Node flowNode = flowNodeList.item(i);
 
-		    	NodeList flowNodeList = document.getDocumentElement().getElementsByTagName("Flow");
-		    	
-		    	if(flowNodeList!=null) {
-		    		for(int i=0; i<flowNodeList.getLength(); i++) {
-		    			Node flowNode = flowNodeList.item(i);
-
-		    			// Search Condition value
-		    			NodeList flowChilds = flowNode.getChildNodes();
-		    			boolean hasNoCondition = true;
-		    			for(int j = 0; j < flowChilds.getLength() && hasNoCondition; j++) {
-		    				Node currentChild = flowChilds.item(j);
-		    				if("Condition".equals(currentChild.getNodeName())) {
-		    					String cond = currentChild.getTextContent();
-		    					if(!"true".equalsIgnoreCase(cond) && cond.length()>0) {
-		    						hasNoCondition = false;
-		    					}
-		    				}
-		    			}
-		    			
-	    				// Create a violation if flow node is not the last one
-		    			if(hasNoCondition && i < flowNodeList.getLength()-1) {
-			    			createViolation(getWebSourceCode().getLineForNode(flowNode), "Flow without a condition should be last.");
-		    			}
-		    		}
-		    	}
+	    			// Search Condition value
+	    			NodeList flowChilds = flowNode.getChildNodes();
+	    			boolean hasNoCondition = true;
+	    			for(int j = 0; j < flowChilds.getLength() && hasNoCondition; j++) {
+	    				Node currentChild = flowChilds.item(j);
+	    				if("Condition".equals(currentChild.getNodeName())) {
+	    					String cond = currentChild.getTextContent();
+	    					if(!"true".equalsIgnoreCase(cond) && cond.length()>0) {
+	    						hasNoCondition = false;
+	    					}
+	    				}
+	    			}
+	    			
+    				// Create a violation if flow node is not the last one
+	    			if(hasNoCondition && i < flowNodeList.getLength()-1) {
+		    			createViolation(getWebSourceCode().getLineForNode(flowNode), "Flow without a condition should be last.");
+	    			}
+	    		}
 	    	}
 	    }
 	}

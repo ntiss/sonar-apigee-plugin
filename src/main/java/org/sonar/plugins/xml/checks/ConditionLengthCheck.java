@@ -21,6 +21,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -34,8 +35,11 @@ import org.w3c.dom.NodeList;
 @Rule(key = "ConditionLengthCheck")
 public class ConditionLengthCheck extends AbstractXmlCheck {
 
-	private static int MAX_LENGTH = 256; 
-	
+	@RuleProperty(
+	    defaultValue = "256",
+	    description = "Max length allowed for a condition tag")
+	protected int maxConditionLength = 256;
+
 	@Override
 	public void validate(XmlSourceCode xmlSourceCode) {
 	    setWebSourceCode(xmlSourceCode);
@@ -48,7 +52,7 @@ public class ConditionLengthCheck extends AbstractXmlCheck {
 		    
 		    try {
 		    	// Select in one shot the Condition which are too long
-			    NodeList conditionNodeList = (NodeList) xpath.evaluate("//Condition[string-length(text()) > "+MAX_LENGTH+"]", document, XPathConstants.NODESET);
+			    NodeList conditionNodeList = (NodeList) xpath.evaluate("//Condition[string-length(text()) > "+maxConditionLength+"]", document, XPathConstants.NODESET);
 			    
 		    	if(conditionNodeList!=null) {
 		    		for(int i=0 ; i < conditionNodeList.getLength(); i++) {
@@ -57,6 +61,7 @@ public class ConditionLengthCheck extends AbstractXmlCheck {
 		    		}
 		    	}
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		    

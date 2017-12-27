@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang.StringUtils;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -33,9 +32,7 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.api.utils.Version;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
@@ -74,36 +71,17 @@ public class ApigeeXmlSensor implements Sensor {
 	private final Checks<Object> checks;
 	private final FileSystem fileSystem;
 	private final FilePredicate mainFilesPredicate;
-	private final FileLinesContextFactory fileLinesContextFactory;
 
-	private static SensorContext CONTEXT;
+	private static SensorContext staticContext;
 
 	private static void setContext(SensorContext ctx) {
-		CONTEXT = ctx;
+		staticContext = ctx;
 	}
 	
-	private static String annotatedEngineKey(Object annotatedClassOrObject) {
-		String key = null;
-		org.sonar.check.Rule ruleAnnotation = AnnotationUtils.getAnnotation(annotatedClassOrObject,
-				org.sonar.check.Rule.class);
-		if (ruleAnnotation != null) {
-			key = ruleAnnotation.key();
-		}
-		Class clazz = annotatedClassOrObject.getClass();
-		if (annotatedClassOrObject instanceof Class) {
-			clazz = (Class) annotatedClassOrObject;
-		}
-		return StringUtils.defaultIfEmpty(key, clazz.getCanonicalName());
-	}
-
-	public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory,
-			FileLinesContextFactory fileLinesContextFactory) {
-		this.fileLinesContextFactory = fileLinesContextFactory;
-		this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY)
-				.addAnnotatedChecks((Iterable<?>) CheckRepository.getChecks());
+	public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory) {
+		this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY).addAnnotatedChecks((Iterable<?>) CheckRepository.getChecks());
 		this.fileSystem = fileSystem;
-		this.mainFilesPredicate = fileSystem.predicates().and(fileSystem.predicates().hasType(InputFile.Type.MAIN),
-				fileSystem.predicates().hasLanguage(Xml.KEY));
+		this.mainFilesPredicate = fileSystem.predicates().and(fileSystem.predicates().hasType(InputFile.Type.MAIN), fileSystem.predicates().hasLanguage(Xml.KEY));
 	}
 
 	public void analyse(SensorContext sensorContext) {
@@ -169,8 +147,8 @@ public class ApigeeXmlSensor implements Sensor {
 
 	@Override
 	public void execute(SensorContext context) {
-		// Optional<RuleKey> parsingErrorKey = getParsingErrorKey();
-
+		Optional<RuleKey> parsingErrorKey = getParsingErrorKey();
+		
 		// Forcing context
 		ApigeeXmlSensor.setContext(context);
 		
@@ -187,7 +165,7 @@ public class ApigeeXmlSensor implements Sensor {
 			try {
 				runChecks(context, xmlFile);
 			} catch (ParseException e) {
-				// processParseException(e, context, inputFile, parsingErrorKey);
+				processParseException(e, context, inputFile, parsingErrorKey);
 			} catch (RuntimeException e) {
 				processException(e, context, inputFile);
 			}
@@ -195,7 +173,7 @@ public class ApigeeXmlSensor implements Sensor {
 	}
 
 	public static SensorContext getContext() {
-		return CONTEXT;
+		return staticContext;
 	}
 
 	private Optional<RuleKey> getParsingErrorKey() {

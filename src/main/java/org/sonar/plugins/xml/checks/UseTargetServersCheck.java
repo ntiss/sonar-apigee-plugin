@@ -42,7 +42,7 @@ public class UseTargetServersCheck extends AbstractXmlCheck {
 	    	// Search for last Flow of an ProxyEndpoint document
 	    	NodeList targetNodeList = document.getDocumentElement().getElementsByTagName("TargetEndpoint");
 	    	
-	    	Set<String> targetRefSet = new HashSet<String>();
+	    	Set<String> targetRefSet = new HashSet<>();
 	    	if(targetNodeList!=null) {
 	    		
 	    		// Look for each different target endpoint

@@ -50,6 +50,7 @@ public class UseManagementServerCheck extends AbstractXmlCheck {
     				createViolation(getWebSourceCode().getLineForNode(urlNode), "HTTPTargetConnection appears to be connecting to Management Server.");
 		    	}
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 	}

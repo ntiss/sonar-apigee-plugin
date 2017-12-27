@@ -62,6 +62,7 @@ public class FaultRuleConditionCheck extends AbstractXmlCheck {
 		    		}
 		    	}
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		    

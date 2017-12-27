@@ -22,6 +22,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -29,14 +30,19 @@ import org.w3c.dom.NodeList;
 
 
 /**
- * Definition : The Description tag should have more than 5 chars to be useful.
+ * Definition : The Description tag should have more than N chars to be useful. N can be modified in the Rule definition in the Quality Profile.
  * Code : BN500
  * @author Nicolas Tisserand
  */
 @Rule(key = "DescriptionCheck")
 public class DescriptionCheck extends AbstractXmlCheck {
 
-	private static int MIN_LENGTH = 5; 
+	@RuleProperty(
+	    defaultValue = ".*",
+	    description = "Min length allowed for a description tag")
+	protected int minDescriptionLength = 5;
+
+	
 	
 	@Override
 	public void validate(XmlSourceCode xmlSourceCode) {
@@ -50,7 +56,7 @@ public class DescriptionCheck extends AbstractXmlCheck {
 		    
 		    try {
 		    	// Select in one shot the Description which are too short
-			    XPathExpression exprDisplayName = xpath.compile("//Description[string-length(text())<="+MIN_LENGTH+"]");
+			    XPathExpression exprDisplayName = xpath.compile("//Description[string-length(text())<="+minDescriptionLength+"]");
 			    NodeList descriptionNodeList = (NodeList)exprDisplayName.evaluate(document, XPathConstants.NODESET);
 
 		    	if(descriptionNodeList!=null) {
@@ -60,6 +66,7 @@ public class DescriptionCheck extends AbstractXmlCheck {
 		    		}
 		    	}
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		    

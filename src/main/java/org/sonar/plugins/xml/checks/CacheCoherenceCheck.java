@@ -77,6 +77,7 @@ public class CacheCoherenceCheck extends AbstractXmlCheck {
 	        	}
 		        
 			} catch (XPathExpressionException e) {
+				// Nothing to do
 			}
 	    }
 		
