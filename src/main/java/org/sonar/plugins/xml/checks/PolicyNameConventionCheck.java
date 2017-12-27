@@ -35,12 +35,14 @@ import org.w3c.dom.Node;
  * @author Nicolas Tisserand
  */
 @Rule(key = "PolicyNameConventionCheck")
+@SuppressWarnings("squid:S1192")
 public class PolicyNameConventionCheck extends AbstractXmlCheck {
 
 	/**
 	 * Definition of supported policies, and naming convention
 	 */
-	private static Map<String, List<String>> supportedPolicies = new HashMap<>();	
+	private static Map<String, List<String>> supportedPolicies = new HashMap<>();
+
 	static {
 		supportedPolicies.put("AccessControl", Arrays.asList("accesscontrol", "ac", "accessc") );
 		supportedPolicies.put("AccessEntity", Arrays.asList("accessentity", "ae", "accesse") );
