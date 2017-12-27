@@ -38,7 +38,7 @@ import org.w3c.dom.NodeList;
 public class DescriptionCheck extends AbstractXmlCheck {
 
 	@RuleProperty(
-	    defaultValue = ".*",
+	    defaultValue = "5",
 	    description = "Min length allowed for a description tag")
 	protected int minDescriptionLength = 5;
 
