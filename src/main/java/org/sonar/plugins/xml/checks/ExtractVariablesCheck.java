@@ -64,7 +64,7 @@ public class ExtractVariablesCheck extends AbstractXmlCheck {
 			    List<XmlSourceCode> listProxiesEndpoint = BundleRecorder.searchByStepName(nameAttr);
 			    
 			    if(listProxiesEndpoint.isEmpty()) {
-			    	// It means that the policy is unused is no condition at all
+			    	// It means that the policy is unused in no condition at all
 					// Create a violation for the root node
 			    }
 			    
