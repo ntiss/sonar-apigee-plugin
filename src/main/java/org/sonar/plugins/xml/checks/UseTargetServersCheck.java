@@ -38,40 +38,36 @@ public class UseTargetServersCheck extends AbstractXmlCheck {
 	    setWebSourceCode(xmlSourceCode);
 
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null) {
-
+	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 	    	// Search for last Flow of an ProxyEndpoint document
-	    	if("ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
-
-		    	NodeList targetNodeList = document.getDocumentElement().getElementsByTagName("TargetEndpoint");
-		    	
-		    	Set<String> targetRefSet = new HashSet<String>();
-		    	if(targetNodeList!=null) {
-		    		
-		    		// Look for each different target endpoint
-		    		for(int i=0; i<targetNodeList.getLength(); i++) {
-		    			Node targetNode = targetNodeList.item(i);
-		    			targetRefSet.add(targetNode.getTextContent());
-		    		}
-		    	}
-
-		    	// If there is only NoRoute (without TargetEndpoint), then it's not a violation.
-	    		// If there is only ONE TargetEndpoint, this is a violation.
-	    		// If there are more than ONE TargetEndpoint, this is ok.
-		    	if(targetRefSet.size() == 1) {
-		    
-		    		int lineNumber = 1; // By default
-
-		    		// Search for a <RouteRule> node (it's a better location to indicate the violation
-		    		NodeList routeRuleNodeList = document.getDocumentElement().getElementsByTagName("RouteRule");
-		    		if(routeRuleNodeList!=null && routeRuleNodeList.getLength()>0) {
-		    			lineNumber = getWebSourceCode().getLineForNode(routeRuleNodeList.item(0));
-		    		}
-		    		
-		    		createViolation(lineNumber, "Encourage the use of target servers.");
-		    	}
+	    	NodeList targetNodeList = document.getDocumentElement().getElementsByTagName("TargetEndpoint");
+	    	
+	    	Set<String> targetRefSet = new HashSet<String>();
+	    	if(targetNodeList!=null) {
+	    		
+	    		// Look for each different target endpoint
+	    		for(int i=0; i<targetNodeList.getLength(); i++) {
+	    			Node targetNode = targetNodeList.item(i);
+	    			targetRefSet.add(targetNode.getTextContent());
+	    		}
 	    	}
-	    }
+
+	    	// If there is only NoRoute (without TargetEndpoint), then it's not a violation.
+    		// If there is only ONE TargetEndpoint, this is a violation.
+    		// If there are more than ONE TargetEndpoint, this is ok.
+	    	if(targetRefSet.size() == 1) {
+	    
+	    		int lineNumber = 1; // By default
+
+	    		// Search for a <RouteRule> node (it's a better location to indicate the violation
+	    		NodeList routeRuleNodeList = document.getDocumentElement().getElementsByTagName("RouteRule");
+	    		if(routeRuleNodeList!=null && routeRuleNodeList.getLength()>0) {
+	    			lineNumber = getWebSourceCode().getLineForNode(routeRuleNodeList.item(0));
+	    		}
+	    		
+	    		createViolation(lineNumber, "Encourage the use of target servers.");
+	    	}
+    	}
 	}
 
 }
