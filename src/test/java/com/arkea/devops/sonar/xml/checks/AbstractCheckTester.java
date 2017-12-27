@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License.
  */
-package com.arkea.devops.sonar.xml;
+package com.arkea.devops.sonar.xml.checks;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,6 +27,8 @@ import org.sonar.plugins.xml.checks.AbstractXmlCheck;
 import org.sonar.plugins.xml.checks.XmlFile;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.sonar.plugins.xml.compat.CompatibleInputFile;
+
+import com.arkea.devops.sonar.xml.AbstractXmlPluginTester;
 
 import static org.sonar.plugins.xml.compat.CompatibilityHelper.wrap;
 
