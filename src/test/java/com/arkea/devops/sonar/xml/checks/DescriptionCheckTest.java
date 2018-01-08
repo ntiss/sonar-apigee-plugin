@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and 
  * limitations under the License.
  */
-package com.arkea.devops.sonar.xml;
+package com.arkea.devops.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
@@ -21,22 +21,19 @@ import java.io.IOException;
 import java.util.List;
 
 import org.junit.Test;
-import org.sonar.plugins.xml.checks.DescriptionPatternCheck;
+import org.sonar.plugins.xml.checks.DescriptionCheck;
 import org.sonar.plugins.xml.checks.XmlIssue;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 
-public class DescriptionPatternCheckTest extends AbstractCheckTester {
+public class DescriptionCheckTest extends AbstractCheckTester {
 
-	private DescriptionPatternCheck check = new DescriptionPatternCheck();
-	
-	
 	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), check);
+		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new DescriptionCheck());
 		return sourceCode.getXmlIssues();
 	}
 
 	@Test
-	public void test_ok1() throws Exception {
+	public void test_ok() throws Exception {
 		List<XmlIssue> issues = getIssues(
 			"<APIProxy revision=\"1\" name=\"XXX\">\r\n" + 
 			"    <Description>Text of description</Description>\r\n" + 
@@ -46,24 +43,10 @@ public class DescriptionPatternCheckTest extends AbstractCheckTester {
 	}
 	
 	@Test
-	public void test_ok2() throws Exception {
-		check.setRegexPattern(".*\\(code=([A-Z0-9]{4})\\).*");
+	public void test_too_short() throws Exception {
 		List<XmlIssue> issues = getIssues(
 			"<APIProxy revision=\"1\" name=\"XXX\">\r\n" + 
-			"    <Description>Text of description (code=AB12)</Description>\r\n" + 
-			"</APIProxy>"
-		);
-		assertEquals(0, issues.size());
-	}
-	
-	@Test
-	public void test_ko() throws Exception {
-		
-		check.setRegexPattern("[a-zA-Z]*");
-		
-		List<XmlIssue> issues = getIssues(
-			"<APIProxy revision=\"1\" name=\"XXX\">\r\n" + 
-			"    <Description>bad desc : 123456</Description>\r\n" + 
+			"    <Description>short</Description>\r\n" + 
 			"</APIProxy>"
 		);
 		assertEquals(1, issues.size());
