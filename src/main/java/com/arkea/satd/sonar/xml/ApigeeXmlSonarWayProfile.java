@@ -24,7 +24,6 @@ import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.xml.language.Xml;
 
-import com.arkea.satd.sonar.ApigeePlugin;
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 
 /**
@@ -32,31 +31,31 @@ import com.arkea.satd.sonar.xml.checks.CheckRepository;
  * 
  * @author Nicolas Tisserand
  */
-public final class XmlSonarWayProfile extends ProfileDefinition {
+public final class ApigeeXmlSonarWayProfile extends ProfileDefinition {
 
-  private final RuleFinder ruleFinder;
+	public static final String PROFILE_NAME = "Sonar way Apigee";
 
-  public XmlSonarWayProfile(RuleFinder ruleFinder) {
-    this.ruleFinder = ruleFinder;
-  }
+	private final RuleFinder ruleFinder;
 
-  @Override
-  public RulesProfile createProfile(ValidationMessages validation) {
-    RulesProfile profile = RulesProfile.create(ApigeePlugin.SONAR_WAY_PROFILE_NAME, Xml.KEY);
-    
-    for(Object ruleClass : CheckRepository.getChecks()) {
-    	org.sonar.check.Rule ruleAnnotation = AnnotationUtils.getAnnotation(ruleClass, org.sonar.check.Rule.class);
-	    if (ruleAnnotation != null) {
-	      String ruleKey = ruleAnnotation.key();
-	      Rule rule = ruleFinder.findByKey(CheckRepository.REPOSITORY_KEY, ruleKey);
-	      
-	      profile.activateRule(rule, null);
-	      
-	    }
-    }
-    return profile;
-  }
+	public ApigeeXmlSonarWayProfile(RuleFinder ruleFinder) {
+		this.ruleFinder = ruleFinder;
+	}
 
+	@Override
+	public RulesProfile createProfile(ValidationMessages validation) {
+		RulesProfile profile = RulesProfile.create(PROFILE_NAME, Xml.KEY);
 
+		for (Object ruleClass : CheckRepository.getChecks()) {
+			org.sonar.check.Rule ruleAnnotation = AnnotationUtils.getAnnotation(ruleClass, org.sonar.check.Rule.class);
+			if (ruleAnnotation != null) {
+				String ruleKey = ruleAnnotation.key();
+				Rule rule = ruleFinder.findByKey(CheckRepository.REPOSITORY_KEY, ruleKey);
+
+				profile.activateRule(rule, null);
+
+			}
+		}
+		return profile;
+	}
 
 }
