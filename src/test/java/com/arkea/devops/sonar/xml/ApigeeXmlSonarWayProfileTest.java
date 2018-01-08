@@ -32,7 +32,7 @@ import org.sonar.plugins.xml.language.Xml;
 import com.arkea.satd.sonar.xml.ApigeeXmlSonarWayProfile;
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 
-public class XmlSonarWayProfileTest {
+public class ApigeeXmlSonarWayProfileTest {
 
   @Test
   public void should_create_sonar_way_profile() {
