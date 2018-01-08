@@ -29,7 +29,7 @@ import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.xml.language.Xml;
 
-import com.arkea.satd.sonar.xml.XmlSonarWayProfile;
+import com.arkea.satd.sonar.xml.ApigeeXmlSonarWayProfile;
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 
 public class XmlSonarWayProfileTest {
@@ -39,11 +39,11 @@ public class XmlSonarWayProfileTest {
     ValidationMessages validation = ValidationMessages.create();
 
     RuleFinder ruleFinder = ruleFinder();
-    XmlSonarWayProfile definition = new XmlSonarWayProfile(ruleFinder);
+    ApigeeXmlSonarWayProfile definition = new ApigeeXmlSonarWayProfile(ruleFinder);
     RulesProfile profile = definition.createProfile(validation);
 
     assertThat(profile.getLanguage()).isEqualTo(Xml.KEY);
-    assertThat(profile.getName()).isEqualTo(RulesProfile.SONAR_WAY_NAME);
+    assertThat(profile.getName()).isEqualTo(ApigeeXmlSonarWayProfile.PROFILE_NAME);
     assertThat(profile.getActiveRulesByRepository(CheckRepository.REPOSITORY_KEY)).hasSize(23);
     assertThat(validation.hasErrors()).isFalse();
   }
