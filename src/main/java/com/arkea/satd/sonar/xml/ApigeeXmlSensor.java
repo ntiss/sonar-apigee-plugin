@@ -17,8 +17,6 @@ package com.arkea.satd.sonar.xml;
 
 import static org.sonar.plugins.xml.compat.CompatibilityHelper.wrap;
 
-import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 import org.sonar.api.batch.fs.FilePredicate;
@@ -29,7 +27,6 @@ import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.highlighting.NewHighlighting;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.api.rule.RuleKey;
@@ -43,8 +40,6 @@ import org.sonar.plugins.xml.checks.XmlFile;
 import org.sonar.plugins.xml.checks.XmlIssue;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.sonar.plugins.xml.compat.CompatibleInputFile;
-import org.sonar.plugins.xml.highlighting.HighlightingData;
-import org.sonar.plugins.xml.highlighting.XMLHighlighting;
 import org.sonar.plugins.xml.language.Xml;
 import org.sonar.plugins.xml.parsers.ParseException;
 import org.sonar.squidbridge.api.AnalysisException;
@@ -98,25 +93,6 @@ public class ApigeeXmlSensor implements Sensor {
 				((AbstractXmlCheck) check).validate(sourceCode);
 			}
 			saveIssue(context, sourceCode);
-			try {
-				saveSyntaxHighlighting(context, new XMLHighlighting(xmlFile).getHighlightingData(),
-						xmlFile.getInputFile().wrapped());
-			} catch (IOException e) {
-				throw new IllegalStateException("Could not analyze file " + xmlFile.getAbsolutePath(), e);
-			}
-		}
-	}
-
-	private static void saveSyntaxHighlighting(SensorContext context, List<HighlightingData> highlightingDataList, InputFile inputFile) {
-		
-		if(context!=null) {
-			NewHighlighting highlighting = context.newHighlighting().onFile(inputFile);
-	
-			for (HighlightingData highlightingData : highlightingDataList) {
-				highlighting.highlight(highlightingData.startOffset(), highlightingData.endOffset(),
-						highlightingData.highlightCode());
-			}
-			highlighting.save();
 		}
 	}
 
