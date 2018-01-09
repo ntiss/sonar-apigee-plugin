@@ -37,22 +37,22 @@ public class UnknownResourceFlowCheck extends AbstractXmlCheck {
 	    setWebSourceCode(xmlSourceCode);
 
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
-
-		    XPathFactory xPathfactory = XPathFactory.newInstance();
-		    XPath xpath = xPathfactory.newXPath();
-		    
-		    try {
-		    	// Select the last Flow node
-		    	Node flowsNode = (Node)xpath.evaluate("//Flows", document, XPathConstants.NODE);
-		    	String condition = (String)xpath.evaluate("//Flows/Flow[last()]/Condition/text()", document, XPathConstants.STRING);
-				if(condition!=null && condition.length()>0 && !"true".equalsIgnoreCase(condition)) {
-					createViolation(getWebSourceCode().getLineForNode(flowsNode.getNextSibling()) - 1, "There is no default flow in this proxy endpoint.");
-				}			    
-			} catch (XPathExpressionException e) {
-				// Nothing to do
-			}
-	    }
+	    XPathFactory xPathfactory = XPathFactory.newInstance();
+	    XPath xpath = xPathfactory.newXPath();
+	    
+	    try {
+	    	// Select the last Flow node
+	    	Node flowsNode = (Node)xpath.evaluate("/ProxyEndpoint/Flows", document, XPathConstants.NODE);
+	    	String condition = (String)xpath.evaluate("/ProxyEndpoint/Flows/Flow[last()]/Condition/text()", document, XPathConstants.STRING);
+			if(flowsNode!=null && 
+				condition!=null && 
+				condition.length()>0 && 
+				!"true".equalsIgnoreCase(condition)) {
+				createViolation(getWebSourceCode().getLineForNode(flowsNode.getNextSibling()) - 1, "There is no default flow in this proxy endpoint.");
+			}			    
+		} catch (XPathExpressionException e) {
+			// Nothing to do
+		}
 	}
 
 }

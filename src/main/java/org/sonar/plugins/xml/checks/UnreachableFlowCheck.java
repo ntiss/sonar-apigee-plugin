@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Credit Mutuel Arkea
+ * Copyright 2017 Credit Mutuel ArkeahasNoCondition
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +14,11 @@
  * limitations under the License.
  */
 package org.sonar.plugins.xml.checks;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
@@ -34,35 +39,28 @@ public class UnreachableFlowCheck extends AbstractXmlCheck {
 	    setWebSourceCode(xmlSourceCode);
 
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
-
-	    	// Search for last Flow of an ProxyEndpoint document
-	    	NodeList flowNodeList = document.getDocumentElement().getElementsByTagName("Flow");
+	    XPathFactory xPathfactory = XPathFactory.newInstance();
+	    XPath xpath = xPathfactory.newXPath();
+	    
+	    try {
+	    	// Select the Flow nodes
+	    	NodeList flowNodeList = (NodeList)xpath.evaluate("/ProxyEndpoint/Flows/Flow", document, XPathConstants.NODESET);
 	    	
-	    	if(flowNodeList!=null) {
-	    		for(int i=0; i<flowNodeList.getLength(); i++) {
-	    			Node flowNode = flowNodeList.item(i);
+    		for(int i=0; i<flowNodeList.getLength(); i++) {
+    			Node flowNode = flowNodeList.item(i);
 
-	    			// Search Condition value
-	    			NodeList flowChilds = flowNode.getChildNodes();
-	    			boolean hasNoCondition = true;
-	    			for(int j = 0; j < flowChilds.getLength() && hasNoCondition; j++) {
-	    				Node currentChild = flowChilds.item(j);
-	    				if("Condition".equals(currentChild.getNodeName())) {
-	    					String cond = currentChild.getTextContent();
-	    					if(!"true".equalsIgnoreCase(cond) && cond.length()>0) {
-	    						hasNoCondition = false;
-	    					}
-	    				}
-	    			}
-	    			
-    				// Create a violation if flow node is not the last one
-	    			if(hasNoCondition && i < flowNodeList.getLength()-1) {
-		    			createViolation(getWebSourceCode().getLineForNode(flowNode), "Flow without a condition should be last.");
-	    			}
-	    		}
-	    	}
-	    }
+    			// Search Condition value
+    			String cond = (String)xpath.evaluate("Condition", flowNode, XPathConstants.STRING);
+				if(i < flowNodeList.getLength()-1 &&
+					(cond==null || cond.isEmpty() || "true".equalsIgnoreCase(cond)) ) {
+
+					// Create a violation if flow node is not the last one
+	    			createViolation(getWebSourceCode().getLineForNode(flowNode), "Flow without a condition should be last.");
+    			}
+    		}	    
+		} catch (XPathExpressionException e) {
+			// Nothing to do
+		}
 	}
 
 }

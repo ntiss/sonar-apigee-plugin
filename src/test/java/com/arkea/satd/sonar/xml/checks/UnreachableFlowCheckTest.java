@@ -137,6 +137,51 @@ public class UnreachableFlowCheckTest extends AbstractCheckTester {
 
 		);
 		assertEquals(1, issues.size());
-	}	
+	}
+	
+	
+	@Test
+	public void test_three_no_cond() throws Exception {
+		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <PreFlow name=\"PreFlow\">\r\n" + 
+				"        <Request/>\r\n" + 
+				"        <Response/>\r\n" + 
+				"    </PreFlow>\r\n" + 
+				"    <Flows>\r\n" + 
+				"        <Flow name=\"GET_check\">\r\n" + 
+				"            <Condition>(proxy.pathsuffix MatchesPath \"/check\") and (request.verb = \"GET\")</Condition>\r\n" + 
+				"            <Description>Check</Description>\r\n" + 
+				"            <Request/>\r\n" + 
+				"            <Response></Response>\r\n" + 
+				"        </Flow>\r\n" + 
+				"        <Flow name=\"unknownResource1\">\r\n" + 
+				"            <Description>Flow used when no other has been used</Description>\r\n" + 
+				"            <Request/>\r\n" + 
+				"            <Response/>\r\n" + 
+				"            <Condition>true</Condition>\r\n" + 
+				"        </Flow>\r\n" + 
+				"        <Flow name=\"POST_check\">\r\n" + 
+				"            <Condition>(proxy.pathsuffix MatchesPath \"/check\") and (request.verb = \"POST\")</Condition>\r\n" + 
+				"            <Description>Check</Description>\r\n" + 
+				"            <Request/>\r\n" + 
+				"            <Response></Response>\r\n" + 
+				"        </Flow>\r\n" + 
+				"        <Flow name=\"unknownResource2\">\r\n" + 
+				"            <Description>Flow used when no other has been used</Description>\r\n" + 
+				"            <Request/>\r\n" + 
+				"            <Response/>\r\n" + 
+				"        </Flow>\r\n" + 
+				"        <Flow name=\"unknownResource3\">\r\n" + 
+				"            <Description>Flow used when no other has been used</Description>\r\n" + 
+				"            <Request/>\r\n" + 
+				"            <Response/>\r\n" + 
+				"        </Flow>\r\n" + 
+				"    </Flows>\r\n" + 
+				"</ProxyEndpoint>"
+
+		);
+		assertEquals(2, issues.size());
+	}		
 		
 }
