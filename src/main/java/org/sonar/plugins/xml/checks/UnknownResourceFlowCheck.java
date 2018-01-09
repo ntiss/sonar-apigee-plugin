@@ -15,11 +15,14 @@
  */
 package org.sonar.plugins.xml.checks;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.sonar.check.Rule;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 /**
  * A default flow should be defined.
@@ -36,34 +39,19 @@ public class UnknownResourceFlowCheck extends AbstractXmlCheck {
 	    Document document = getWebSourceCode().getDocument(false);
 	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 
-	    	NodeList flowsNodeList = document.getDocumentElement().getElementsByTagName("Flows");
-	    	
-	    	if(flowsNodeList != null && flowsNodeList.getLength()>0) {
-	    		Node flowsNode = flowsNodeList.item(0);
-	    		if(flowsNode != null) {
-	    			// Go to the last defined flow
-	    			Node lastFlowNode = flowsNode.getLastChild();
-
-	    			// Loop to get rid of #text nodes
-	    			int loop = 0;
-	    			while(!"Flow".equals(lastFlowNode.getNodeName()) && loop < flowsNode.getChildNodes().getLength()) {
-	    				lastFlowNode = lastFlowNode.getPreviousSibling();
-	    				loop++;
-	    			}
-	    		
-	    			// Search and test Condition value
-	    			NodeList lastFlowChilds = lastFlowNode.getChildNodes();
-	    			for(int i = 0; i < lastFlowChilds.getLength(); i++) {
-	    				Node currentChild = lastFlowChilds.item(i);
-	    				if("Condition".equals(currentChild.getNodeName())) {
-	    					String cond = currentChild.getTextContent();
-	    					if(!"true".equalsIgnoreCase(cond)) {
-	    						createViolation(getWebSourceCode().getLineForNode(flowsNode.getNextSibling()) - 1, "There is no default flow in this proxy endpoint.");
-	    					}
-	    				}
-	    			}
-	    		}
-	    	}
+		    XPathFactory xPathfactory = XPathFactory.newInstance();
+		    XPath xpath = xPathfactory.newXPath();
+		    
+		    try {
+		    	// Select the last Flow node
+		    	Node flowsNode = (Node)xpath.evaluate("//Flows", document, XPathConstants.NODE);
+		    	String condition = (String)xpath.evaluate("//Flows/Flow[last()]/Condition/text()", document, XPathConstants.STRING);
+				if(condition!=null && condition.length()>0 && !"true".equalsIgnoreCase(condition)) {
+					createViolation(getWebSourceCode().getLineForNode(flowsNode.getNextSibling()) - 1, "There is no default flow in this proxy endpoint.");
+				}			    
+			} catch (XPathExpressionException e) {
+				// Nothing to do
+			}
 	    }
 	}
 
