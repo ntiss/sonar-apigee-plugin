@@ -19,7 +19,7 @@ import org.sonar.api.Plugin;
 
 import com.arkea.satd.sonar.xml.ApigeeXmlRulesDefinition;
 import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
-import com.arkea.satd.sonar.xml.XmlSonarWayProfile;
+import com.arkea.satd.sonar.xml.ApigeeXmlSonarWayProfile;
 
 
 /**
@@ -29,8 +29,6 @@ import com.arkea.satd.sonar.xml.XmlSonarWayProfile;
  */
 public class ApigeePlugin implements Plugin {
 
-	  public static final String SONAR_WAY_PROFILE_NAME = "Sonar way";
-	
 	@Override
 	public void define(Context context) {
 
@@ -38,7 +36,7 @@ public class ApigeePlugin implements Plugin {
 			//Xml.class, // Already imported by sonar-xml-plugin
 			ApigeeXmlRulesDefinition.class,
 			ApigeeXmlSensor.class,
-			XmlSonarWayProfile.class
+			ApigeeXmlSonarWayProfile.class
 			
 		);
 	}
