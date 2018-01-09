@@ -34,6 +34,7 @@ import org.sonar.plugins.xml.checks.XmlIssue;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.sonar.plugins.xml.compat.CompatibleInputFile;
 import org.sonar.plugins.xml.language.Xml;
+import org.sonar.plugins.xml.parsers.ParseException;
 
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 import com.google.common.annotations.VisibleForTesting;
@@ -70,13 +71,17 @@ public class ApigeeXmlSensor implements Sensor {
 		XmlSourceCode sourceCode = new XmlSourceCode(xmlFile);
 
 		// Do not execute any XML rule when an XML file is corrupted (SONARXML-13)
-		if (sourceCode.parseSource()) {
+		try {
+			sourceCode.parseSource();
 			for (Object check : checks.all()) {
 				((AbstractXmlCheck) check).setRuleKey(checks.ruleKey(check));
 				((AbstractXmlCheck) check).validate(sourceCode);
 			}
 			saveIssue(context, sourceCode);
+		} catch(ParseException e) {
+			// Do nothing
 		}
+
 	}
 
 	@VisibleForTesting
