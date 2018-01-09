@@ -17,8 +17,6 @@ package com.arkea.satd.sonar.xml;
 
 import static org.sonar.plugins.xml.compat.CompatibilityHelper.wrap;
 
-import java.util.Optional;
-
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
@@ -29,20 +27,13 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
-import org.sonar.api.rule.RuleKey;
-import org.sonar.api.utils.Version;
-import org.sonar.api.utils.log.Logger;
-import org.sonar.api.utils.log.Loggers;
 import org.sonar.plugins.xml.checks.AbstractXmlCheck;
 import org.sonar.plugins.xml.checks.BundleRecorder;
-import org.sonar.plugins.xml.checks.ParsingErrorCheck;
 import org.sonar.plugins.xml.checks.XmlFile;
 import org.sonar.plugins.xml.checks.XmlIssue;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.sonar.plugins.xml.compat.CompatibleInputFile;
 import org.sonar.plugins.xml.language.Xml;
-import org.sonar.plugins.xml.parsers.ParseException;
-import org.sonar.squidbridge.api.AnalysisException;
 
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 import com.google.common.annotations.VisibleForTesting;
@@ -54,14 +45,6 @@ import com.google.common.annotations.VisibleForTesting;
  * @author Nicolas Tisserand
  */
 public class ApigeeXmlSensor implements Sensor {
-
-	private static final Version V6_0 = Version.create(6, 0);
-
-	/**
-	 * Use Sonar logger instead of SL4FJ logger, in order to be able to unit test
-	 * the logs.
-	 */
-	private static final Logger LOG = Loggers.get(ApigeeXmlSensor.class);
 
 	private final Checks<Object> checks;
 	private final FileSystem fileSystem;
@@ -143,15 +126,4 @@ public class ApigeeXmlSensor implements Sensor {
 	public static SensorContext getContext() {
 		return staticContext;
 	}
-
-	private Optional<RuleKey> getParsingErrorKey() {
-		for (Object obj : checks.all()) {
-			AbstractXmlCheck check = (AbstractXmlCheck) obj;
-			if (check instanceof ParsingErrorCheck) {
-				return Optional.of(checks.ruleKey(check));
-			}
-		}
-		return Optional.empty();
-	}
-
 }
