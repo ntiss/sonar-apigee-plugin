@@ -27,6 +27,7 @@ import org.sonar.plugins.xml.checks.AbstractXmlCheck;
 import org.sonar.plugins.xml.checks.XmlFile;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.sonar.plugins.xml.compat.CompatibleInputFile;
+import org.sonar.plugins.xml.parsers.ParseException;
 
 import com.arkea.satd.sonar.xml.AbstractXmlPluginTester;
 
@@ -42,9 +43,12 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
   XmlSourceCode parseAndCheck(File file, AbstractXmlCheck check) {
     XmlSourceCode xmlSourceCode = new XmlSourceCode(new XmlFile(newInputFile(file), createFileSystem()));
 
-    if (xmlSourceCode.parseSource()) {
-      check.validate(xmlSourceCode);
-    }
+    try {
+    	xmlSourceCode.parseSource();
+    	check.validate(xmlSourceCode);
+	} catch(ParseException e) {
+		// Do nothing
+	}
 
     return xmlSourceCode;
   }

@@ -15,6 +15,11 @@
  */
 package org.sonar.plugins.xml.checks;
 
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+
 import org.sonar.check.Rule;
 import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
@@ -35,44 +40,32 @@ public class UnconditionalFlowCheck extends AbstractXmlCheck {
 	    setWebSourceCode(xmlSourceCode);
 
 	    Document document = getWebSourceCode().getDocument(false);
-	    if (document.getDocumentElement() != null) {
+	    
+	    XPathFactory xPathfactory = XPathFactory.newInstance();
+	    XPath xpath = xPathfactory.newXPath();
+	    
+	    try {
+	    	// Select the Flow nodes
+	    	NodeList flowNodeList = (NodeList)xpath.evaluate("/ProxyEndpoint/Flows/Flow", document, XPathConstants.NODESET);
 	    	
 	    	int noConditionCount = 0;
+    		for(int i=0; i<flowNodeList.getLength(); i++) {
+    			Node flowNode = flowNodeList.item(i);
 
-	    	// Search for last Flow of an ProxyEndpoint document
-	    	if("ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
-
-		    	NodeList flowNodeList = document.getDocumentElement().getElementsByTagName("Flow");
-		    	
-		    	if(flowNodeList!=null) {
-		    		for(int i=0; i<flowNodeList.getLength(); i++) {
-		    			Node flowNode = flowNodeList.item(i);
-
-		    			// Search Condition value
-		    			NodeList flowChilds = flowNode.getChildNodes();
-		    			boolean hasNoCondition = true;
-		    			for(int j = 0; j < flowChilds.getLength() && hasNoCondition; j++) {
-		    				Node currentChild = flowChilds.item(j);
-		    				if("Condition".equals(currentChild.getNodeName())) {
-		    					String cond = currentChild.getTextContent();
-		    					if(!"true".equalsIgnoreCase(cond) && cond.length()>0) {
-		    						hasNoCondition = false;
-		    					}
-		    				}
-		    			}
-		    			
-		    			if(hasNoCondition) {
-		    				noConditionCount++;
-
-		    				// Create a violation for each flow node
-			    			if(noConditionCount>1) {
-			    				createViolation(getWebSourceCode().getLineForNode(flowNode), "Only one unconditional flow will get executed.");
-			    			}
-		    			}
-		    		}
-		    	}
-	    	}
-	    }
+    			// Search Condition value
+    			String cond = (String)xpath.evaluate("Condition", flowNode, XPathConstants.STRING);
+				if(cond==null || cond.isEmpty() || "true".equalsIgnoreCase(cond)) {
+					noConditionCount++;
+					
+    				// Create a violation for each flow node
+	    			if(noConditionCount>1) {
+	    				createViolation(getWebSourceCode().getLineForNode(flowNode), "Only one unconditional flow will get executed.");
+	    			}
+    			}
+    		}	    
+		} catch (XPathExpressionException e) {
+			// Nothing to do
+		}
 	}
 
 }

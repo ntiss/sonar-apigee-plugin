@@ -56,6 +56,21 @@ public class UnknownResourceFlowCheckTest extends AbstractCheckTester {
 	}
 	
 	@Test
+	public void test_ok_other_file() throws Exception {
+		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<SpikeArrest async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Spike-Arrest-1\">\r\n" + 
+				"    <DisplayName>Spike Arrest</DisplayName>\r\n" + 
+				"    <Properties/>\r\n" + 
+				"    <Identifier ref=\"request.header.some-header-name\"/>\r\n" + 
+				"    <MessageWeight ref=\"request.header.weight\"/>\r\n" + 
+				"    <Rate>30pm</Rate>\r\n" + 
+				"</SpikeArrest>"
+
+		);
+		assertEquals(0, issues.size());
+	}	
+	
+	@Test
 	public void test_missing_cond() throws Exception {
 		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 

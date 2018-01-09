@@ -94,6 +94,17 @@ public class UnconditionalFlowCheckTest extends AbstractCheckTester {
 		assertEquals(1, issues.size());
 	}	
 	
+	@Test
+	public void test_bad_xml() throws Exception {
+		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <PreFlow name=\"PreFlow\">\r\n" + 
+				"        <Request/>\r\n" + 
+				"        <Resp"
+
+		);
+		assertEquals(0, issues.size());
+	}	
 	
 	
 	private List<XmlIssue> getIssues(String content) throws IOException {
