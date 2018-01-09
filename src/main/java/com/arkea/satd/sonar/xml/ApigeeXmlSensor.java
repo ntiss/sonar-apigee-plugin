@@ -123,8 +123,6 @@ public class ApigeeXmlSensor implements Sensor {
 
 	@Override
 	public void execute(SensorContext context) {
-		Optional<RuleKey> parsingErrorKey = getParsingErrorKey();
-		
 		// Catch the context
 		ApigeeXmlSensor.setContext(context);
 		
@@ -138,13 +136,7 @@ public class ApigeeXmlSensor implements Sensor {
 		// Second loop to checks files one by one.
 		for (CompatibleInputFile inputFile : wrap(fileSystem.inputFiles(mainFilesPredicate), context)) {
 			XmlFile xmlFile = new XmlFile(inputFile, fileSystem);
-			try {
-				runChecks(context, xmlFile);
-			} catch (ParseException e) {
-				processParseException(e, context, inputFile, parsingErrorKey);
-			} catch (RuntimeException e) {
-				processException(e, context, inputFile);
-			}
+			runChecks(context, xmlFile);
 		}
 	}
 
@@ -160,34 +152,6 @@ public class ApigeeXmlSensor implements Sensor {
 			}
 		}
 		return Optional.empty();
-	}
-
-	private static void processParseException(ParseException e, SensorContext context, CompatibleInputFile inputFile,
-			Optional<RuleKey> parsingErrorKey) {
-		reportAnalysisError(e, context, inputFile);
-
-		LOG.warn("Unable to parse file {}", inputFile.absolutePath());
-		LOG.warn("Cause: {}", e.getMessage());
-
-		if (parsingErrorKey.isPresent()) {
-			// the ParsingErrorCheck rule is activated: we create a beautiful issue
-			NewIssue newIssue = context.newIssue();
-			NewIssueLocation primaryLocation = newIssue.newLocation().message("Parse error: " + e.getMessage())
-					.on(inputFile.wrapped());
-			newIssue.forRule(parsingErrorKey.get()).at(primaryLocation).save();
-		}
-	}
-
-	private static void processException(RuntimeException e, SensorContext context, CompatibleInputFile inputFile) {
-		reportAnalysisError(e, context, inputFile);
-
-		throw new AnalysisException("Unable to analyse file " + inputFile.absolutePath(), e);
-	}
-
-	private static void reportAnalysisError(RuntimeException e, SensorContext context, CompatibleInputFile inputFile) {
-		if (context.getSonarQubeVersion().isGreaterThanOrEqual(V6_0)) {
-			context.newAnalysisError().onFile(inputFile.wrapped()).message(e.getMessage()).save();
-		}
 	}
 
 }
