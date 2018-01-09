@@ -24,6 +24,7 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.sonar.api.profiles.RulesProfile;
+import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.rules.Rule;
 import org.sonar.api.rules.RuleFinder;
 import org.sonar.api.utils.ValidationMessages;
@@ -34,27 +35,28 @@ import com.arkea.satd.sonar.xml.checks.CheckRepository;
 
 public class ApigeeXmlSonarWayProfileTest {
 
-  @Test
-  public void should_create_sonar_way_profile() {
-    ValidationMessages validation = ValidationMessages.create();
+	@Test
+	public void should_create_sonar_way_apigee_profile() {
 
-    RuleFinder ruleFinder = ruleFinder();
-    ApigeeXmlSonarWayProfile definition = new ApigeeXmlSonarWayProfile(ruleFinder);
-    RulesProfile profile = definition.createProfile(validation);
+		XMLProfileParser xmlParser = mock(XMLProfileParser.class);
+		xmlParser = new XMLProfileParser(ruleFinder());
+		ValidationMessages validation = ValidationMessages.create();
+		RulesProfile profile = new ApigeeXmlSonarWayProfile(xmlParser).createProfile(validation);
+		//verify(xmlParser).parse(Mockito.any(Reader.class), Mockito.same(validation));
+		
+		assertThat(profile.getLanguage()).isEqualTo(Xml.KEY);
+		assertThat(profile.getName()).isEqualTo(ApigeeXmlSonarWayProfile.PROFILE_NAME);
+		assertThat(profile.getActiveRulesByRepository(CheckRepository.REPOSITORY_KEY).size() > 22).isTrue();  // At least 22 rules
+		assertThat(validation.hasErrors()).isFalse();
+	}
 
-    assertThat(profile.getLanguage()).isEqualTo(Xml.KEY);
-    assertThat(profile.getName()).isEqualTo(ApigeeXmlSonarWayProfile.PROFILE_NAME);
-    assertThat(profile.getActiveRulesByRepository(CheckRepository.REPOSITORY_KEY)).hasSize(23);
-    assertThat(validation.hasErrors()).isFalse();
-  }
-
-  static RuleFinder ruleFinder() {
-    return when(mock(RuleFinder.class).findByKey(Mockito.anyString(), Mockito.anyString())).thenAnswer(new Answer<Rule>() {
-      public Rule answer(InvocationOnMock invocation) {
-        Object[] arguments = invocation.getArguments();
-        return Rule.create((String) arguments[0], (String) arguments[1], (String) arguments[1]);
-      }
-    }).getMock();
-  }
+	static RuleFinder ruleFinder() {
+		return when(mock(RuleFinder.class).findByKey(Mockito.anyString(), Mockito.anyString())).thenAnswer(new Answer<Rule>() {
+			public Rule answer(InvocationOnMock invocation) {
+				Object[] arguments = invocation.getArguments();
+				return Rule.create((String) arguments[0], (String) arguments[1], (String) arguments[1]);
+			}
+		}).getMock();
+	}
 
 }

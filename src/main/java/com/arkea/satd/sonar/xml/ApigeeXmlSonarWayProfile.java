@@ -16,10 +16,11 @@
 
 package com.arkea.satd.sonar.xml;
 
+import java.io.StringReader;
+
 import org.sonar.api.profiles.ProfileDefinition;
 import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.rules.Rule;
-import org.sonar.api.rules.RuleFinder;
+import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.api.utils.ValidationMessages;
 import org.sonar.plugins.xml.language.Xml;
@@ -27,7 +28,7 @@ import org.sonar.plugins.xml.language.Xml;
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 
 /**
- * Default XML profile.
+ * Default XML Apige profile.
  * 
  * @author Nicolas Tisserand
  */
@@ -35,27 +36,40 @@ public final class ApigeeXmlSonarWayProfile extends ProfileDefinition {
 
 	public static final String PROFILE_NAME = "Sonar way Apigee";
 
-	private final RuleFinder ruleFinder;
+	private final XMLProfileParser xmlParser;
 
-	public ApigeeXmlSonarWayProfile(RuleFinder ruleFinder) {
-		this.ruleFinder = ruleFinder;
+	public ApigeeXmlSonarWayProfile(XMLProfileParser xmlParser) {
+		this.xmlParser = xmlParser;
 	}
 
 	@Override
 	public RulesProfile createProfile(ValidationMessages validation) {
-		RulesProfile profile = RulesProfile.create(PROFILE_NAME, Xml.KEY);
-
+		return xmlParser.parse(new StringReader(prepareProfileXML()), validation);
+	}	
+	
+	private String prepareProfileXML() {
+		StringBuilder xml = new StringBuilder(
+			"<profile>\n" + 
+			"	<language>"+Xml.KEY+"</language>\n" + 
+			"	<name>"+PROFILE_NAME+"</name>\n" + 
+			"	<rules>\n");
+		
+		// Add a <rule> block for each rule of the repository
 		for (Object ruleClass : CheckRepository.getChecks()) {
 			org.sonar.check.Rule ruleAnnotation = AnnotationUtils.getAnnotation(ruleClass, org.sonar.check.Rule.class);
 			if (ruleAnnotation != null) {
-				String ruleKey = ruleAnnotation.key();
-				Rule rule = ruleFinder.findByKey(CheckRepository.REPOSITORY_KEY, ruleKey);
-
-				profile.activateRule(rule, null);
-
+				xml.append(
+					"		<rule>\n" + 
+					"			<repositoryKey>"+CheckRepository.REPOSITORY_KEY+"</repositoryKey>\n" + 
+					"			<key>"+ruleAnnotation.key()+"</key>\n" + 
+					"		</rule>\n");
 			}
 		}
-		return profile;
-	}
 
+		xml.append(
+			"	</rules>\n" + 
+			"</profile>");
+		
+		return xml.toString();
+	}
 }
