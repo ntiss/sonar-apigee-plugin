@@ -9,6 +9,8 @@ The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/
 All rules are not yet implemented ([see below](#implemented-rules)).
 Apigee Shared Flows are not yet supported.
 
+Tested with Sonarqube 5.6.7 LTS and 6.7.1 LTS.
+
 ## Usage
 
 ### Dependencies
