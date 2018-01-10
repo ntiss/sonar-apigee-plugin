@@ -25,7 +25,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
 /**
- * A default flow should be defined.
+ * A default flow must be defined.
  * Code : FL500
  * @author Nicolas Tisserand
  */

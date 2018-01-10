@@ -7,8 +7,9 @@
     "constantCost": "30min"
   },
   "tags": [
+  	"apigee",
     "performance",
     "bad-practice"
   ],
-  "defaultSeverity": "Critical"
+  "defaultSeverity": "Major"
 }

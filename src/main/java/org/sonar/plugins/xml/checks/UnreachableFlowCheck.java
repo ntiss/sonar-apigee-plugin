@@ -27,7 +27,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Flow without a condition should be last.
+ * Flow without a condition must be last.
  * Code : FL501
  * @author Nicolas Tisserand
  */

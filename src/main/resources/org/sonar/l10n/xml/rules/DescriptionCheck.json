@@ -1,5 +1,5 @@
 {
-  "title": "Description tag should longer than N chars",
+  "title": "Description tags should meet minimum length requirements",
   "type": "CODE_SMELL",
   "status": "ready",	
   "remediation": {
@@ -7,6 +7,7 @@
     "constantCost": "1min"
   },
   "tags": [
+  	"apigee",
     "convention",
     "bad-practice"
   ],

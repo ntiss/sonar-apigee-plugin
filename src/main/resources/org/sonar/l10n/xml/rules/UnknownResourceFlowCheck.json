@@ -1,5 +1,5 @@
 {
-  "title": "A default flow should be defined.",
+  "title": "A default flow must be defined.",
   "type": "VULNERABILITY",
   "status": "ready",
   "remediation": {
@@ -7,7 +7,9 @@
     "constantCost": "10min"
   },
   "tags": [
-    "leak"
+   	"apigee",
+    "leak",
+    "owasp"
   ],
   "defaultSeverity": "Critical"
 }

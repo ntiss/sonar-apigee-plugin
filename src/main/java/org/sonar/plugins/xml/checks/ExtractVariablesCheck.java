@@ -36,7 +36,7 @@ import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
 
 /**
  * ExtractVariables XML or JSON Payload
- * A check for a body element must be performed before policy execution.
+ * A check for a body element should be performed before policy execution.
  * Code : PO003 & PO004 & PO005
  * @author Nicolas Tisserand
  */

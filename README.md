@@ -79,15 +79,15 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 ### Target Definition level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
-|:white_check_mark:| TD001 | Critical | Mgmt Server as Target | Discourage calls to the Management Server from a Proxy via target. |
+|:white_check_mark:| TD001 | Major | Mgmt Server as Target | Discourage calls to the Management Server from a Proxy via target. |
 |:white_check_mark:| TD002 | Major | Use Target Servers | Encourage the use of target servers |
 
 ### Flow level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:white_check_mark:| FL001 | Blocker | Unconditional Flows | Only one unconditional flow will get executed. Error if more than one was detected. |
-|:white_check_mark:| FL500 | Critical | Default flow | A default flow should be defined to catch all requests on undefined resources. |
-|:white_check_mark:| FL501 | Blocker | Unreachable flow | Flow without a condition should be last. |
+|:white_check_mark:| FL500 | Critical | Default flow | A default flow must be defined to catch all requests on undefined resources. |
+|:white_check_mark:| FL501 | Blocker | Unreachable flow | Flow without a condition must be last. |
 
 ### Step level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
@@ -97,15 +97,15 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 ### Policy level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
-|:white_check_mark:| PO001 | Major | JSON Threat Protection | A check for a body element must be performed before policy execution. |
-|:white_check_mark:| PO002 | Major | XML Threat Protection | A check for a body element must be performed before policy execution. |
-|:white_check_mark:| PO003 | Major | Extract Variables with JSONPayload | A check for a body element must be performed before policy execution. |
-|:white_check_mark:| PO004 | Major | Extract Variables with XMLPayload | A check for a body element must be performed before policy execution. |
-|:white_check_mark:| PO005 | Major | Extract Variables with FormParam | A check for a body element must be performed before policy execution. |
+|:white_check_mark:| PO001 | Major | JSON Threat Protection | A check for a body element should be performed before policy execution. |
+|:white_check_mark:| PO002 | Major | XML Threat Protection | A check for a body element should be performed before policy execution. |
+|:white_check_mark:| PO003 | Major | Extract Variables with JSONPayload | A check for a body element should be performed before policy execution. |
+|:white_check_mark:| PO004 | Major | Extract Variables with XMLPayload | A check for a body element should be performed before policy execution. |
+|:white_check_mark:| PO005 | Major | Extract Variables with FormParam | A check for a body element should be performed before policy execution. |
 |:heavy_multiplication_x:| PO006 | &nbsp; | Policy Naming Conventions - default name | Policy names should not be default. |
 |:white_check_mark:| PO007 | Minor | Policy Naming Conventions - type indication | It is recommended that the policy name include an indicator of the policy type. |
 |:white_check_mark:| PO008 | Minor | Policy Name Attribute Conventions | It is recommended that the policy name attribute match the display name of the policy. |
-|:white_check_mark:| PO009 | Critical | Service Callout Target - Mgmt Server | Targeting management server may result in higher than expected latency use with caution. |
+|:white_check_mark:| PO009 | Major | Service Callout Target - Mgmt Server | Targeting management server may result in higher than expected latency use with caution. |
 |:heavy_multiplication_x:| PO010 | &nbsp; | Service Callout Target - Target Server | Encourage use of target servers. |
 |:heavy_multiplication_x:| PO011 | &nbsp; | Service Callout Target - Dynamic URLs | Error on dynamic URLs in target server URL tag. |
 |:heavy_multiplication_x:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. |

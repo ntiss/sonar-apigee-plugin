@@ -36,7 +36,7 @@ import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
 
 /**
  * JSON Threat Protection or XML Threat Protection
- * A check for a body element must be performed before policy execution.
+ * A check for a body element should be performed before policy execution.
  * Code : PO001 & PO002
  * @author Nicolas Tisserand
  */
