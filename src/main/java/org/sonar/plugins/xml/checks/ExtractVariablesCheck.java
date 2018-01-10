@@ -58,16 +58,10 @@ public class ExtractVariablesCheck extends AbstractXmlCheck {
 			String nameAttr = (String)xpath.evaluate("/ExtractVariables/@name", document, XPathConstants.STRING);
 			Boolean hasPayloadExtraction = (Boolean)xpath.evaluate("count(/ExtractVariables/*[(name()='JSONPayload' or name()='XMLPayload')]/Variable) + count(/ExtractVariables/FormParam) > 0", document, XPathConstants.BOOLEAN);
 
-		    if(nameAttr!=null && !nameAttr.isEmpty() && hasPayloadExtraction.booleanValue()) {
-			    // Search for the associated step in the full storage
-		    	
+			if(hasPayloadExtraction.booleanValue()) {
+			    // Search for the associated step in the full storage		    	
 			    List<XmlSourceCode> listProxiesEndpoint = BundleRecorder.searchByStepName(nameAttr);
-			    
-			    if(listProxiesEndpoint.isEmpty()) {
-			    	// It means that the policy is unused in no condition at all
-					// Create a violation for the root node
-			    }
-			    
+	
 			    // Now check the Condition of the matching Steps
 			    for(XmlSourceCode currentXml : listProxiesEndpoint) {
 			    	
@@ -77,35 +71,23 @@ public class ExtractVariablesCheck extends AbstractXmlCheck {
 					for(int i=0; i<stepNodes.getLength(); i++) {
 						Node currentStep = stepNodes.item(i);
 						
-						XPathExpression exprCondition = xpath.compile("Condition/text()");
-						String condition = (String)exprCondition.evaluate(currentStep, XPathConstants.STRING);
+						String condition = (String)xpath.evaluate("Condition/text()", currentStep, XPathConstants.STRING);
 						
-						boolean hasIssue = true;
-						if(condition!=null && !condition.isEmpty()) {
-							// Analyse the content of the condition
-							Matcher matcher = pattern.matcher(condition);	    
-							if(matcher.find()) {
-								hasIssue = false;
-							}
-						} 
+						// Analyse the content of the condition
+						Matcher matcher = pattern.matcher(condition);	    
+						boolean hasIssue = !matcher.find();
 						
 						// Check also on flow condition :
 						// if the parent is a flow we might revert the decision if it has an appropriate condition
 						if(hasIssue) {
-							
 							// Search the condition of the parent Node (Flow, but not PreFlow or PostFlow
-							XPathExpression exprFlowCondition = xpath.compile("../../../*[name() = 'Flow']/Condition/text()");
-							String flowCondition = (String)exprFlowCondition.evaluate(currentStep, XPathConstants.STRING);
-							
-							Matcher matcher = pattern.matcher(flowCondition);	    
-							if(matcher.find()) {
-								hasIssue = false;
-							}
+							String flowCondition = (String)xpath.evaluate("../../../*[name() = 'Flow']/Condition/text()", currentStep, XPathConstants.STRING);						
+							matcher = pattern.matcher(flowCondition);	    
+							hasIssue = !matcher.find();
 						}
 						
 						// Finally : Create issue if needed
 						if(hasIssue) {
-							
 							XmlIssue issue = new XmlIssue(getRuleKey(), currentXml.getLineForNode(currentStep), "An appropriate check for a message body was not found on the enclosing Step or Flow.");
 							currentXml.addViolation(issue); // Useful for JUnit test
 							ApigeeXmlSensor.saveIssue(ApigeeXmlSensor.getContext(), currentXml); // Mandatory to "commit" the issue in the final report

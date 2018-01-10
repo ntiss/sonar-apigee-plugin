@@ -263,6 +263,45 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 	}
 	
 	@Test
+	public void test_queryparam_ok() throws Exception {
+		
+		// Fake ProxyEndpoint file
+		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <Description/>\r\n" + 
+				"    <PreFlow name=\"PreFlow\">\r\n" + 
+				"        <Request/>\r\n" + 
+				"        <Response/>\r\n" + 
+				"    </PreFlow>\r\n" + 
+				"    <Flows>\r\n" + 
+				"        <Flow name=\"list resources\">\r\n" + 
+				"            <Description>CREATE the resource</Description>\r\n" + 
+				"            <Request>\r\n" + 
+				"                <Step>\r\n" + 
+				"                    <Name>EV-Extract-Things</Name>\r\n" + 
+				"                </Step>\r\n" + 
+				"            </Request>\r\n" + 
+				"            <Response/>\r\n" + 
+				"        </Flow>\r\n" + 
+				"    </Flows>\r\n" + 
+				"</ProxyEndpoint>" 
+				));
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(proxyEndpointXML);
+
+		List<XmlIssue> issues = getIssues(
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+					"<ExtractVariables async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"EV-Extract-Things\">\r\n" +
+					"	<QueryParam name=\"code\">\r\n" + 
+					"      <Pattern ignoreCase=\"true\">DBN{dbncode}</Pattern>\r\n" + 
+					"   </QueryParam>" + 
+					"</ExtractVariables>"
+					);
+		assertEquals(0, issues.size());
+		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
+	}
+		
+	@Test
 	public void test_json_ko1() throws Exception {
 		
 		// Fake ProxyEndpoint file
