@@ -15,23 +15,13 @@
  */
 package org.sonar.plugins.xml.checks;
 
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
 
 
 /**
@@ -41,7 +31,7 @@ import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
  * @author Nicolas Tisserand
  */
 @Rule(key = "ThreatProtectionCheck")
-public class ThreatProtectionCheck extends AbstractXmlCheck {
+public class ThreatProtectionCheck extends AbstractBodyCheck {
 
 	@Override
 	public void validate(XmlSourceCode xmlSourceCode) {
@@ -52,47 +42,11 @@ public class ThreatProtectionCheck extends AbstractXmlCheck {
 	    XPathFactory xPathfactory = XPathFactory.newInstance();
 	    XPath xpath = xPathfactory.newXPath();
 	    
-	    Pattern pattern = Pattern.compile("(response.content|response.form|request.content|request.form|message.content|message.form|message.verb|request.verb|request.header.Content-Length|response.header.Content-Length)");
-
 	    try {
-			XPathExpression exprName = xpath.compile("//*[name() = 'JSONThreatProtection' or name() = 'XMLThreatProtection']/@name");
-		    String nameAttr = (String)exprName.evaluate(document, XPathConstants.STRING);
+		    String nameAttr = (String)xpath.evaluate("//*[name() = 'JSONThreatProtection' or name() = 'XMLThreatProtection']/@name", document, XPathConstants.STRING);
 		
-		    // Search for the associated step in the full storage 
-		    List<XmlSourceCode> listProxiesEndpoint = BundleRecorder.searchByStepName(nameAttr);
-		    
-		    // Now check the Condition of the matching Steps
-		    for(XmlSourceCode currentXml : listProxiesEndpoint) {
-		    	
-				XPathExpression exprSteps = xpath.compile("//Step[Name[text() = '"+nameAttr+"']]");
-				NodeList stepNodes = (NodeList)exprSteps.evaluate(currentXml.getDocument(false), XPathConstants.NODESET);
-				
-				for(int i=0; i<stepNodes.getLength(); i++) {
-					Node currentStep = stepNodes.item(i);
-
-					// First analyse of the content of the condition
-					String condition = (String)xpath.evaluate("Condition/text()", currentStep, XPathConstants.STRING);
-					Matcher matcher = pattern.matcher(condition);
-					boolean hasIssue = !matcher.find();
-				
-					// Check also on flow condition :
-					// if the parent is a flow we might revert the decision if it has an appropriate condition
-					if(hasIssue) {
-						// Search the condition of the parent Node (Flow, but not PreFlow or PostFlow
-						String flowCondition = (String)xpath.evaluate("../../../*[name() = 'Flow']/Condition/text()", currentStep, XPathConstants.STRING);							
-						matcher = pattern.matcher(flowCondition);
-						hasIssue = !matcher.find();
-					}
-					
-					// Finally : Create issue if needed
-					if(hasIssue) {
-						XmlIssue issue = new XmlIssue(getRuleKey(), currentXml.getLineForNode(currentStep), "An appropriate check for a message body was not found on the enclosing Step or Flow.");
-						currentXml.addViolation(issue); // Useful for JUnit test
-						ApigeeXmlSensor.saveIssue(ApigeeXmlSensor.getContext(), currentXml); // Mandatory to "commit" the issue in the final report
-					}
-				}
-		    
-		    }
+			checkConditionInStepOrParent(nameAttr, 
+										"(response.content|response.form|request.content|request.form|message.content|message.form|message.verb|request.verb|request.header.Content-Length|response.header.Content-Length)");
 		} catch (XPathExpressionException e) {
 			// Nothing to do
 		}
