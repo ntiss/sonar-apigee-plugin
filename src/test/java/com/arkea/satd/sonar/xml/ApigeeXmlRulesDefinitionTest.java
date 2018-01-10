@@ -39,7 +39,7 @@ public class ApigeeXmlRulesDefinitionTest {
 
 		RulesDefinition.Rule alertUseRule = repository.rule("DescriptionCheck");
 		assertThat(alertUseRule).isNotNull();
-		assertThat(alertUseRule.name()).isEqualTo("Description tag should longer than N chars");
+		assertThat(alertUseRule.name()).isEqualTo("Description tags should meet minimum length requirements");
 
 		for (Rule rule : repository.rules()) {
 			for (RulesDefinition.Param param : rule.params()) {
