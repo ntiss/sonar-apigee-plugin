@@ -30,7 +30,7 @@ import org.w3c.dom.NodeList;
 
 
 /**
- * Definition : The Description tag should have more than N chars to be useful. N can be modified in the Rule definition in the Quality Profile.
+ * Definition : The Description tags should meet minimum length requirements to be useful. The default minimum length is 5. This can be modified in the Quality Profile.
  * Code : BN500
  * @author Nicolas Tisserand
  */

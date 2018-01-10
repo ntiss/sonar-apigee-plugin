@@ -26,7 +26,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * RouteRules should map to defined Targets
+ * RouteRules must map to defined Targets
  * (Apigee UI already prevent this from happening)
  * Code : PD001
  * @author Nicolas Tisserand

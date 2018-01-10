@@ -1,5 +1,5 @@
 {
-  "title": "A check for a body element must be performed before the execution of policy JSONThreatProtection or XMLThreatProtection.",
+  "title": "A check for a body element should be performed before the execution of policy JSONThreatProtection or XMLThreatProtection.",
   "type": "BUG",
   "status": "ready",	
   "remediation": {
@@ -7,6 +7,7 @@
     "constantCost": "1min"
   },
   "tags": [
+  	"apigee",
     "bug"
   ],
   "defaultSeverity": "Major"
