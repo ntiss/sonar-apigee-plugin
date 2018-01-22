@@ -5,7 +5,7 @@
 
 	<groupId>com.arkea.satd.sonar.apigee</groupId>
 	<artifactId>sonar-apigee-plugin</artifactId>
-	<version>1.1.0-RC</version>
+	<version>1.1.0</version>
 	<name>sonar-apigee-plugin</name>
 	<packaging>sonar-plugin</packaging>
 	<description>Sonar Plugin for Apigee</description>
@@ -149,7 +149,7 @@
 					<pluginKey>apigee-custom</pluginKey>
 					<pluginName>SonarApigee</pluginName>
 					<pluginClass>com.arkea.satd.sonar.ApigeePlugin</pluginClass>
-					<pluginUrl>https://github.com/ntiss/sonar-apigee-plugin</pluginUrl>
+					<pluginUrl>https://github.com/CreditMutuelArkea/sonar-apigee-plugin</pluginUrl>
 					<basePlugin>xml</basePlugin>
 					<skipDependenciesPackaging>false</skipDependenciesPackaging>
 					<sonarLintSupported>false</sonarLintSupported>
@@ -170,9 +170,5 @@
 
 		</plugins>
 	</build>
-
-
-
-
 
 </project>
