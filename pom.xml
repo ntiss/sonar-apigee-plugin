@@ -5,7 +5,7 @@
 
 	<groupId>com.arkea.satd.sonar.apigee</groupId>
 	<artifactId>sonar-apigee-plugin</artifactId>
-	<version>1.1.0-RC</version>
+	<version>1.1.0</version>
 	<name>sonar-apigee-plugin</name>
 	<packaging>sonar-plugin</packaging>
 	<description>Sonar Plugin for Apigee</description>
