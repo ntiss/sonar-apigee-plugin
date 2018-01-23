@@ -146,7 +146,7 @@
 				<version>1.17</version>
 				<extensions>true</extensions>
 				<configuration>
-					<pluginKey>apigee-custom</pluginKey>
+					<pluginKey>apigee</pluginKey>
 					<pluginName>SonarApigee</pluginName>
 					<pluginClass>com.arkea.satd.sonar.ApigeePlugin</pluginClass>
 					<pluginUrl>https://github.com/CreditMutuelArkea/sonar-apigee-plugin</pluginUrl>
