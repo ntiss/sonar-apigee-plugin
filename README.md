@@ -10,27 +10,51 @@ The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/
 All rules are not yet implemented ([see below](#implemented-rules)).
 Apigee Shared Flows are not yet supported.
 
-Tested with Sonarqube 5.6.7 LTS and 6.7.1 LTS.
+Tested with Sonarqube 5.6, 5.6.1, 5.6.6, 5.6.7 LTS and 6.7.1 LTS.
 
 ## Usage
 
-### Dependencies
+### Some screenshots
+
+<table>
+ <tr>
+  <td><a href="https://raw.githubusercontent.com/CreditMutuelArkea/sonar-apigee-plugin/master/images/project_overview.png"><img src="images/project_overview.png" width="420" /></a></td>
+  <td><a href="https://raw.githubusercontent.com/CreditMutuelArkea/sonar-apigee-plugin/master/images/project_issues.png"><img src="images/project_issues.png" width="420" /></a></td>
+</table>
+
+
+### Requirements
+
 To work, the plugin sonar-xml-plugin MUST be installed.
+
 As Apigee also deals with Javascript and Python, it would be pertinent to install sonar-python-plugin and sonar-javascript-plugin, but it's not mandatory.
 
+### Installation
+
+For SonarQube from 5.6 up to 5.6.6 :
+ * Check that the sonarXML Plugin is already installed (minimum release 1.4.3.1027)
+ * Put the file sonar-apigee-plugin-X.X.X.jar in the directory $SONARQUBE_HOME/extensions/plugins. (the jar is available in the [release section](https://github.com/CreditMutuelArkea/sonar-apigee-plugin/releases))
+ * Restart the server
+ 
+For SonarQube from 5.6.7 and later (including 6.7.*)
+ * Check that the sonarXML Plugin is already installed (minimum release 1.4.3.1027)
+ * Use the Marketplace Update Center to install the Apigee plugin :
+   ![](images/marketplace.png)
+ * Restart the server
+
+Finally :
+ * Activate all rules in the sonar way profile.
+ 
 ### Build
+
+If you want to try the very last version :
 
     mvn clean install
   
-You'll get a jar file in the target directory
+You'll get a jar file in the target directory.
 
-### Installation
-Like any Sonar plugin :
- * put the file sonar-apigee-plugin-X.X.X.jar in the directory $SONARQUBE_HOME/extensions/plugins. (the jar is also avalaible in the release section)
- * restart the server
-Finally :
- * activate all rules in the sonar way profile
- 
+Copy this jar in the directory $SONARQUBE_HOME/extensions/plugins and restart the server.
+
 
 ## Why this plugin ?
  * because companies, like mine, prefer using a centralized platform like Sonar, instead of an standalone tool

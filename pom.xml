@@ -5,7 +5,7 @@
 
 	<groupId>com.arkea.satd.sonar.apigee</groupId>
 	<artifactId>sonar-apigee-plugin</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<name>sonar-apigee-plugin</name>
 	<packaging>sonar-plugin</packaging>
 	<description>Sonar Plugin for Apigee</description>
@@ -19,12 +19,22 @@
 		</license>
 	</licenses>
 
+    <organization>
+		<name>Nicolas Tisserand for Crédit Mutuel Arkéa</name>
+		<url>https://github.com/CreditMutuelArkea</url>
+	</organization>
+
 	<developers>
 		<developer>
 			<id>ntiss</id>
 			<name>Nicolas Tisserand</name>
 		</developer>
 	</developers>
+
+	<issueManagement>
+	  <system>GitHub Issues</system>
+	  <url>https://github.com/CreditMutuelArkea/sonar-apigee-plugin/issues</url>
+	</issueManagement>
 
 	<properties>
 		<license.title>SonarQube XML Plugin</license.title>
@@ -54,13 +64,6 @@
 			<groupId>org.sonarsource.xml</groupId>
 			<artifactId>sonar-xml-plugin</artifactId>
 			<version>1.4.3.1027</version>
-			<scope>provided</scope>
-		</dependency>
-
-		<dependency>
-			<groupId>org.sonarsource.java</groupId>
-			<artifactId>java-frontend</artifactId>
-			<version>${java.plugin.version}</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -146,8 +149,8 @@
 				<version>1.17</version>
 				<extensions>true</extensions>
 				<configuration>
-					<pluginKey>apigee-custom</pluginKey>
-					<pluginName>SonarApigee</pluginName>
+					<pluginKey>apigee</pluginKey>
+					<pluginName>Apigee</pluginName>
 					<pluginClass>com.arkea.satd.sonar.ApigeePlugin</pluginClass>
 					<pluginUrl>https://github.com/CreditMutuelArkea/sonar-apigee-plugin</pluginUrl>
 					<basePlugin>xml</basePlugin>
