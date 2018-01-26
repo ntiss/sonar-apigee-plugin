@@ -43,7 +43,7 @@ For SonarQube from 5.6.7 and later (including 6.7.*)
  * Restart the server
 
 Finally :
- * Activate all rules in the sonar way profile
+ * Activate all rules in the sonar way profile.
  
 ### Build
 
@@ -51,7 +51,9 @@ If you want to try the very last version :
 
     mvn clean install
   
-You'll get a jar file in the target directory
+You'll get a jar file in the target directory.
+
+Copy this jar in the directory $SONARQUBE_HOME/extensions/plugins and restart the server.
 
 
 ## Why this plugin ?
