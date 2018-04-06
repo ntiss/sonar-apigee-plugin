@@ -14,8 +14,19 @@ Tested with Sonarqube 5.6, 5.6.1, 5.6.6, 5.6.7 LTS and 6.7.1 LTS.
 
 ## Usage
 
-### Dependencies
+### Some screenshots
+
+<table>
+ <tr>
+  <td><a href="https://raw.githubusercontent.com/CreditMutuelArkea/sonar-apigee-plugin/master/images/project_overview.png"><img src="images/project_overview.png" width="420" /></a></td>
+  <td><a href="https://raw.githubusercontent.com/CreditMutuelArkea/sonar-apigee-plugin/master/images/project_issues.png"><img src="images/project_issues.png" width="420" /></a></td>
+</table>
+
+
+### Requirements
+
 To work, the plugin sonar-xml-plugin MUST be installed.
+
 As Apigee also deals with Javascript and Python, it would be pertinent to install sonar-python-plugin and sonar-javascript-plugin, but it's not mandatory.
 
 ### Installation
@@ -32,7 +43,7 @@ For SonarQube from 5.6.7 and later (including 6.7.*)
  * Restart the server
 
 Finally :
- * Activate all rules in the sonar way profile
+ * Activate all rules in the sonar way profile.
  
 ### Build
 
@@ -40,7 +51,9 @@ If you want to try the very last version :
 
     mvn clean install
   
-You'll get a jar file in the target directory
+You'll get a jar file in the target directory.
+
+Copy this jar in the directory $SONARQUBE_HOME/extensions/plugins and restart the server.
 
 
 ## Why this plugin ?
