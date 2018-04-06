@@ -37,7 +37,6 @@ import org.sonar.plugins.xml.language.Xml;
 import org.sonar.plugins.xml.parsers.ParseException;
 
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
-import com.google.common.annotations.VisibleForTesting;
 
 /**
  * ApigeeXmlSensor provides analysis of xml files.
@@ -84,7 +83,6 @@ public class ApigeeXmlSensor implements Sensor {
 
 	}
 
-	@VisibleForTesting
 	public static void saveIssue(SensorContext context, XmlSourceCode sourceCode) {
 		if(context!=null) {
 			for (XmlIssue xmlIssue : sourceCode.getXmlIssues()) {

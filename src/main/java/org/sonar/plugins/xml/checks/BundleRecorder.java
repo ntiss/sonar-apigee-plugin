@@ -28,8 +28,6 @@ import javax.xml.xpath.XPathFactory;
 import org.sonar.plugins.xml.parsers.ParseException;
 import org.w3c.dom.Document;
 
-import com.google.common.collect.Iterables;
-
 /**
  * This class records each files discovered in the bundle directory
  * @author Nicolas Tisserand
@@ -94,9 +92,15 @@ public class BundleRecorder {
 	public static List<XmlSourceCode> searchByStepName(String stepName) {
 		
 		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<>();
+
+		// Concat full list
+		List<XmlSourceCode> fullXmlSourceCode = new ArrayList<>();
+		fullXmlSourceCode.addAll(proxiesEndpoint.values());
+		fullXmlSourceCode.addAll(targetsEndpoint.values());
+		
 		
 		// Search for "stepName" in both ProxyEndpoint and TargetEndpoint
-		for(XmlSourceCode currentXml : Iterables.concat(proxiesEndpoint.values(), targetsEndpoint.values())) {
+		for(XmlSourceCode currentXml : fullXmlSourceCode) {
 			Document document = currentXml.getDocument(false);
 			try {
 			    XPathFactory xPathfactory = XPathFactory.newInstance();
