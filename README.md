@@ -10,7 +10,7 @@ The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/
 All rules are not yet implemented ([see below](#implemented-rules)).
 Apigee Shared Flows are not yet supported.
 
-Tested with Sonarqube 5.6, 5.6.1, 5.6.6, 5.6.7 LTS and 6.7.1 LTS.
+Tested with Sonarqube 5.6, 5.6.1, 5.6.6, 5.6.7 LTS, 6.7.1 LTS and 7.0.
 
 ## Usage
 
@@ -43,7 +43,7 @@ For SonarQube from 5.6.7 and later (including 6.7.*)
  * Restart the server
 
 Finally :
- * Activate all rules in the sonar way profile.
+ * Activate all rules in the sonar way profile or make the "Sonar way Apigee" quality profile as default.
  
 ### Build
 
