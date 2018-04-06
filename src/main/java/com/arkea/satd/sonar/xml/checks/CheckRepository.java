@@ -15,7 +15,9 @@
  */
 package com.arkea.satd.sonar.xml.checks;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.sonar.plugins.xml.checks.AbstractXmlCheck;
 import org.sonar.plugins.xml.checks.AvoidPythonCheck;
@@ -42,7 +44,6 @@ import org.sonar.plugins.xml.checks.UnreachableRouteRuleCheck;
 import org.sonar.plugins.xml.checks.UseManagementServerCheck;
 import org.sonar.plugins.xml.checks.UseTargetServersCheck;
 
-import com.google.common.collect.ImmutableList;
 
 /**
  * @author Nicolas Tisserand
@@ -57,35 +58,34 @@ public class CheckRepository {
 
 	@SuppressWarnings("rawtypes")
 	public static List<Class> getChecks() {
-		return ImmutableList.<Class>builder().addAll(getClassesChecks()).build();
+		return getClassesChecks().stream().map(AbstractXmlCheck::getClass).collect(Collectors.toList());
 	}
   
-	public static List<Class<? extends AbstractXmlCheck>> getClassesChecks() {
-		return ImmutableList.<Class<? extends AbstractXmlCheck>>builder()
-				.add(AvoidPythonCheck.class)
-				.add(CacheCoherenceCheck.class)
-				.add(ConditionLengthCheck.class)
-				.add(DescriptionCheck.class)
-				.add(DescriptionPatternCheck.class)
-				.add(EmptyRouteRuleLastCheck.class)
-				.add(EmptyStepCheck.class)
-				.add(ExtractVariablesCheck.class)
-				.add(FaultRuleConditionCheck.class)
-				.add(PolicyDisplayNameCheck.class)
-				.add(PolicyNameConventionCheck.class)
-				.add(RegexLookAroundCheck.class)
-				.add(RouteRulesToTargetCheck.class)
-				.add(ServiceCalloutRequestVariableNameCheck.class)
-				.add(ServiceCalloutResponseVariableNameCheck.class)
-				.add(ThreatProtectionCheck.class)
-				.add(UnattachedPolicyCheck.class)
-				.add(UnconditionalFlowCheck.class)
-				.add(UnknownResourceFlowCheck.class)
-				.add(UnreachableFlowCheck.class)
-				.add(UnreachableRouteRuleCheck.class)
-				.add(UseManagementServerCheck.class)
-				.add(UseTargetServersCheck.class)
-				
-				.build();
+	public static List<? extends AbstractXmlCheck> getClassesChecks() {
+		return Arrays.asList(
+			      new AvoidPythonCheck(),
+			      new CacheCoherenceCheck(),
+			      new ConditionLengthCheck(),
+			      new DescriptionCheck(),
+			      new DescriptionPatternCheck(),
+			      new EmptyRouteRuleLastCheck(),
+			      new EmptyStepCheck(),
+			      new ExtractVariablesCheck(),
+			      new FaultRuleConditionCheck(),
+			      new PolicyDisplayNameCheck(),
+			      new PolicyNameConventionCheck(),
+			      new RegexLookAroundCheck(),
+			      new RouteRulesToTargetCheck(),
+			      new ServiceCalloutRequestVariableNameCheck(),
+			      new ServiceCalloutResponseVariableNameCheck(),
+			      new ThreatProtectionCheck(),
+			      new UnattachedPolicyCheck(),
+			      new UnconditionalFlowCheck(),
+			      new UnknownResourceFlowCheck(),
+			      new UnreachableFlowCheck(),
+			      new UnreachableRouteRuleCheck(),
+			      new UseManagementServerCheck(),
+			      new UseTargetServersCheck()
+			);
 	}
 }
