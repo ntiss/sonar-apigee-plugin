@@ -61,7 +61,7 @@ public class CheckRepository {
 		return getClassesChecks().stream().map(AbstractXmlCheck::getClass).collect(Collectors.toList());
 	}
   
-	public static List<? extends AbstractXmlCheck> getClassesChecks() {
+	public static List<AbstractXmlCheck> getClassesChecks() {
 		return Arrays.asList(
 			      new AvoidPythonCheck(),
 			      new CacheCoherenceCheck(),

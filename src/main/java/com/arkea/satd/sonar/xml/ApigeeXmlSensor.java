@@ -27,6 +27,7 @@ import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.xml.checks.AbstractXmlCheck;
 import org.sonar.plugins.xml.checks.BundleRecorder;
 import org.sonar.plugins.xml.checks.XmlFile;
@@ -73,8 +74,12 @@ public class ApigeeXmlSensor implements Sensor {
 		try {
 			sourceCode.parseSource();
 			for (Object check : checks.all()) {
-				((AbstractXmlCheck) check).setRuleKey(checks.ruleKey(check));
-				((AbstractXmlCheck) check).validate(sourceCode);
+				
+				RuleKey rkey = checks.ruleKey(check); 
+				if(rkey != null) {
+					((AbstractXmlCheck) check).setRuleKey(rkey);
+					((AbstractXmlCheck) check).validate(sourceCode);
+				}
 			}
 			saveIssue(context, sourceCode);
 		} catch(ParseException e) {

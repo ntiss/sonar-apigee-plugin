@@ -48,8 +48,8 @@ public final class ApigeeXmlRulesDefinition implements RulesDefinition {
       .createRepository(CheckRepository.REPOSITORY_KEY, Xml.KEY)
       .setName(CheckRepository.REPOSITORY_NAME);
         
-    //FIXME replacement of new AnnotationBasedRulesDefinition(repository, Xml.KEY).addRuleClasses(false, CheckRepository.getChecks());
-    //TODO : use RuleMetadataLoader, but unavailable in Sonar 5.6
+    // Replacement of AnnotationBasedRulesDefinition
+    // Use RuleMetadataLoader, but unavailable in Sonar 5.6
     new RulesDefinitionAnnotationLoader().load(repository, CheckRepository.getChecks().toArray(new Class[CheckRepository.getChecks().size()]));
     
     for (NewRule rule : repository.rules()) {
@@ -70,16 +70,15 @@ public final class ApigeeXmlRulesDefinition implements RulesDefinition {
     if (resource == null) {
       return null;
     }
-    try {
-        BufferedReader in = new BufferedReader(new InputStreamReader(resource.openStream(), Charset.forName("UTF-8")));
+    
+    try (BufferedReader in = new BufferedReader(new InputStreamReader(resource.openStream(), Charset.forName("UTF-8")))) {
 
         StringBuilder response = new StringBuilder();
         String inputLine;
         while ((inputLine = in.readLine()) != null) {
         	response.append(inputLine);
         }
-        in.close();    	
-    	
+	
         return response.toString();
     	 
     } catch (IOException e) {
