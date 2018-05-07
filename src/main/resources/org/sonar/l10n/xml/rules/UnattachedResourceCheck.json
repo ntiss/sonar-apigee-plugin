@@ -1,0 +1,14 @@
+{
+  "title": "Unattached Resource",
+  "type": "CODE_SMELL",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [
+   	"apigee",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Minor"
+}

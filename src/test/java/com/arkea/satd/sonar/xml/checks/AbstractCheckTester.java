@@ -94,5 +94,18 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 
     return f;
   }
+  
+  File createTempFile(String content, String fileName, String directory) throws IOException {
+	  
+	    File tempRoot = createFileSystem().workDir();
+	    File subDir = new File(tempRoot, directory);
+	    subDir.mkdir();
+	    
+		File f = File.createTempFile(fileName.substring(0, fileName.indexOf('.')), fileName.substring(fileName.indexOf('.')), subDir);
+	    FileUtils.write(f, content, Charset.defaultCharset());
+
+	    return f;
+	  }
+	    
 
 }

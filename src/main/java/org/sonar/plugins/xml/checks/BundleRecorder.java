@@ -36,6 +36,7 @@ public class BundleRecorder {
 
 	private static Map<String, XmlSourceCode> proxiesEndpoint = new HashMap<>();
 	private static Map<String, XmlSourceCode> targetsEndpoint = new HashMap<>();
+	private static Map<String, XmlSourceCode> resources = new HashMap<>();
 	private static Map<String, XmlSourceCode> policies = new HashMap<>();
 	
 	private BundleRecorder() {
@@ -45,6 +46,7 @@ public class BundleRecorder {
 	public static void clear() {
 			proxiesEndpoint.clear();
 			targetsEndpoint.clear();
+			resources.clear();
 			policies.clear();
 	}
 	
@@ -70,9 +72,12 @@ public class BundleRecorder {
 		    	} else if ("TargetEndpoint".equals(rootNodeName)) {
 					// TargetEndpoint storage
 			    	targetsEndpoint.put(fileName, xmlSourceCode);
-		    	} else if ("APIProxy".equals(rootNodeName)) {
-					// APIProxy storage
+		    	} else if ("APIProxy".equals(rootNodeName) || "Manifest".equals(rootNodeName)) {
+					// APIProxy & Manifest storage
 			    	// No need to store for the moment 
+		    	} else if ("xsl:stylesheet".equals(rootNodeName) || "wsdl:definitions".equals(rootNodeName) || "xs:schema".equals(rootNodeName) ) {
+					// Resource storage
+		    		resources.put(fileName, xmlSourceCode);
 		    	} else {
 		    		// Policy storage
 		    		policies.put(fileName, xmlSourceCode);
@@ -197,5 +202,37 @@ public class BundleRecorder {
 		
 		return null;
 	}			
+
+	
+	/**
+	 * Returns the XmlSourceCode list containing the policies having a link to the resourceURL
+	 * @param resourceURL
+	 * @return
+	 */
+	public static List<XmlSourceCode> searchPoliciesByResourceURL(String resourceURL) {
+		
+		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<>();
+		
+		for(XmlSourceCode currentXml : policies.values()) {
+			Document document = currentXml.getDocument(false);
+			try {
+			    XPathFactory xPathfactory = XPathFactory.newInstance();
+			    XPath xpath = xPathfactory.newXPath();
+				
+				String resourceLink = (String)xpath.evaluate("//ResourceURL", document, XPathConstants.STRING);
+
+				// Test based only on the last part of the path
+			    if(resourceURL.equals(resourceLink)) {
+			    	matchingXmlSourceCode.add(currentXml);
+			    }
+
+			} catch (XPathExpressionException e) {
+				// Nothing to do
+			}			
+		}
+		
+		return matchingXmlSourceCode;
+	}
+	
 	
 }
