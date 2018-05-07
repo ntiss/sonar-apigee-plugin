@@ -39,27 +39,32 @@ public class UnattachedPolicyCheck extends AbstractXmlCheck {
 	    
 	    Document document = getWebSourceCode().getDocument(false);
 	    if (document.getDocumentElement() != null) {
-    	
-		    XPathFactory xPathfactory = XPathFactory.newInstance();
-		    XPath xpath = xPathfactory.newXPath();
-		    
-		    try {
-		    	// Select in one shot the name attribute
-		    	String attrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
-		    	
-		    	// Verify that this is a policy :
-		    	if(BundleRecorder.searchPoliciesByName(attrName) != null) {
-		    		
-		    		// Search for a step with the same name
-		    		List<XmlSourceCode> stepsList = BundleRecorder.searchByStepName(attrName);
-		    		if(stepsList==null || stepsList.isEmpty()) {
-		    			createViolation(1, "This policy is not attached to a Step in the bundle.");
-		    		}
-		    	}
-		    	
-			} catch (XPathExpressionException e) {
-				// Nothing to do
-			}
+	    	
+	    	String rootNodeName = document.getDocumentElement().getNodeName();
+
+	    	if(!"Manifest".equals(rootNodeName) && !"xsl:stylesheet".equals(rootNodeName) && !"wsdl:definitions".equals(rootNodeName) && !"xs:schema".equals(rootNodeName) ) {
+
+			    XPathFactory xPathfactory = XPathFactory.newInstance();
+			    XPath xpath = xPathfactory.newXPath();
+			    
+			    try {
+			    	// Select in one shot the name attribute
+			    	String attrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
+			    	
+			    	// Verify that this is a policy :
+			    	if(BundleRecorder.searchPoliciesByName(attrName) != null) {
+			    		
+			    		// Search for a step with the same name
+			    		List<XmlSourceCode> stepsList = BundleRecorder.searchByStepName(attrName);
+			    		if(stepsList==null || stepsList.isEmpty()) {
+			    			createViolation(1, "This policy is not attached to a Step in the bundle.");
+			    		}
+			    	}
+			    	
+				} catch (XPathExpressionException e) {
+					// Nothing to do
+				}
+		    }
 	    }
 		    
 	}
