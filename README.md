@@ -1,6 +1,6 @@
 # Sonar Apigee Plugin
 
-[![Build Status](https://travis-ci.org/CreditMutuelArkea/sonar-apigee-plugin.svg?branch=master)](https://travis-ci.org/CreditMutuelArkea/sonar-apigee-plugin)   [![SonarCloud](https://sonarcloud.io/api/badges/gate?key=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin)](https://sonarcloud.io/dashboard?id=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin)   [![Quality Gate](https://sonarcloud.io/api/badges/measure?metric=coverage&key=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin)](https://sonarcloud.io/dashboard?id=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin)
+[![Build Status](https://travis-ci.org/CreditMutuelArkea/sonar-apigee-plugin.svg?branch=master)](https://travis-ci.org/CreditMutuelArkea/sonar-apigee-plugin) [![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin)
 
 This SonarQube Plugin is designed to test Apigee apiproxies.
 The goals is to help  API developpers in doing a static analysis and providing issues to the Sonar engine.
@@ -44,6 +44,7 @@ For SonarQube from 5.6.7 and later (including 6.7.*)
 
 Finally :
  * Activate all rules in the sonar way profile or make the "Sonar way Apigee" quality profile as default.
+ * Add `.wsdl` as suffix to be analyzed in the XMLPlugin administration.
  
 ### Build
 
@@ -94,6 +95,8 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| BN009 | &nbsp; | Statistics Collector - duplicate policies | Warn on duplicate policies when no conditions are present or conditions are duplicates. |
 |:white_check_mark:| BN500 | Info | Description length | A Description tag should have more than N chars to be useful. "N" can be modified in the Quality Profile. The default value is 5. |
 |:white_check_mark:| BN501 | Blocker | Description pattern | The Description of the APIProxy must be compliant with a pattern defined in the Quality Profile. For example : `.*\(code=([A-Z0-9]{4})\).*`. The default pattern is  `.*` |
+|:white_check_mark:| BN502 | Minor | Unattached resources. | Unattached resources are dead code and should be removed from production bundles. This rule only checks XSL, XSD and  WSDL resources. Don't forget to add `.wsdl` as suffix to be analyzed in the XMLPlugin administration. |
+
 
 ### Proxy Definition level
 | Status | Rule&nbsp;ID | Severity | Name | Description |

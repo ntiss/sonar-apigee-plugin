@@ -37,6 +37,7 @@ import org.sonar.plugins.xml.checks.ServiceCalloutRequestVariableNameCheck;
 import org.sonar.plugins.xml.checks.ServiceCalloutResponseVariableNameCheck;
 import org.sonar.plugins.xml.checks.ThreatProtectionCheck;
 import org.sonar.plugins.xml.checks.UnattachedPolicyCheck;
+import org.sonar.plugins.xml.checks.UnattachedResourceCheck;
 import org.sonar.plugins.xml.checks.UnconditionalFlowCheck;
 import org.sonar.plugins.xml.checks.UnknownResourceFlowCheck;
 import org.sonar.plugins.xml.checks.UnreachableFlowCheck;
@@ -80,6 +81,7 @@ public class CheckRepository {
 			      new ServiceCalloutResponseVariableNameCheck(),
 			      new ThreatProtectionCheck(),
 			      new UnattachedPolicyCheck(),
+			      new UnattachedResourceCheck(),
 			      new UnconditionalFlowCheck(),
 			      new UnknownResourceFlowCheck(),
 			      new UnreachableFlowCheck(),
