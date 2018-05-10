@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/CreditMutuelArkea/sonar-apigee-plugin.svg?branch=master)](https://travis-ci.org/CreditMutuelArkea/sonar-apigee-plugin) [![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin)
 
 This SonarQube Plugin is designed to test Apigee apiproxies.
-The goals is to help  API developpers in doing a static analysis and providing issues to the Sonar engine.
+The goals is to help  API developers in doing a static analysis and providing issues to the Sonar engine.
 
 The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter) and on this [document about best-practices](https://docs.apigee.com/api-services/content/best-practices-api-proxy-design-and-development).
 
