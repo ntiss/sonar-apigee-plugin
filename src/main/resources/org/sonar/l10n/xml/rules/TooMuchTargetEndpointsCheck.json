@@ -1,13 +1,14 @@
 {
-  "title": "Overly long conditions on Steps are difficult to debug and maintain",
+  "title": "Discourage the use of numerous target servers",
   "type": "CODE_SMELL",
   "status": "ready",	
   "remediation": {
     "func": "Constant\/Issue",
-    "constantCost": "1min"
+    "constantCost": "10min"
   },
   "tags": [
   	"apigee",
+    "convention",
     "bad-practice"
   ],
   "defaultSeverity": "Major"

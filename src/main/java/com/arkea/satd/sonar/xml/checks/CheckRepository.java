@@ -36,12 +36,15 @@ import org.sonar.plugins.xml.checks.RouteRulesToTargetCheck;
 import org.sonar.plugins.xml.checks.ServiceCalloutRequestVariableNameCheck;
 import org.sonar.plugins.xml.checks.ServiceCalloutResponseVariableNameCheck;
 import org.sonar.plugins.xml.checks.ThreatProtectionCheck;
+import org.sonar.plugins.xml.checks.TooMuchProxyEndpointsCheck;
+import org.sonar.plugins.xml.checks.TooMuchTargetEndpointsCheck;
 import org.sonar.plugins.xml.checks.UnattachedPolicyCheck;
 import org.sonar.plugins.xml.checks.UnattachedResourceCheck;
 import org.sonar.plugins.xml.checks.UnconditionalFlowCheck;
 import org.sonar.plugins.xml.checks.UnknownResourceFlowCheck;
 import org.sonar.plugins.xml.checks.UnreachableFlowCheck;
 import org.sonar.plugins.xml.checks.UnreachableRouteRuleCheck;
+import org.sonar.plugins.xml.checks.UseFaultRulesCheck;
 import org.sonar.plugins.xml.checks.UseManagementServerCheck;
 import org.sonar.plugins.xml.checks.UseTargetServersCheck;
 
@@ -80,12 +83,15 @@ public class CheckRepository {
 			      new ServiceCalloutRequestVariableNameCheck(),
 			      new ServiceCalloutResponseVariableNameCheck(),
 			      new ThreatProtectionCheck(),
+			      new TooMuchProxyEndpointsCheck(),
+			      new TooMuchTargetEndpointsCheck(),
 			      new UnattachedPolicyCheck(),
 			      new UnattachedResourceCheck(),
 			      new UnconditionalFlowCheck(),
 			      new UnknownResourceFlowCheck(),
 			      new UnreachableFlowCheck(),
 			      new UnreachableRouteRuleCheck(),
+			      new UseFaultRulesCheck(),
 			      new UseManagementServerCheck(),
 			      new UseTargetServersCheck()
 			);

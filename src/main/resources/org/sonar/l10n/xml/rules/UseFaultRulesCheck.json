@@ -1,0 +1,15 @@
+{
+  "title": "FaultRules or DefaultFaultRule must be used.",
+  "type": "VULNERABILITY",
+  "status": "ready",
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "10min"
+  },
+  "tags": [
+   	"apigee",
+    "leak",
+    "owasp"
+  ],
+  "defaultSeverity": "Major"
+}

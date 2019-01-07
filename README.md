@@ -104,6 +104,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:white_check_mark:| PD001 | Blocker | RouteRules to Targets | RouteRules should map to defined Targets |
 |:white_check_mark:| PD002 | Blocker | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
 |:white_check_mark:| PD003 | Blocker | Unreachable Route Rules | RouteRule without a condition should be last. |
+|:white_check_mark:| PD501 | Major | Too much proxy endpoints | Discourage the declaration of multiple proxy endpoints in a same proxy. |
 
 
 ### Target Definition level
@@ -111,6 +112,8 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:------:| ---- | -------- | ---- | ----------- |
 |:white_check_mark:| TD001 | Major | Mgmt Server as Target | Discourage calls to the Management Server from a Proxy via target. |
 |:white_check_mark:| TD002 | Major | Use Target Servers | Encourage the use of target servers |
+|:white_check_mark:| TD501 | Major | Too much Target Endpoints | Discourage the use of numerous target endpoints |
+
 
 ### Flow level
 | Status | Rule&nbsp;ID | Severity | Name | Description |
@@ -157,6 +160,11 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 | Status | Rule&nbsp;ID | Severity | Name | Description |
 |:------:| ---- | -------- | ---- | ----------- |
 |:white_check_mark:| FR001 | Major | No Condition on FaultRule | It's not a best practice to have a FaultRule without an outer condition, which automatically makes the FaultRule true. |
+|:white_check_mark:| FR501 | Major | FaultRules or DefaultFaultRule must be used | It's needed to prevent default error messages from the backend or from Apigee to be forwarded outside. |
+|:white_check_mark:| FR502 | Critical | DefaultFaultRule defined and FaultRule without condition | A DefaultFaultRule is defined whereas a FaultRule without condition exists. Consider removing the FaultRule without condition. |
+
+
+
 
 ### Conditional level
 | Status | Rule&nbsp;ID | Severity | Name | Description |

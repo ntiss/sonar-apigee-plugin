@@ -46,7 +46,7 @@ public class ApigeeXmlSonarWayProfileTest {
 		
 		assertThat(profile.getLanguage()).isEqualTo(Xml.KEY);
 		assertThat(profile.getName()).isEqualTo(ApigeeXmlSonarWayProfile.PROFILE_NAME);
-		assertThat(profile.getActiveRulesByRepository(CheckRepository.REPOSITORY_KEY).size() >= 24).isTrue();  // At least 24 rules
+		assertThat(profile.getActiveRulesByRepository(CheckRepository.REPOSITORY_KEY).size() >= 27).isTrue();  // At least 27 rules
 		assertThat(validation.hasErrors()).isFalse();
 	}
 
