@@ -1,0 +1,14 @@
+{
+  "title": "DefaultFaultRule defined and FaultRule without condition",
+  "type": "BUG",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+  	"apigee",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Critical"
+}
