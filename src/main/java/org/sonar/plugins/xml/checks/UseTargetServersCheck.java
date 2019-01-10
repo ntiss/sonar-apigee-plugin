@@ -62,10 +62,9 @@ public class UseTargetServersCheck extends AbstractXmlCheck {
 	    	// If there is only NoRoute (without TargetEndpoint), then it's not a violation.
     		// If there is only ONE unique TargetEndpoint with a NoRoute route, this is still ok.
     		// If there is only ONE unique TargetEndpoint without a NoRoute route, this is a violation.
-	    	if(targetRefSet.size() == 1) {
-	    		if(!hasNoroute || nbOfRouteRulesWithTarget>1) {
-	    			createViolation(lineNumber, "Encourage the use of target servers.");
-	    		}
+	    	if(targetRefSet.size() == 1 && (!hasNoroute || nbOfRouteRulesWithTarget>1) ) {
+    			createViolation(lineNumber, "Encourage the use of target servers.");
+    		
 	    	}
     	}
 	}
