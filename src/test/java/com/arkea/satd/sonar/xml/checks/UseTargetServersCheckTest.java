@@ -66,7 +66,20 @@ public class UseTargetServersCheckTest extends AbstractCheckTester {
 	}	
 	
 	@Test
-	public void test_one_target() throws Exception {
+	public void test_one_target_without_no_route() throws Exception {
+		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <RouteRule name=\"default\">\r\n" + 
+				"		<TargetEndpoint>default</TargetEndpoint>" +
+				"    </RouteRule>\r\n" + 
+				"</ProxyEndpoint>"
+
+		);
+		assertEquals(1, issues.size());
+	}
+	
+	@Test
+	public void test_one_target_with_no_route() throws Exception {
 		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <RouteRule name=\"NoRoute\">\r\n" + 
@@ -78,8 +91,9 @@ public class UseTargetServersCheckTest extends AbstractCheckTester {
 				"</ProxyEndpoint>"
 
 		);
-		assertEquals(1, issues.size());
+		assertEquals(0, issues.size());
 	}
+	
 	
 	@Test
 	public void test_same_target() throws Exception {

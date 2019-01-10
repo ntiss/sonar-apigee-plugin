@@ -19,9 +19,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sonar.check.Rule;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
@@ -39,33 +37,35 @@ public class UseTargetServersCheck extends AbstractXmlCheck {
 
 	    Document document = getWebSourceCode().getDocument(false);
 	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
+
 	    	// Search for last Flow of an ProxyEndpoint document
 	    	NodeList targetNodeList = document.getDocumentElement().getElementsByTagName("TargetEndpoint");
+	    	NodeList routesNodeList = document.getDocumentElement().getElementsByTagName("RouteRule");
+	    	
+	    	
+	    	boolean hasNoroute = false;
+	    	if(routesNodeList.getLength() > targetNodeList.getLength()) {
+	    		hasNoroute = true;
+	    	}
 	    	
 	    	Set<String> targetRefSet = new HashSet<>();
-	    	if(targetNodeList!=null) {
-	    		
-	    		// Look for each different target endpoint
-	    		for(int i=0; i<targetNodeList.getLength(); i++) {
-	    			Node targetNode = targetNodeList.item(i);
-	    			targetRefSet.add(targetNode.getTextContent());
-	    		}
+	    	int nbOfRouteRulesWithTarget = targetNodeList.getLength();
+
+	    	int lineNumber = 1; // By default
+	    	for(int i=0; i<targetNodeList.getLength(); i++) {
+		    	targetRefSet.add(targetNodeList.item(i).getTextContent());
+	    		// Use the <TargetEndpoint> node, it's a better location to indicate the violation
+		    	lineNumber = getWebSourceCode().getLineForNode(targetNodeList.item(i));
 	    	}
 
+    		// If there are more than ONE TargetEndpoint, this is ok (default behaviour).
 	    	// If there is only NoRoute (without TargetEndpoint), then it's not a violation.
-    		// If there is only ONE TargetEndpoint, this is a violation.
-    		// If there are more than ONE TargetEndpoint, this is ok.
+    		// If there is only ONE unique TargetEndpoint with a NoRoute route, this is still ok.
+    		// If there is only ONE unique TargetEndpoint without a NoRoute route, this is a violation.
 	    	if(targetRefSet.size() == 1) {
-	    
-	    		int lineNumber = 1; // By default
-
-	    		// Search for a <RouteRule> node (it's a better location to indicate the violation
-	    		NodeList routeRuleNodeList = document.getDocumentElement().getElementsByTagName("RouteRule");
-	    		if(routeRuleNodeList!=null && routeRuleNodeList.getLength()>0) {
-	    			lineNumber = getWebSourceCode().getLineForNode(routeRuleNodeList.item(0));
+	    		if(!hasNoroute || nbOfRouteRulesWithTarget>1) {
+	    			createViolation(lineNumber, "Encourage the use of target servers.");
 	    		}
-	    		
-	    		createViolation(lineNumber, "Encourage the use of target servers.");
 	    	}
     	}
 	}
