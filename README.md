@@ -12,6 +12,8 @@ Apigee Shared Flows are not yet supported.
 
 Tested with Sonarqube 5.6, 5.6.1, 5.6.6, 5.6.7 LTS, 6.7.1 LTS and 7.0.
 
+*Warning :* This plugin is not compatible with the plugin Sonar-xml 2.0.x. If you use this plugin, please consider not upgrading sonar-xml plugin until development is finished and merged on [this branch](https://github.com/CreditMutuelArkea/sonar-apigee-plugin/tree/2.0.0).
+
 ## Usage
 
 ### Some screenshots
