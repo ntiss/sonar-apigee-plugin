@@ -21,6 +21,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -29,14 +31,14 @@ import org.w3c.dom.Node;
  * Code : PO500
  * @author Nicolas Tisserand
  */
-@Rule(key = "AvoidPythonCheck")
-public class AvoidPythonCheck extends AbstractXmlCheck {
+@Rule(key = AvoidPythonCheck.RULE_KEY)
+public class AvoidPythonCheck extends SonarXmlCheck {
+	
+	public static final String RULE_KEY = "AvoidPythonCheck";
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null) {
     	
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -47,13 +49,12 @@ public class AvoidPythonCheck extends AbstractXmlCheck {
 			    Node resourceURLNode = (Node)xpath.evaluate("//Script//ResourceURL[starts-with(., 'py://')]", document, XPathConstants.NODE);
 
 		    	if(resourceURLNode!=null) {
-	    			createViolation(getWebSourceCode().getLineForNode(resourceURLNode), "Avoid Python language.");
+		    		reportIssue(resourceURLNode, "Avoid Python language.");
 		    	}
 			} catch (XPathExpressionException e) {
 				// Nothing to do
 			}
-	    }
-		    
+	    }		
 	}
 	
 }

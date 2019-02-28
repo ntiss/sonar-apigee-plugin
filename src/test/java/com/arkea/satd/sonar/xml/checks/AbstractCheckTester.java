@@ -19,19 +19,22 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
+import java.util.Collection;
+import org.sonar.plugins.xml.Xml;
+import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.api.rule.RuleKey;
 import org.apache.commons.io.FileUtils;
 import org.junit.rules.TemporaryFolder;
+import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
-import org.sonar.plugins.xml.checks.AbstractXmlCheck;
-import org.sonar.plugins.xml.checks.XmlFile;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
-import org.sonar.plugins.xml.compat.CompatibleInputFile;
-import org.sonar.plugins.xml.parsers.ParseException;
+import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
+import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 import com.arkea.satd.sonar.xml.AbstractXmlPluginTester;
-
-import static org.sonar.plugins.xml.compat.CompatibilityHelper.wrap;
 
 public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 
@@ -39,7 +42,41 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
   
   private DefaultFileSystem filesystem = null;
+  
 
+	
+	protected Collection<Issue> getIssues(SonarXmlCheck check, String content, RuleKey rulekey) throws IOException {
+		
+		//Path BASE_DIR = Paths.get("");
+		
+		SensorContextTester context = SensorContextTester
+				.create(Paths.get(""));
+			/*	.setActiveRules((new ActiveRulesBuilder())
+					.create(rulekey)
+					.activate()
+					.build());		*/
+		
+	    DefaultInputFile defaultInputFile = TestInputFileBuilder.create("", "")
+	  	      .setType(InputFile.Type.MAIN)
+	  	      .setContents(content)
+	  	      .setLanguage(Xml.KEY)
+	  	      .setCharset(StandardCharsets.UTF_8)
+	  	      .build();
+		
+	    XmlFile xmlFile;
+	    try {
+	      xmlFile = XmlFile.create(defaultInputFile);
+	    } catch (IOException e) {
+	      throw new IllegalStateException("Unable to scan xml file", e);
+	    }		
+
+	    check.scanFile(context, rulekey, xmlFile);
+		return context.allIssues();	    
+	}
+  
+  
+  
+/*
   XmlSourceCode parseAndCheck(File file, AbstractXmlCheck check) {
     XmlSourceCode xmlSourceCode = new XmlSourceCode(new XmlFile(newInputFile(file), createFileSystem()));
 
@@ -75,7 +112,7 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 	
 	    filesystem = new DefaultFileSystem(workDir);
 	    filesystem.setEncoding(Charset.defaultCharset());
-	    filesystem.setWorkDir(workDir);
+	    //filesystem.setWorkDir(workDir);
 	
 	    return filesystem;
 	} catch (IOException e) {
@@ -106,6 +143,6 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 
 	    return f;
 	  }
-	    
+*/    
 
 }
