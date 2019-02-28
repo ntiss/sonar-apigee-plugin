@@ -24,24 +24,23 @@ import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.xml.Xml;
 import org.sonar.plugins.xml.checks.AvoidPythonCheck;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 
 public class AvoidPythonCheckTest extends AbstractCheckTester {
 
+	private SonarXmlCheck check = new AvoidPythonCheck();
 	
 	@Test
 	public void test_ok() throws Exception {
 		
-		AvoidPythonCheck check = new AvoidPythonCheck();
-		RuleKey RULE_KEY = RuleKey.of(Xml.KEY, AvoidPythonCheck.RULE_KEY);
-
 		Collection<Issue> issues = getIssues(check, 
 				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<Script async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"theName\">\r\n" + 
 				"    <DisplayName>theDisplayName</DisplayName>\r\n" + 
 				"    <Properties/>\r\n" + 
 				"    <ResourceURL>jsc://script.js</ResourceURL>\r\n" + 
-				"</Script>", RULE_KEY);
+				"</Script>");
 		
 		assertEquals(0, issues.size());
 	}
@@ -49,29 +48,20 @@ public class AvoidPythonCheckTest extends AbstractCheckTester {
 	@Test
 	public void test_ko1() throws Exception {
 	
-		AvoidPythonCheck check = new AvoidPythonCheck();
-		RuleKey RULE_KEY = RuleKey.of(Xml.KEY, AvoidPythonCheck.RULE_KEY);
-
 		Collection<Issue> issues = getIssues(check, 
 				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<Script async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"theName\">\r\n" + 
 				"    <DisplayName>theDisplayName</DisplayName>\r\n" + 
 				"    <Properties/>\r\n" + 
 				"    <ResourceURL>py://script.py</ResourceURL>\r\n" + 
-				"</Script>", RULE_KEY);
-		//System.out.println(issues);
-		
+				"</Script>");
+
 		assertEquals(1, issues.size());
-
-
 	}
 
 	@Test
 	public void test_ko2() throws Exception {
 		
-		AvoidPythonCheck check = new AvoidPythonCheck();
-		RuleKey RULE_KEY = RuleKey.of(Xml.KEY, AvoidPythonCheck.RULE_KEY);
-
 		Collection<Issue> issues = getIssues(check, 
 				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<Script async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"theName\">\r\n" + 
@@ -79,7 +69,7 @@ public class AvoidPythonCheckTest extends AbstractCheckTester {
 				"    <Properties/>\r\n" + 
 				"    <ResourceURL>py://script.py</ResourceURL>\r\n" + 
 				"    <ResourceURL>py://script.py</ResourceURL>\r\n" +  // Blocked by Apigee, should never happen 
-				"</Script>", RULE_KEY);
+				"</Script>");
 	
 		assertEquals(1, issues.size());
 	}	

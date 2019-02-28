@@ -36,6 +36,10 @@ public class AvoidPythonCheck extends SonarXmlCheck {
 	
 	public static final String RULE_KEY = "AvoidPythonCheck";
 
+	public AvoidPythonCheck() {
+		super();
+	}
+	
 	@Override
 	public void scanFile(XmlFile xmlFile) {
 	    Document document = xmlFile.getDocument();

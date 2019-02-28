@@ -15,22 +15,20 @@
  */
 package com.arkea.satd.sonar.xml.checks;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Collection;
-import org.sonar.plugins.xml.Xml;
-import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonar.api.rule.RuleKey;
-import org.apache.commons.io.FileUtils;
+
 import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
+import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.api.rule.RuleKey;
+import org.sonar.plugins.xml.Xml;
 import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
@@ -45,7 +43,7 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
   
 
 	
-	protected Collection<Issue> getIssues(SonarXmlCheck check, String content, RuleKey rulekey) throws IOException {
+	protected Collection<Issue> getIssues(SonarXmlCheck check, String content) throws IOException {
 		
 		//Path BASE_DIR = Paths.get("");
 		
@@ -70,7 +68,7 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 	      throw new IllegalStateException("Unable to scan xml file", e);
 	    }		
 
-	    check.scanFile(context, rulekey, xmlFile);
+	    check.scanFile(context, RuleKey.of(Xml.KEY, "ruleKey"), xmlFile);
 		return context.allIssues();	    
 	}
   
