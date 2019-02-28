@@ -23,7 +23,7 @@ import org.sonar.api.profiles.RulesProfile;
 import org.sonar.api.profiles.XMLProfileParser;
 import org.sonar.api.utils.AnnotationUtils;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.plugins.xml.language.Xml;
+import org.sonar.plugins.xml.Xml;
 
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 

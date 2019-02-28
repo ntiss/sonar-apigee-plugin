@@ -28,7 +28,7 @@ import org.sonar.api.rules.RuleType;
 import org.sonar.api.server.debt.DebtRemediationFunction;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinitionAnnotationLoader;
-import org.sonar.plugins.xml.language.Xml;
+import org.sonar.plugins.xml.Xml;
 
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 import com.google.gson.Gson;
