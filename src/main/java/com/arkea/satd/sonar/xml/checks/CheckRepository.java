@@ -17,9 +17,7 @@ package com.arkea.satd.sonar.xml.checks;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import org.sonar.plugins.xml.checks.AbstractXmlCheck;
 import org.sonar.plugins.xml.checks.AvoidPythonCheck;
 import org.sonar.plugins.xml.checks.CacheCoherenceCheck;
 import org.sonar.plugins.xml.checks.ConditionLengthCheck;
@@ -54,46 +52,43 @@ import org.sonar.plugins.xml.checks.UseTargetServersCheck;
  */
 public class CheckRepository {
 
-  public static final String REPOSITORY_KEY = "apigee-xml";
-  public static final String REPOSITORY_NAME = "Apigee XML";
+	public static final String REPOSITORY_KEY = "apigee-xml";
+	public static final String REPOSITORY_NAME = "Apigee XML";
 
-  private CheckRepository() {
-  }
+	private CheckRepository() {
+	}
 
 	@SuppressWarnings("rawtypes")
-	public static List<Class> getChecks() {
-		return getClassesChecks().stream().map(AbstractXmlCheck::getClass).collect(Collectors.toList());
-	}
-  
-	public static List<AbstractXmlCheck> getClassesChecks() {
+	public static List<Class> getCheckClasses() {
 		return Arrays.asList(
-			      new AvoidPythonCheck(),
-			      new CacheCoherenceCheck(),
-			      new ConditionLengthCheck(),
-			      new DescriptionCheck(),
-			      new DescriptionPatternCheck(),
-			      new EmptyRouteRuleLastCheck(),
-			      new EmptyStepCheck(),
-			      new ExtractVariablesCheck(),
-			      new FaultRuleConditionCheck(),
-			      new PolicyDisplayNameCheck(),
-			      new PolicyNameConventionCheck(),
-			      new RegexLookAroundCheck(),
-			      new RouteRulesToTargetCheck(),
-			      new ServiceCalloutRequestVariableNameCheck(),
-			      new ServiceCalloutResponseVariableNameCheck(),
-			      new ThreatProtectionCheck(),
-			      new TooMuchProxyEndpointsCheck(),
-			      new TooMuchTargetEndpointsCheck(),
-			      new UnattachedPolicyCheck(),
-			      new UnattachedResourceCheck(),
-			      new UnconditionalFlowCheck(),
-			      new UnknownResourceFlowCheck(),
-			      new UnreachableFlowCheck(),
-			      new UnreachableRouteRuleCheck(),
-			      new UseFaultRulesCheck(),
-			      new UseManagementServerCheck(),
-			      new UseTargetServersCheck()
+				AvoidPythonCheck.class,
+				CacheCoherenceCheck.class,
+				ConditionLengthCheck.class,
+				DescriptionCheck.class,
+				DescriptionPatternCheck.class,
+				EmptyRouteRuleLastCheck.class,
+				EmptyStepCheck.class,
+				ExtractVariablesCheck.class,
+				FaultRuleConditionCheck.class,
+				PolicyDisplayNameCheck.class,
+				PolicyNameConventionCheck.class,
+				RegexLookAroundCheck.class,
+				RouteRulesToTargetCheck.class,
+				ServiceCalloutRequestVariableNameCheck.class,
+				ServiceCalloutResponseVariableNameCheck.class,
+				ThreatProtectionCheck.class,
+				TooMuchProxyEndpointsCheck.class,
+				TooMuchTargetEndpointsCheck.class,
+				UnattachedPolicyCheck.class,
+				UnattachedResourceCheck.class,
+				UnconditionalFlowCheck.class,
+				UnknownResourceFlowCheck.class,
+				UnreachableFlowCheck.class,
+				UnreachableRouteRuleCheck.class,
+				UseFaultRulesCheck.class,
+				UseManagementServerCheck.class,
+				UseTargetServersCheck.class
 			);
-	}
+	}	
+	
 }
