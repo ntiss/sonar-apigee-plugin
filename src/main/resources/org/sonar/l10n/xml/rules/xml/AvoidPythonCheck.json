@@ -11,5 +11,8 @@
     "performance",
     "bad-practice"
   ],
-  "defaultSeverity": "Major"
+  "defaultSeverity": "Major",
+  "ruleSpecification": "PO-500",
+  "sqKey": "AvoidPythonCheck"
+  
 }
