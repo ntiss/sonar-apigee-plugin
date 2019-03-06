@@ -18,24 +18,30 @@ package com.arkea.satd.sonar.xml;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
+import org.sonar.api.SonarQubeSide;
+import org.sonar.api.SonarRuntime;
+import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
+import org.sonar.api.utils.Version;
 
-import com.arkea.satd.sonar.xml.ApigeeXmlRulesDefinition;
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 
 public class ApigeeXmlRulesDefinitionTest {
 
 	@Test
 	public void test() {
-		ApigeeXmlRulesDefinition rulesDefinition = new ApigeeXmlRulesDefinition();
+		
+	    SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(7, 3), SonarQubeSide.SERVER);
+
+		ApigeeXmlRulesDefinition rulesDefinition = new ApigeeXmlRulesDefinition(sonarRuntime);
 		RulesDefinition.Context context = new RulesDefinition.Context();
 		rulesDefinition.define(context);
 		RulesDefinition.Repository repository = context.repository("apigee-xml");
 
 		assertThat(repository.name()).isEqualTo("Apigee XML");
 		assertThat(repository.language()).isEqualTo("xml");
-		assertThat(repository.rules()).hasSize(CheckRepository.getChecks().size());
+		assertThat(repository.rules()).hasSize(CheckRepository.getCheckClasses().size());
 
 		RulesDefinition.Rule alertUseRule = repository.rule("DescriptionCheck");
 		assertThat(alertUseRule).isNotNull();
