@@ -1,0 +1,33 @@
+{
+  "name": "Sonar way Apigee",
+  "ruleKeys": [
+	"AvoidPythonCheck",
+	"CacheCoherenceCheck",
+	"ConditionLengthCheck",
+	"DescriptionCheck",
+	"DescriptionPatternCheck",
+	"EmptyRouteRuleLastCheck",
+	"EmptyStepCheck",
+	"ExtractVariablesCheck",
+	"FaultRuleAndDefaultFaultRuleCheck",
+	"FaultRuleConditionCheck",
+	"PolicyDisplayNameCheck",
+	"PolicyNameConventionCheck",
+	"RegexLookAroundCheck",
+	"RouteRulesToTargetCheck",
+	"ServiceCalloutRequestVariableNameCheck",
+	"ServiceCalloutResponseVariableNameCheck",
+	"ThreatProtectionCheck",
+	"TooMuchProxyEndpointsCheck",
+	"TooMuchTargetEndpointsCheck",
+	"UnattachedPolicyCheck",
+	"UnattachedResourceCheck",
+	"UnconditionalFlowCheck",
+	"UnknownResourceFlowCheck",
+	"UnreachableFlowCheck",
+	"UnreachableRouteRuleCheck",
+	"UseFaultRulesCheck",
+	"UseManagementServerCheck",
+	"UseTargetServersCheck"
+  ]
+}
