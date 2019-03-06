@@ -16,14 +16,10 @@
 
 package com.arkea.satd.sonar.xml;
 
-import java.io.StringReader;
-
-import org.sonar.api.profiles.ProfileDefinition;
-import org.sonar.api.profiles.RulesProfile;
-import org.sonar.api.profiles.XMLProfileParser;
-import org.sonar.api.utils.AnnotationUtils;
-import org.sonar.api.utils.ValidationMessages;
+import org.sonar.api.SonarRuntime;
+import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.plugins.xml.Xml;
+import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
 
 import com.arkea.satd.sonar.xml.checks.CheckRepository;
 
@@ -32,44 +28,23 @@ import com.arkea.satd.sonar.xml.checks.CheckRepository;
  * 
  * @author Nicolas Tisserand
  */
-public final class ApigeeXmlSonarWayProfile extends ProfileDefinition {
+public final class ApigeeXmlSonarWayProfile implements BuiltInQualityProfilesDefinition {
+
+	private final org.sonar.api.SonarRuntime sonarRuntime;
 
 	public static final String PROFILE_NAME = "Sonar way Apigee";
 
-	private final XMLProfileParser xmlParser;
+	private static final String SONAR_WAY_PATH = "org/sonar/l10n/xml/rules/xml/Sonar_way_apigee_profile.json";
 
-	public ApigeeXmlSonarWayProfile(XMLProfileParser xmlParser) {
-		this.xmlParser = xmlParser;
+	public ApigeeXmlSonarWayProfile(SonarRuntime sonarRuntime) {
+		this.sonarRuntime = sonarRuntime;
 	}
 
 	@Override
-	public RulesProfile createProfile(ValidationMessages validation) {
-		return xmlParser.parse(new StringReader(prepareProfileXML()), validation);
-	}	
-	
-	private String prepareProfileXML() {
-		StringBuilder xml = new StringBuilder(
-			"<profile>\n" + 
-			"	<language>"+Xml.KEY+"</language>\n" + 
-			"	<name>"+PROFILE_NAME+"</name>\n" + 
-			"	<rules>\n");
-		
-		// Add a <rule> block for each rule of the repository
-		for (Object ruleClass : CheckRepository.getChecks()) {
-			org.sonar.check.Rule ruleAnnotation = AnnotationUtils.getAnnotation(ruleClass, org.sonar.check.Rule.class);
-			if (ruleAnnotation != null) {
-				xml.append(
-					"		<rule>\n" + 
-					"			<repositoryKey>"+CheckRepository.REPOSITORY_KEY+"</repositoryKey>\n" + 
-					"			<key>"+ruleAnnotation.key()+"</key>\n" + 
-					"		</rule>\n");
-			}
-		}
-
-		xml.append(
-			"	</rules>\n" + 
-			"</profile>");
-		
-		return xml.toString();
+	public void define(Context context) {
+		NewBuiltInQualityProfile sonarWay = context.createBuiltInQualityProfile(ApigeeXmlSonarWayProfile.PROFILE_NAME, Xml.KEY);
+		BuiltInQualityProfileJsonLoader.load(sonarWay, CheckRepository.REPOSITORY_KEY, ApigeeXmlSonarWayProfile.SONAR_WAY_PATH, Xml.XML_RESOURCE_PATH, sonarRuntime);
+		sonarWay.done();
 	}
+
 }
