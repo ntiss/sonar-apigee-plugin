@@ -17,24 +17,20 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.ServiceCalloutRequestVariableNameCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class ServiceCalloutRequestVariableNameCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new ServiceCalloutRequestVariableNameCheck());
-		return sourceCode.getXmlIssues();
-	}
+	private SonarXmlCheck check = new ServiceCalloutRequestVariableNameCheck();
 
 	@Test
 	public void test_ok() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ServiceCallout async=\"false\" continueOnError=\"true\" enabled=\"true\" name=\"SC-theCallout\">\r\n" + 
 				"    <DisplayName>SC-theCallout</DisplayName>\r\n" + 
 				"    <Request clearPayload=\"false\" variable=\"customVariableName\">\r\n" + 
@@ -46,7 +42,7 @@ public class ServiceCalloutRequestVariableNameCheckTest extends AbstractCheckTes
 	
 	@Test
 	public void test_ko() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ServiceCallout async=\"false\" continueOnError=\"true\" enabled=\"true\" name=\"SC-theCallout\">\r\n" + 
 				"    <DisplayName>SC-theCallout</DisplayName>\r\n" + 
 				"    <Request clearPayload=\"false\" variable=\"request\">\r\n" + 

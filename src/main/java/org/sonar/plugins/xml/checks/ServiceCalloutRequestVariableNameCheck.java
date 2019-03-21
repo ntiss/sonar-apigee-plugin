@@ -21,6 +21,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -31,13 +33,12 @@ import org.w3c.dom.Node;
  * @author Nicolas Tisserand
  */
 @Rule(key = "ServiceCalloutRequestVariableNameCheck")
-public class ServiceCalloutRequestVariableNameCheck extends AbstractXmlCheck {
+public class ServiceCalloutRequestVariableNameCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null) {
     	
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -47,7 +48,7 @@ public class ServiceCalloutRequestVariableNameCheck extends AbstractXmlCheck {
 		    	// Select in one shot the Request which have variable equals to 'request'
 			    Node requestNode = (Node)xpath.evaluate("/ServiceCallout/Request[@variable = 'request']", document, XPathConstants.NODE);
 		    	if(requestNode!=null) {
-    				createViolation(getWebSourceCode().getLineForNode(requestNode), "Using request for the Request name causes unexepected side effects.");
+    				reportIssue(requestNode, "Using request for the Request name causes unexepected side effects.");
 		    	}
 			} catch (XPathExpressionException e) {
 				// Nothing to do
