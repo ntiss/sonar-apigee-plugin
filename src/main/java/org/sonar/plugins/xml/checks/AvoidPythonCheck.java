@@ -31,10 +31,10 @@ import org.w3c.dom.Node;
  * Code : PO500
  * @author Nicolas Tisserand
  */
-@Rule(key = AvoidPythonCheck.RULE_KEY)
+@Rule(key = "AvoidPythonCheck")
 public class AvoidPythonCheck extends SonarXmlCheck {
 	
-	public static final String RULE_KEY = "AvoidPythonCheck";
+	//public static final String RULE_KEY = "AvoidPythonCheck";
 
 	public AvoidPythonCheck() {
 		super();
