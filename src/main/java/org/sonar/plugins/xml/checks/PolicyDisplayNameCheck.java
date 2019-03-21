@@ -22,6 +22,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -33,13 +35,12 @@ import org.w3c.dom.Node;
  * @author Nicolas Tisserand
  */
 @Rule(key = "PolicyDisplayNameCheck")
-public class PolicyDisplayNameCheck extends AbstractXmlCheck {
+public class PolicyDisplayNameCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    
 	    XPathFactory xPathfactory = XPathFactory.newInstance();
 	    XPath xpath = xPathfactory.newXPath();
@@ -55,7 +56,7 @@ public class PolicyDisplayNameCheck extends AbstractXmlCheck {
 			    String displayNameText = displayNameNode.getTextContent();
 			    
 				// Create a violation for the root node
-				createViolation(getWebSourceCode().getLineForNode(displayNameNode), "It is recommended that the policy name attribute ("+nameAttr+") match the display name of the policy ("+displayNameText+").");
+				reportIssue(displayNameNode, "It is recommended that the policy name attribute ("+nameAttr+") match the display name of the policy ("+displayNameText+").");
 		    }
 		} catch (XPathExpressionException e) {
 			// Nothing to do

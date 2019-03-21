@@ -17,33 +17,29 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.PolicyDisplayNameCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class PolicyDisplayNameCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new PolicyDisplayNameCheck());
-		return sourceCode.getXmlIssues();
-	}
-
+	private SonarXmlCheck check = new PolicyDisplayNameCheck();
+	
 	@Test
 	public void test_ok1() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
-				"<RaiseFault async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Raise-Fault-1\">\r\n" + 
-				"    <DisplayName>Raise-Fault-1</DisplayName>\r\n" + 
-				"</RaiseFault>");
+		Collection<Issue> issues = getIssues(check,"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+			"<RaiseFault async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Raise-Fault-1\">\r\n" + 
+			"    <DisplayName>Raise-Fault-1</DisplayName>\r\n" + 
+			"</RaiseFault>");
 		assertEquals(0, issues.size());
 	}
 
 	@Test
 	public void test_ok2() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<RaiseFault async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Raise-Fault-1\">\r\n" + 
 				"</RaiseFault>");
 		assertEquals(0, issues.size());
@@ -52,7 +48,7 @@ public class PolicyDisplayNameCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_bad_displayName1() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<RaiseFault async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Raise-Fault-1\">\r\n" + 
 				"    <DisplayName>Raise Fault 1</DisplayName>\r\n" + 
 				"</RaiseFault>");
@@ -61,7 +57,7 @@ public class PolicyDisplayNameCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_bad_displayName2() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<RaiseFault async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Raise-Fault-1\">\r\n" + 
 				"    <DisplayName>Raise:Fault:1</DisplayName>\r\n" + 
 				"</RaiseFault>");
@@ -70,7 +66,7 @@ public class PolicyDisplayNameCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_bad_displayName3() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<RaiseFault async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Raise:Fault:1\">\r\n" + 
 				"    <DisplayName>Raise-Fault-1</DisplayName>\r\n" + 
 				"</RaiseFault>");
