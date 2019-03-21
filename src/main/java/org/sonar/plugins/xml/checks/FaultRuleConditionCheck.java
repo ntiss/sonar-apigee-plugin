@@ -35,7 +35,6 @@ import org.w3c.dom.NodeList;
 @Rule(key = "FaultRuleConditionCheck")
 public class FaultRuleConditionCheck extends SonarXmlCheck {
 
-
 	@Override
 	public void scanFile(XmlFile xmlFile) {
 		
