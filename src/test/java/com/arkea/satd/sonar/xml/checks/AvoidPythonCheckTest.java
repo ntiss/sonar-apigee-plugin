@@ -21,8 +21,6 @@ import java.util.Collection;
 
 import org.junit.Test;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonar.api.rule.RuleKey;
-import org.sonar.plugins.xml.Xml;
 import org.sonar.plugins.xml.checks.AvoidPythonCheck;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
