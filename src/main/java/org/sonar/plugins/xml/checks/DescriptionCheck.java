@@ -23,6 +23,8 @@ import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -34,20 +36,19 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "DescriptionCheck")
-public class DescriptionCheck extends AbstractXmlCheck {
+public class DescriptionCheck extends SonarXmlCheck {
 
 	@RuleProperty(
 	    defaultValue = "5",
 	    description = "Min length allowed for a description tag")
 	protected int minDescriptionLength = 5;
-
-	
 	
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    
-	    Document document = getWebSourceCode().getDocument(false);
+	    
 	    if (document.getDocumentElement() != null) {
     	
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -61,7 +62,7 @@ public class DescriptionCheck extends AbstractXmlCheck {
 		    	if(descriptionNodeList!=null) {
 		    		for(int i=0 ; i < descriptionNodeList.getLength(); i++) {
 		    	    	Node node = descriptionNodeList.item(i);
-	    				createViolation(getWebSourceCode().getLineForNode(node), "Description is too short.");
+		    	    	reportIssue(node, "Description is too short.");
 		    		}
 		    	}
 			} catch (XPathExpressionException e) {

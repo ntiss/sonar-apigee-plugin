@@ -17,24 +17,20 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.DescriptionCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class DescriptionCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new DescriptionCheck());
-		return sourceCode.getXmlIssues();
-	}
+	private SonarXmlCheck check = new DescriptionCheck();
 
 	@Test
 	public void test_ok() throws Exception {
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check,
 			"<APIProxy revision=\"1\" name=\"XXX\">\r\n" + 
 			"    <Description>Text of description</Description>\r\n" + 
 			"</APIProxy>"
@@ -44,7 +40,7 @@ public class DescriptionCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_too_short() throws Exception {
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check,
 			"<APIProxy revision=\"1\" name=\"XXX\">\r\n" + 
 			"    <Description>short</Description>\r\n" + 
 			"</APIProxy>"
