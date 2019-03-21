@@ -22,6 +22,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -32,13 +34,12 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "TooMuchProxyEndpointsCheck")
-public class TooMuchProxyEndpointsCheck extends AbstractXmlCheck {
+public class TooMuchProxyEndpointsCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null && "APIProxy".equals(document.getDocumentElement().getNodeName())) {
 
 	    	
@@ -53,15 +54,10 @@ public class TooMuchProxyEndpointsCheck extends AbstractXmlCheck {
 	    	// If there are more than 2 ProxyEndpoint, this is a violation.
 	    	if(proxiesCount > 2) {
 	    
-	    		int lineNumber = 1; // By default
-
 	    		// Search for the <ProxyEndpoints> node (it's a better location to indicate the violation
 	    		NodeList proxyEndpointsNodeList = document.getDocumentElement().getElementsByTagName("ProxyEndpoints");
-	    		if(proxyEndpointsNodeList!=null && proxyEndpointsNodeList.getLength()>0) {
-	    			lineNumber = getWebSourceCode().getLineForNode(proxyEndpointsNodeList.item(0));
-	    		}
+	    		reportIssue(proxyEndpointsNodeList.item(0), "Discourage the declaration of multiple proxy endpoints in a same proxy.");
 	    		
-	    		createViolation(lineNumber, "Discourage the declaration of multiple proxy endpoints in a same proxy.");
 	    	}
 	    	
 			} catch (XPathExpressionException e) {
