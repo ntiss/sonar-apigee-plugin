@@ -22,6 +22,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -33,13 +35,12 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "EmptyStepCheck")
-public class EmptyStepCheck extends AbstractXmlCheck {
+public class EmptyStepCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    
 	    XPathFactory xPathfactory = XPathFactory.newInstance();
 	    XPath xpath = xPathfactory.newXPath();
@@ -52,7 +53,7 @@ public class EmptyStepCheck extends AbstractXmlCheck {
 	    	if(descriptionNodeList!=null) {
 	    		for(int i=0 ; i < descriptionNodeList.getLength(); i++) {
 	    	    	Node stepNode = descriptionNodeList.item(i);
-    				createViolation(getWebSourceCode().getLineForNode(stepNode), "Empty steps clutter a bundle. Performance is not degraded.");
+    				reportIssue(stepNode, "Empty steps clutter a bundle. Performance is not degraded.");
 	    		}
 	    	}
 		} catch (XPathExpressionException e) {
