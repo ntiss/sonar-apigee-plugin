@@ -17,24 +17,21 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.FaultRuleAndDefaultFaultRuleCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class FaultRuleAndDefaultFaultRuleCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new FaultRuleAndDefaultFaultRuleCheck());
-		return sourceCode.getXmlIssues();
-	}
-	
+	private SonarXmlCheck check = new FaultRuleAndDefaultFaultRuleCheck();
+		
 	@Test
 	public void test_ok1() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check,
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<ProxyEndpoint name=\"default\">\r\n" + 
 			"    <FaultRules>\r\n" + 
 			"        <FaultRule name=\"baderror\">\r\n" + 
@@ -51,7 +48,8 @@ public class FaultRuleAndDefaultFaultRuleCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_ok2() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check,
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<ProxyEndpoint name=\"default\">\r\n" + 
 			"    <FaultRules>\r\n" + 
 			"        <FaultRule name=\"baderror\">\r\n" + 
@@ -67,7 +65,8 @@ public class FaultRuleAndDefaultFaultRuleCheckTest extends AbstractCheckTester {
 
 	@Test
 	public void test_ok3() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check,
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<ProxyEndpoint name=\"default\">\r\n" + 
 			"    <DefaultFaultRule>\r\n" + 
 			"       <Step>\r\n" + 
@@ -81,7 +80,8 @@ public class FaultRuleAndDefaultFaultRuleCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_ok4() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check,
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<ProxyEndpoint name=\"default\">\r\n" + 
 			"    <FaultRules>\r\n" + 
 			"        <FaultRule name=\"baderror\">\r\n" + 
@@ -104,7 +104,8 @@ public class FaultRuleAndDefaultFaultRuleCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_ko() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check,
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <FaultRules>\r\n" + 
 				"        <FaultRule name=\"baderror\">\r\n" + 

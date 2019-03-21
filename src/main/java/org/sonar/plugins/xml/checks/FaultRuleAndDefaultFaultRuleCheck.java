@@ -21,6 +21,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -31,13 +33,12 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "FaultRuleAndDefaultFaultRuleCheck")
-public class FaultRuleAndDefaultFaultRuleCheck extends AbstractXmlCheck {
+public class FaultRuleAndDefaultFaultRuleCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null) {
     	
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -57,8 +58,8 @@ public class FaultRuleAndDefaultFaultRuleCheck extends AbstractXmlCheck {
 		    			// Check the condition
 		    			String condition = (String)xpath.evaluate("Condition", currentFaultRule, XPathConstants.STRING);
 		    			if(condition==null || condition.isEmpty() || "true".equals(condition)) {
-		    				createViolation(getWebSourceCode().getLineForNode(currentFaultRule), "DefaultFaultRule defined and FaultRule without condition.");
-		    				createViolation(getWebSourceCode().getLineForNode(defaultFaultRuleNode), "DefaultFaultRule defined and FaultRule without condition.");
+		    				reportIssue(currentFaultRule, "DefaultFaultRule defined and FaultRule without condition.");
+		    				reportIssue(defaultFaultRuleNode, "DefaultFaultRule defined and FaultRule without condition.");
 		    				break;
 		    			}
 		    		}
