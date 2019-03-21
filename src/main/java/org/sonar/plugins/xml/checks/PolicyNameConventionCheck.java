@@ -23,6 +23,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -35,7 +37,7 @@ import org.w3c.dom.Node;
  */
 @Rule(key = "PolicyNameConventionCheck")
 @SuppressWarnings("squid:S1192")
-public class PolicyNameConventionCheck extends AbstractXmlCheck {
+public class PolicyNameConventionCheck extends SonarXmlCheck {
 
 	/**
 	 * Definition of supported policies, and naming convention
@@ -73,23 +75,26 @@ public class PolicyNameConventionCheck extends AbstractXmlCheck {
 		supportedPolicies.put("Quota", Arrays.asList("quota", "q") );
 		supportedPolicies.put("Script", Arrays.asList("script", "scr") );
 		supportedPolicies.put("ServiceCallout", Arrays.asList("callout", "sc") );
+		supportedPolicies.put("SharedFlow", Arrays.asList("sf") );
 		supportedPolicies.put("StatisticsCollector", Arrays.asList("stats", "statcoll") );
 		supportedPolicies.put("XMLThreatProtection", Arrays.asList("xmltp", "tp") );
 		supportedPolicies.put("XMLToJSON", Arrays.asList("xmltojson", "x2j", "xtoj") );
 		supportedPolicies.put("XSL", Arrays.asList("xsl") );				
+		supportedPolicies.put("GenerateJWT", Arrays.asList("jwt") );
+		supportedPolicies.put("DecodeJWT", Arrays.asList("jwt") );
+		supportedPolicies.put("VerifyJWT", Arrays.asList("jwt") );
+
 	}
 	
 	
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    Node rootNode = document.getDocumentElement();
 	    if (rootNode != null) {
 	    	
 	    	String policyName = rootNode.getNodeName();
-	    	
 	    	if(supportedPolicies.containsKey(policyName)) {
 	    		
 	    		String nameAttr = rootNode.getAttributes().getNamedItem("name").getNodeValue();
@@ -108,7 +113,7 @@ public class PolicyNameConventionCheck extends AbstractXmlCheck {
 	    		
 	    		if(!isCompliant) {
     				// Create a violation for the root node
-    				createViolation(getWebSourceCode().getLineForNode(rootNode), "Policy " + policyName + " should have an indicative prefix. Typical prefixes include : " + knownPrefixes);
+    				reportIssue(rootNode, "Policy " + policyName + " should have an indicative prefix. Typical prefixes include : " + knownPrefixes);
 	    		}
 	    	}
 	    }
