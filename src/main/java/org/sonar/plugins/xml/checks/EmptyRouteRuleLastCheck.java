@@ -21,6 +21,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -33,13 +35,12 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "EmptyRouteRuleLastCheck")
-public class EmptyRouteRuleLastCheck extends AbstractXmlCheck {
+public class EmptyRouteRuleLastCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
     	// Search for last Flow of an ProxyEndpoint document
 	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 	    	
@@ -60,7 +61,7 @@ public class EmptyRouteRuleLastCheck extends AbstractXmlCheck {
 		    			
 		    			if(condition==null || condition.getTextContent().isEmpty() || "true".equals(condition.getTextContent())) {
 		    				// Issue detected
-		    				createViolation(getWebSourceCode().getLineForNode(routeRuleNode), "Unreachable Route Rules - empty conditions go last");
+		    				reportIssue(routeRuleNode, "Unreachable Route Rules - empty conditions go last");
 		    			}
 		    		}
 		    	}

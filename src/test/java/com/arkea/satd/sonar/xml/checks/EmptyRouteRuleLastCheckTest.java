@@ -17,24 +17,22 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.EmptyRouteRuleLastCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class EmptyRouteRuleLastCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new EmptyRouteRuleLastCheck());
-		return sourceCode.getXmlIssues();
-	}
-	
+
+	private SonarXmlCheck check = new EmptyRouteRuleLastCheck();
+
 	@Test
 	public void test_ok() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+			Collection<Issue> issues = getIssues(check,
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <RouteRule name=\"firstRoute\">\r\n" + 
 				"        <Condition>request.header.route = \"firstRoute\"</Condition>\r\n" + 
@@ -51,7 +49,8 @@ public class EmptyRouteRuleLastCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_no_route() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check,
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <RouteRule name=\"NoRoute\">\r\n" + 
 				"        <Condition>request.verb == \"OPTIONS\"</Condition>\r\n" + 
@@ -64,7 +63,8 @@ public class EmptyRouteRuleLastCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_empty_route() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check,
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <RouteRule name=\"NoRoute\">\r\n" + 
 				"    </RouteRule>\r\n" + 
@@ -76,7 +76,8 @@ public class EmptyRouteRuleLastCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_no_cond() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check,
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <RouteRule name=\"firstRoute\">\r\n" + 
 				"        <Condition>request.header.route = \"firstRoute\"</Condition>\r\n" + 
@@ -96,7 +97,8 @@ public class EmptyRouteRuleLastCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_multiple() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check,
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <RouteRule name=\"route1\">\r\n" + 
 				"        <Condition/>\r\n" + 
