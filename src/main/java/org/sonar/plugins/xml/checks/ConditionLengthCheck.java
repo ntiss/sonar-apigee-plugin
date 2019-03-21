@@ -22,6 +22,8 @@ import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -33,18 +35,18 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "ConditionLengthCheck")
-public class ConditionLengthCheck extends AbstractXmlCheck {
+public class ConditionLengthCheck extends SonarXmlCheck {
 
 	@RuleProperty(
 	    defaultValue = "256",
 	    description = "Max length allowed for a condition tag")
 	protected int maxConditionLength = 256;
-
+	
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
+		
 	    if (document.getDocumentElement() != null) {
     	
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -57,7 +59,7 @@ public class ConditionLengthCheck extends AbstractXmlCheck {
 		    	if(conditionNodeList!=null) {
 		    		for(int i=0 ; i < conditionNodeList.getLength(); i++) {
 		    	    	Node node = conditionNodeList.item(i);
-	    				createViolation(getWebSourceCode().getLineForNode(node), "Condition is " + node.getTextContent().length() + " characters.");
+		    	    	reportIssue(node, "Condition is " + node.getTextContent().length() + " characters.");
 		    		}
 		    	}
 			} catch (XPathExpressionException e) {
