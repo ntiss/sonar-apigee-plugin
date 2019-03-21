@@ -25,6 +25,8 @@ import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
 import org.sonar.check.RuleProperty;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -35,7 +37,7 @@ import org.w3c.dom.Node;
  * @author Nicolas Tisserand
  */
 @Rule(key = "DescriptionPatternCheck")
-public class DescriptionPatternCheck extends AbstractXmlCheck {
+public class DescriptionPatternCheck extends SonarXmlCheck {
 
 	@RuleProperty(
 	    defaultValue = ".*",
@@ -51,10 +53,9 @@ public class DescriptionPatternCheck extends AbstractXmlCheck {
 	}
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null && "APIProxy".equals(document.getDocumentElement().getNodeName())) {
 
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -71,7 +72,7 @@ public class DescriptionPatternCheck extends AbstractXmlCheck {
 		    		Matcher matcher = pattern.matcher(desc);
 		    		
 		    		if(!matcher.matches()) {
-		    			createViolation(getWebSourceCode().getLineForNode(descriptionNode), "Description is not compliant with the pattern " + regexPattern);
+		    			reportIssue(descriptionNode, "Description is not compliant with the pattern " + regexPattern);
 		    		}
 		    	}
 			} catch (XPathExpressionException e) {

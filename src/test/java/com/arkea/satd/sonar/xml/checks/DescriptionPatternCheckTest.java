@@ -17,27 +17,19 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.DescriptionPatternCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
 
 public class DescriptionPatternCheckTest extends AbstractCheckTester {
 
 	private DescriptionPatternCheck check = new DescriptionPatternCheck();
 	
-	
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), check);
-		return sourceCode.getXmlIssues();
-	}
-
 	@Test
 	public void test_ok1() throws Exception {
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check,
 			"<APIProxy revision=\"1\" name=\"XXX\">\r\n" + 
 			"    <Description>Text of description</Description>\r\n" + 
 			"</APIProxy>"
@@ -48,7 +40,7 @@ public class DescriptionPatternCheckTest extends AbstractCheckTester {
 	@Test
 	public void test_ok2() throws Exception {
 		check.setRegexPattern(".*\\(code=([A-Z0-9]{4})\\).*");
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check,
 			"<APIProxy revision=\"1\" name=\"XXX\">\r\n" + 
 			"    <Description>Text of description (code=AB12)</Description>\r\n" + 
 			"</APIProxy>"
@@ -61,7 +53,7 @@ public class DescriptionPatternCheckTest extends AbstractCheckTester {
 		
 		check.setRegexPattern("[a-zA-Z]*");
 		
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check,
 			"<APIProxy revision=\"1\" name=\"XXX\">\r\n" + 
 			"    <Description>bad desc : 123456</Description>\r\n" + 
 			"</APIProxy>"
