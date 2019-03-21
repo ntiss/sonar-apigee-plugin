@@ -47,8 +47,6 @@ public class DescriptionCheck extends SonarXmlCheck {
 	public void scanFile(XmlFile xmlFile) {
 		
 	    Document document = xmlFile.getDocument();
-	    
-	    
 	    if (document.getDocumentElement() != null) {
     	
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
