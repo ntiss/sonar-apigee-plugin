@@ -21,6 +21,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -32,13 +34,12 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "RegexLookAroundCheck")
-public class RegexLookAroundCheck extends AbstractXmlCheck {
+public class RegexLookAroundCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null) {
     	
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -51,7 +52,7 @@ public class RegexLookAroundCheck extends AbstractXmlCheck {
 		    	if(patternNodeList!=null) {
 		    		for(int i=0 ; i < patternNodeList.getLength(); i++) {
 		    	    	Node node = patternNodeList.item(i);
-	    				createViolation(getWebSourceCode().getLineForNode(node), "Lookaround in Regex can be inefficient.");
+	    				reportIssue(node, "Lookaround in Regex can be inefficient.");
 		    		}
 		    	}
 			} catch (XPathExpressionException e) {

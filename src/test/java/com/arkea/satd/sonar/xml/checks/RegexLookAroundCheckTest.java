@@ -17,24 +17,20 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.RegexLookAroundCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class RegexLookAroundCheckTest extends AbstractCheckTester {
 	
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new RegexLookAroundCheck());
-		return sourceCode.getXmlIssues();
-	}
+	private SonarXmlCheck check = new RegexLookAroundCheck();
 
 	@Test
 	public void test_ok() throws Exception {
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<RegularExpressionProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Regular-Expression-Protection-1\">\r\n" + 
 			"     <URIPath>\r\n" + 
@@ -68,7 +64,7 @@ public class RegexLookAroundCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_ko() throws Exception {
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<RegularExpressionProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Regular-Expression-Protection-1\">\r\n" + 
 			"     <URIPath>\r\n" + 
