@@ -17,24 +17,20 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.UnreachableFlowCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class UnreachableFlowCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new UnreachableFlowCheck());
-		return sourceCode.getXmlIssues();
-	}
+	private SonarXmlCheck check = new UnreachableFlowCheck();
 	
 	@Test
 	public void test_ok() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
 				"        <Request/>\r\n" + 
@@ -68,7 +64,7 @@ public class UnreachableFlowCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_no_cond_in_the_middle() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
 				"        <Request/>\r\n" + 
@@ -102,7 +98,7 @@ public class UnreachableFlowCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_two_no_cond() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
 				"        <Request/>\r\n" + 
@@ -142,7 +138,7 @@ public class UnreachableFlowCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_three_no_cond() throws Exception {
-		List<XmlIssue> issues = getIssues("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
 				"        <Request/>\r\n" + 
