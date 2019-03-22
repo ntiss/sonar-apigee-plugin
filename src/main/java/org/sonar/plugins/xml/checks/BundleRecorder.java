@@ -25,7 +25,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.sonar.plugins.xml.parsers.ParseException;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.w3c.dom.Document;
 
 /**
@@ -34,10 +34,10 @@ import org.w3c.dom.Document;
  */
 public class BundleRecorder {
 
-	private static Map<String, XmlSourceCode> proxiesEndpoint = new HashMap<>();
-	private static Map<String, XmlSourceCode> targetsEndpoint = new HashMap<>();
-	private static Map<String, XmlSourceCode> resources = new HashMap<>();
-	private static Map<String, XmlSourceCode> policies = new HashMap<>();
+	private static Map<String, XmlFile> proxiesEndpoint = new HashMap<>();
+	private static Map<String, XmlFile> targetsEndpoint = new HashMap<>();
+	private static Map<String, XmlFile> resources = new HashMap<>();
+	private static Map<String, XmlFile> policies = new HashMap<>();
 	
 	private BundleRecorder() {
 		// Private constructor
@@ -51,116 +51,112 @@ public class BundleRecorder {
 	}
 	
 	/**
-	 * Stores the xmlSourceCode in static Maps depending on their type
-	 * @param xmlSourceCode
+	 * Stores the XmlFile in static Maps depending on their type
+	 * @param xmlFile
 	 */
-	public static void storeFile(XmlSourceCode xmlSourceCode) {
+	public static void storeFile(XmlFile xmlFile) {
 
-		// Force parsing at the beginning
-		try {
-			xmlSourceCode.parseSource();
-			Document document = xmlSourceCode.getDocument(false);
-			String fileName = xmlSourceCode.getInputFile().wrapped().relativePath();
-			
-		    if (document.getDocumentElement() != null) {
-		    	
-		    	String rootNodeName = document.getDocumentElement().getNodeName();
-		    	
-		    	if("ProxyEndpoint".equals(rootNodeName)) {
-					// ProxyEndpoint storage
-			    	proxiesEndpoint.put(fileName, xmlSourceCode);
-		    	} else if ("TargetEndpoint".equals(rootNodeName)) {
-					// TargetEndpoint storage
-			    	targetsEndpoint.put(fileName, xmlSourceCode);
-		    	} else if ("APIProxy".equals(rootNodeName) || "Manifest".equals(rootNodeName)) {
-					// APIProxy & Manifest storage
-			    	// No need to store for the moment 
-		    	} else if ("xsl:stylesheet".equals(rootNodeName) || "wsdl:definitions".equals(rootNodeName) || "xs:schema".equals(rootNodeName) ) {
-					// Resource storage
-		    		resources.put(fileName, xmlSourceCode);
-		    	} else {
-		    		// Policy storage
-		    		policies.put(fileName, xmlSourceCode);
-		    	}
-		    }
-		} catch(ParseException e) {
-			// Do nothing
-		}
+		Document document = xmlFile.getDocument();
+		String fileName = xmlFile.getInputFile().uri().getPath();
+		//fileName = xmlFile.getInputFile().relativePath();
+		
+	    if (document.getDocumentElement() != null) {
+	    	
+	    	String rootNodeName = document.getDocumentElement().getNodeName();
+	    	
+	    	if("ProxyEndpoint".equals(rootNodeName)) {
+				// ProxyEndpoint storage
+		    	proxiesEndpoint.put(fileName, xmlFile);
+	    	} else if ("TargetEndpoint".equals(rootNodeName)) {
+				// TargetEndpoint storage
+		    	targetsEndpoint.put(fileName, xmlFile);
+	    	} else if ("APIProxy".equals(rootNodeName) || "Manifest".equals(rootNodeName)) {
+				// APIProxy & Manifest storage
+		    	// No need to store for the moment 
+	    	} else if ("xsl:stylesheet".equals(rootNodeName) || "wsdl:definitions".equals(rootNodeName) || "xs:schema".equals(rootNodeName) ) {
+				// Resource storage
+	    		resources.put(fileName, xmlFile);
+	    	} else {
+	    		// Policy storage
+	    		policies.put(fileName, xmlFile);
+	    	}
+	    }
+
 	}
 	
 	
 	/**
-	 * Returns all XmlSourceCode containing a Step with the Name stepName
+	 * Returns all XmlFile containing a Step with the Name stepName
 	 * @param stepName
 	 * @return
 	 */
-	public static List<XmlSourceCode> searchByStepName(String stepName) {
+	public static List<XmlFile> searchByStepName(String stepName) {
 		
-		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<>();
+		List<XmlFile> matchingXmlFile = new ArrayList<>();
 
 		// Concat full list
-		List<XmlSourceCode> fullXmlSourceCode = new ArrayList<>();
-		fullXmlSourceCode.addAll(proxiesEndpoint.values());
-		fullXmlSourceCode.addAll(targetsEndpoint.values());
+		List<XmlFile> fullXmlFile = new ArrayList<>();
+		fullXmlFile.addAll(proxiesEndpoint.values());
+		fullXmlFile.addAll(targetsEndpoint.values());
 		
 		
 		// Search for "stepName" in both ProxyEndpoint and TargetEndpoint
-		for(XmlSourceCode currentXml : fullXmlSourceCode) {
-			Document document = currentXml.getDocument(false);
+		for(XmlFile currentXml : fullXmlFile) {
+			Document document = currentXml.getDocument();
 			try {
 			    XPathFactory xPathfactory = XPathFactory.newInstance();
 			    XPath xpath = xPathfactory.newXPath();
 				
 				boolean hasMatchingStep = (boolean)xpath.evaluate("boolean( //Step/Name[text() = '"+stepName+"'])", document, XPathConstants.BOOLEAN);
 			    if(hasMatchingStep) {
-			    	matchingXmlSourceCode.add(currentXml);
+			    	matchingXmlFile.add(currentXml);
 			    }
 			} catch (XPathExpressionException e) {
 				// Nothing to do
 			}
 		}
 		
-		return matchingXmlSourceCode;
+		return matchingXmlFile;
 	}
 	
 	
 	/**
-	 * Returns all XmlSourceCode containing a Policy of type policyType
+	 * Returns all XmlFile containing a Policy of type policyType
 	 * @param policyType
 	 * @return
 	 */
-	public static List<XmlSourceCode> searchPoliciesByType(String policyType) {
+	public static List<XmlFile> searchPoliciesByType(String policyType) {
 		
-		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<>();
+		List<XmlFile> matchingXmlFile = new ArrayList<>();
 		
-		for(XmlSourceCode currentXml : policies.values()) {
-			Document document = currentXml.getDocument(false);
+		for(XmlFile currentXml : policies.values()) {
+			Document document = currentXml.getDocument();
 			try {
 			    XPathFactory xPathfactory = XPathFactory.newInstance();
 			    XPath xpath = xPathfactory.newXPath();
 				
 				boolean isMatchingType = (boolean)xpath.evaluate("boolean(/"+policyType+")", document, XPathConstants.BOOLEAN);
 			    if(isMatchingType) {
-			    	matchingXmlSourceCode.add(currentXml);
+			    	matchingXmlFile.add(currentXml);
 			    }
 			} catch (XPathExpressionException e) {
 				// Nothing to do
 			}			
 		}
 		
-		return matchingXmlSourceCode;
+		return matchingXmlFile;
 	}
 	
 	/**
-	 * Returns the XmlSourceCode containing the Policy of name policyName
+	 * Returns the XmlFile containing the Policy of name policyName
 	 * Policy names are unique
 	 * @param policyType
 	 * @return
 	 */
-	public static XmlSourceCode searchPoliciesByName(String policyName) {
+	public static XmlFile searchPoliciesByName(String policyName) {
 		
-		for(XmlSourceCode currentXml : policies.values()) {
-			Document document = currentXml.getDocument(false);
+		for(XmlFile currentXml : policies.values()) {
+			Document document = currentXml.getDocument();
 			try {
 			    XPathFactory xPathfactory = XPathFactory.newInstance();
 			    XPath xpath = xPathfactory.newXPath();
@@ -178,15 +174,15 @@ public class BundleRecorder {
 	}
 	
 	/**
-	 * Returns the XmlSourceCode containing the TargetEndpoint of name targetName
+	 * Returns the XmlFile containing the TargetEndpoint of name targetName
 	 * TargetEndpoint names are unique
 	 * @param targetName
 	 * @return
 	 */
-	public static XmlSourceCode searchTargetEndpointByName(String targetName) {
+	public static XmlFile searchTargetEndpointByName(String targetName) {
 		
-		for(XmlSourceCode currentXml : targetsEndpoint.values()) {
-			Document document = currentXml.getDocument(false);
+		for(XmlFile currentXml : targetsEndpoint.values()) {
+			Document document = currentXml.getDocument();
 			try {
 			    XPathFactory xPathfactory = XPathFactory.newInstance();
 			    XPath xpath = xPathfactory.newXPath();
@@ -205,16 +201,16 @@ public class BundleRecorder {
 
 	
 	/**
-	 * Returns the XmlSourceCode list containing the policies having a link to the resourceURL
+	 * Returns the XmlFile list containing the policies having a link to the resourceURL
 	 * @param resourceURL
 	 * @return
 	 */
-	public static List<XmlSourceCode> searchPoliciesByResourceURL(String resourceURL) {
+	public static List<XmlFile> searchPoliciesByResourceURL(String resourceURL) {
 		
-		List<XmlSourceCode> matchingXmlSourceCode = new ArrayList<>();
+		List<XmlFile> matchingXmlFile = new ArrayList<>();
 		
-		for(XmlSourceCode currentXml : policies.values()) {
-			Document document = currentXml.getDocument(false);
+		for(XmlFile currentXml : policies.values()) {
+			Document document = currentXml.getDocument();
 			try {
 			    XPathFactory xPathfactory = XPathFactory.newInstance();
 			    XPath xpath = xPathfactory.newXPath();
@@ -223,7 +219,7 @@ public class BundleRecorder {
 
 				// Test based only on the last part of the path
 			    if(resourceURL.equals(resourceLink)) {
-			    	matchingXmlSourceCode.add(currentXml);
+			    	matchingXmlFile.add(currentXml);
 			    }
 
 			} catch (XPathExpressionException e) {
@@ -231,7 +227,7 @@ public class BundleRecorder {
 			}			
 		}
 		
-		return matchingXmlSourceCode;
+		return matchingXmlFile;
 	}
 	
 	
