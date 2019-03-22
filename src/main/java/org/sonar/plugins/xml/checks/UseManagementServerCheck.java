@@ -21,6 +21,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -31,13 +33,12 @@ import org.w3c.dom.Node;
  * @author Nicolas Tisserand
  */
 @Rule(key = "UseManagementServerCheck")
-public class UseManagementServerCheck extends AbstractXmlCheck {
+public class UseManagementServerCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null) {
     	
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -47,7 +48,7 @@ public class UseManagementServerCheck extends AbstractXmlCheck {
 		    	// Select the URL which points to the management server
 			    Node urlNode = (Node)xpath.evaluate("//HTTPTargetConnection/URL[contains(text(), '/v1/organizations') or contains(text(), 'enterprise.apigee.com')]", document, XPathConstants.NODE);
 		    	if(urlNode!=null) {
-    				createViolation(getWebSourceCode().getLineForNode(urlNode), "HTTPTargetConnection appears to be connecting to Management Server.");
+    				reportIssue(urlNode, "HTTPTargetConnection appears to be connecting to Management Server.");
 		    	}
 			} catch (XPathExpressionException e) {
 				// Nothing to do
