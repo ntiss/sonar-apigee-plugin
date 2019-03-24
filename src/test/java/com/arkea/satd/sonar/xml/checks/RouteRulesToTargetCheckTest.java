@@ -17,30 +17,27 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.BundleRecorder;
 import org.sonar.plugins.xml.checks.RouteRulesToTargetCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class RouteRulesToTargetCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new RouteRulesToTargetCheck());
-		return sourceCode.getXmlIssues();
-	}
+	private SonarXmlCheck check = new RouteRulesToTargetCheck();
 
 	@Test
 	public void test_ok() throws Exception {
 		
 		// Fake TargetEndpoint file
-		XmlSourceCode targetEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile targetEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<TargetEndpoint name=\"existingTarget\">\r\n" + 
 				"</TargetEndpoint>"
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(targetEndpointXML);
 
@@ -51,9 +48,9 @@ public class RouteRulesToTargetCheckTest extends AbstractCheckTester {
 				"        <TargetEndpoint>existingTarget</TargetEndpoint>\r\n" + 
 				"    </RouteRule>\r\n" + 
 				"</ProxyEndpoint>";
-		BundleRecorder.storeFile(parse(createTempFile(theEndpoint)));
-		
-		List<XmlIssue> issues = getIssues(theEndpoint);
+		BundleRecorder.storeFile(createTempFile(theEndpoint));
+
+		Collection<Issue> issues = getIssues(check, theEndpoint);
 		assertEquals(0, issues.size());
 	}
 
@@ -69,9 +66,9 @@ public class RouteRulesToTargetCheckTest extends AbstractCheckTester {
 				"        <TargetEndpoint>inexistantTarget</TargetEndpoint>\r\n" + 
 				"    </RouteRule>\r\n" + 
 				"</ProxyEndpoint>";
-		BundleRecorder.storeFile(parse(createTempFile(theEndpoint)));
+		BundleRecorder.storeFile(createTempFile(theEndpoint));
 		
-		List<XmlIssue> issues = getIssues(theEndpoint);
+		Collection<Issue> issues = getIssues(check, theEndpoint);
 		assertEquals(1, issues.size());
 	}
 	
