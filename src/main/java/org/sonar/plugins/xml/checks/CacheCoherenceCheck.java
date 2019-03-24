@@ -23,6 +23,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 
@@ -32,12 +34,12 @@ import org.w3c.dom.Node;
  * @author Nicolas Tisserand
  */
 @Rule(key = "CacheCoherenceCheck")
-public class CacheCoherenceCheck extends AbstractXmlCheck {
+public class CacheCoherenceCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    
 	    checkIt(document, "PopulateCache", "LookupCache");
 	    checkIt(document, "LookupCache", "PopulateCache");
@@ -57,12 +59,12 @@ public class CacheCoherenceCheck extends AbstractXmlCheck {
 		        String compositeKey1 = computeKey(xpath, cacheNode1);
 		        
 		        // Now search for a LookupCache policy
-		        List<XmlSourceCode> type2Policies = BundleRecorder.searchPoliciesByType(type2);
+		        List<XmlFile> type2Policies = BundleRecorder.searchPoliciesByType(type2);
 
 	        	boolean hasMatchingKey = false;
-	        	for(XmlSourceCode type2XmlSourceCode : type2Policies) {
+	        	for(XmlFile type2XmlFile : type2Policies) {
 	        		
-	        		Document type2Document = type2XmlSourceCode.getDocument(false);
+	        		Document type2Document = type2XmlFile.getDocument();
 			    	Node cacheNode2 = (Node)xpath.evaluate( "//CacheKey",type2Document, XPathConstants.NODE);		        
 			        String compositeKey2 = computeKey(xpath, cacheNode2);
 			        
@@ -73,7 +75,7 @@ public class CacheCoherenceCheck extends AbstractXmlCheck {
 	        	
         		// Violation
 	        	if(!hasMatchingKey) {
-	        		createViolation(getWebSourceCode().getLineForNode(cacheNode1), type1 + " may not have a corresponding "+ type2 + ".");
+	        		reportIssue(cacheNode1, type1 + " may not have a corresponding "+ type2 + ".");
 	        	}
 		        
 			} catch (XPathExpressionException e) {
