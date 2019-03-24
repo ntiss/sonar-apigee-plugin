@@ -21,6 +21,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.w3c.dom.Document;
 
 
@@ -34,10 +35,9 @@ import org.w3c.dom.Document;
 public class ExtractVariablesCheck extends AbstractBodyCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    
 	    XPathFactory xPathfactory = XPathFactory.newInstance();
 	    XPath xpath = xPathfactory.newXPath();
