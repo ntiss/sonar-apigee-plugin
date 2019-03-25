@@ -18,8 +18,10 @@ package com.arkea.satd.sonar.xml.checks;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 import org.junit.Test;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.BundleRecorder;
 import org.sonar.plugins.xml.checks.ExtractVariablesCheck;
@@ -30,12 +32,13 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 
 
 	private SonarXmlCheck check = new ExtractVariablesCheck();
+
 	
 	@Test
 	public void test_json_ok1() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlFile proxyEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -63,15 +66,14 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 			"</ExtractVariables>"
 		);
 		
-		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
+		assertEquals(0, issues.size());		
 	}
 	
 	@Test
 	public void test_xml_ok1() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlFile proxyEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -100,14 +102,13 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				);
 	
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 
 	@Test
 	public void test_form_ok1() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlFile proxyEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -134,14 +135,13 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				);
 	
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 	
 	@Test
 	public void test_json_ok2() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlFile proxyEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -177,14 +177,13 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 					"</ExtractVariables>"
 				);
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 	
 	@Test
 	public void test_json_ok3() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlFile proxyEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -219,14 +218,13 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 						"</ExtractVariables>"
 					);
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 
 	@Test
 	public void test_json_ok4() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlFile proxyEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -257,14 +255,13 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 					"</ExtractVariables>"
 					);
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 	
 	@Test
 	public void test_queryparam_ok() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlFile proxyEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -296,14 +293,14 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 					"</ExtractVariables>"
 					);
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 		
 	@Test
 	public void test_json_ko1() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlFile proxyEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		String proxyEndpointFilename = "proxyEndpoint.xml";
+		XmlFile proxyEndpointXML = createTempFile(proxyEndpointFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -331,17 +328,20 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 				);
 
 		
-		assertEquals(0, issues.size());
-		assertEquals(1, proxyEndpointXML.getXmlIssues().size());
-	}
+		assertEquals(1, issues.size());
 
-	
+		// assert also the location of the issue
+		Issue iss = issues.toArray(new Issue[] {})[0];
+		DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
+		assertEquals(proxyEndpointFilename, dif.filename());		
+	}
 
 	@Test
 	public void test_xml_ko1() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlFile proxyEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		String proxyEndpointFilename = "proxyEndpoint.xml";
+		XmlFile proxyEndpointXML = createTempFile(proxyEndpointFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -390,7 +390,13 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 					"</ExtractVariables>"
 				);
 		
-		assertEquals(0, issues.size());
-		assertEquals(3, proxyEndpointXML.getXmlIssues().size());
-	}		
+		assertEquals(3, issues.size());
+
+		// assert also the location of all the issues
+		for(Iterator<Issue> it = issues.iterator(); it.hasNext();) {
+			Issue iss = it.next();
+			DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
+			assertEquals(proxyEndpointFilename, dif.filename());		
+		}
+	}
 }
