@@ -22,6 +22,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -32,13 +34,12 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "TooMuchTargetEndpointsCheck")
-public class TooMuchTargetEndpointsCheck extends AbstractXmlCheck {
+public class TooMuchTargetEndpointsCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null && "APIProxy".equals(document.getDocumentElement().getNodeName())) {
 
 	    	
@@ -47,23 +48,19 @@ public class TooMuchTargetEndpointsCheck extends AbstractXmlCheck {
 		    XPath xpath = xPathfactory.newXPath();
 		    
 		    try {
-		    XPathExpression exprDisplayName = xpath.compile("count(/APIProxy/TargetEndpoints/TargetEndpoint)");
-		    double targetsCount = (double)exprDisplayName.evaluate(document, XPathConstants.NUMBER);
-		    
-	    	// If there are more than 5 TargetEndpoint, this is a violation.
-	    	if(targetsCount > 5) {
-	    
-	    		int lineNumber = 1; // By default
-
-	    		// Search for the <TargetEndpoints> node (it's a better location to indicate the violation
-	    		NodeList targetEndpointsNodeList = document.getDocumentElement().getElementsByTagName("TargetEndpoints");
-	    		if(targetEndpointsNodeList!=null && targetEndpointsNodeList.getLength()>0) {
-	    			lineNumber = getWebSourceCode().getLineForNode(targetEndpointsNodeList.item(0));
-	    		}
-	    		
-	    		createViolation(lineNumber, "Discourage the use of numerous target endpoints.");
-	    	}
-	    	
+			    XPathExpression exprDisplayName = xpath.compile("count(/APIProxy/TargetEndpoints/TargetEndpoint)");
+			    double targetsCount = (double)exprDisplayName.evaluate(document, XPathConstants.NUMBER);
+			    
+		    	// If there are more than 5 TargetEndpoint, this is a violation.
+		    	if(targetsCount > 5) {
+		    		// Search for the <TargetEndpoints> node (it's a better location to indicate the violation
+		    		NodeList targetEndpointsNodeList = document.getDocumentElement().getElementsByTagName("TargetEndpoints");
+		    		if(targetEndpointsNodeList!=null && targetEndpointsNodeList.getLength()>0) {
+		    			reportIssue(targetEndpointsNodeList.item(0), "Discourage the use of numerous target endpoints.");
+		    		} else {
+		    			reportIssue(document, "Discourage the use of numerous target endpoints.");
+		    		}
+		    	}
 			} catch (XPathExpressionException e) {
 				// Nothing to do
 			}	    	

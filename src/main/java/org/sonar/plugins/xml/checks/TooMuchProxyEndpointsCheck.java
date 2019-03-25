@@ -48,18 +48,20 @@ public class TooMuchProxyEndpointsCheck extends SonarXmlCheck {
 		    XPath xpath = xPathfactory.newXPath();
 		    
 		    try {
-		    XPathExpression exprDisplayName = xpath.compile("count(/APIProxy/ProxyEndpoints/ProxyEndpoint)");
-		    double proxiesCount = (double)exprDisplayName.evaluate(document, XPathConstants.NUMBER);
+			    XPathExpression exprDisplayName = xpath.compile("count(/APIProxy/ProxyEndpoints/ProxyEndpoint)");
+			    double proxiesCount = (double)exprDisplayName.evaluate(document, XPathConstants.NUMBER);
+			    
+		    	// If there are more than 2 ProxyEndpoint, this is a violation.
+		    	if(proxiesCount > 2) {
 		    
-	    	// If there are more than 2 ProxyEndpoint, this is a violation.
-	    	if(proxiesCount > 2) {
-	    
-	    		// Search for the <ProxyEndpoints> node (it's a better location to indicate the violation
-	    		NodeList proxyEndpointsNodeList = document.getDocumentElement().getElementsByTagName("ProxyEndpoints");
-	    		reportIssue(proxyEndpointsNodeList.item(0), "Discourage the declaration of multiple proxy endpoints in a same proxy.");
-	    		
-	    	}
-	    	
+		    		// Search for the <ProxyEndpoints> node (it's a better location to indicate the violation
+		    		NodeList proxyEndpointsNodeList = document.getDocumentElement().getElementsByTagName("ProxyEndpoints");
+		    		if(proxyEndpointsNodeList!=null && proxyEndpointsNodeList.getLength()>0) {
+		    			reportIssue(proxyEndpointsNodeList.item(0), "Discourage the declaration of multiple proxy endpoints in a same proxy.");
+		    		} else {
+		    			reportIssue(document, "Discourage the declaration of multiple proxy endpoints in a same proxy.");
+		    		}	    		
+		    	}
 			} catch (XPathExpressionException e) {
 				// Nothing to do
 			}	    	
