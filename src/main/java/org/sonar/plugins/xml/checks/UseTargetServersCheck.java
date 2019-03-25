@@ -19,7 +19,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 
@@ -29,13 +32,12 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "UseTargetServersCheck")
-public class UseTargetServersCheck extends AbstractXmlCheck {
+public class UseTargetServersCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 
 	    	// Search for last Flow of an ProxyEndpoint document
@@ -51,11 +53,11 @@ public class UseTargetServersCheck extends AbstractXmlCheck {
 	    	Set<String> targetRefSet = new HashSet<>();
 	    	int nbOfRouteRulesWithTarget = targetNodeList.getLength();
 
-	    	int lineNumber = 1; // By default
+	    	Node nodeWithIssue = document.getDocumentElement(); // By default
 	    	for(int i=0; i<targetNodeList.getLength(); i++) {
 		    	targetRefSet.add(targetNodeList.item(i).getTextContent());
 	    		// Use the <TargetEndpoint> node, it's a better location to indicate the violation
-		    	lineNumber = getWebSourceCode().getLineForNode(targetNodeList.item(i));
+		    	nodeWithIssue = targetNodeList.item(i);
 	    	}
 
     		// If there are more than ONE TargetEndpoint, this is ok (default behaviour).
@@ -63,7 +65,7 @@ public class UseTargetServersCheck extends AbstractXmlCheck {
     		// If there is only ONE unique TargetEndpoint with a NoRoute route, this is still ok.
     		// If there is only ONE unique TargetEndpoint without a NoRoute route, this is a violation.
 	    	if(targetRefSet.size() == 1 && (!hasNoroute || nbOfRouteRulesWithTarget>1) ) {
-    			createViolation(lineNumber, "Encourage the use of target servers.");
+    			reportIssue(nodeWithIssue, "Encourage the use of target servers.");
     		
 	    	}
     	}

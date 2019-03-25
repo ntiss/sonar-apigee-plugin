@@ -25,6 +25,8 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -35,7 +37,7 @@ import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
  * Abstract class to factorize the check on the body content
  * @author Nicolas Tisserand
  */
-public abstract class AbstractBodyCheck extends AbstractXmlCheck {
+public abstract class AbstractBodyCheck extends SonarXmlCheck {
 
 	/**
 	 * This method performs a check on the Condition tag that is applied to the concerned step 
@@ -48,16 +50,16 @@ public abstract class AbstractBodyCheck extends AbstractXmlCheck {
 	    XPath xpath = xPathfactory.newXPath();
 
 	    // Search for the associated step in the full storage		    	
-	    List<XmlSourceCode> listProxiesEndpoint = BundleRecorder.searchByStepName(stepName);
+	    List<XmlFile> listProxiesEndpoint = BundleRecorder.searchByStepName(stepName);
 
 	    Pattern ptrn = Pattern.compile(pattern);
 		try {
 		    
 		    // Now check the Condition of the matching Steps
-		    for(XmlSourceCode currentXml : listProxiesEndpoint) {
+		    for(XmlFile currentXml : listProxiesEndpoint) {
 		    	
 				XPathExpression exprSteps = xpath.compile("//Step[Name[text() = '"+stepName+"']]");
-				NodeList stepNodes = (NodeList)exprSteps.evaluate(currentXml.getDocument(false), XPathConstants.NODESET);
+				NodeList stepNodes = (NodeList)exprSteps.evaluate(currentXml.getDocument(), XPathConstants.NODESET);
 				
 				for(int i=0; i<stepNodes.getLength(); i++) {
 					Node currentStep = stepNodes.item(i);

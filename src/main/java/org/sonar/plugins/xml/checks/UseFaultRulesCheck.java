@@ -16,6 +16,8 @@
 package org.sonar.plugins.xml.checks;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -26,13 +28,12 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "UseFaultRulesCheck")
-public class UseFaultRulesCheck extends AbstractXmlCheck {
+public class UseFaultRulesCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null && "ProxyEndpoint".equals(document.getDocumentElement().getNodeName())) {
 	    	// Search for FaultRule of a ProxyEndpoint document
 	    	NodeList faultRuleNodeList = document.getDocumentElement().getElementsByTagName("FaultRule");
@@ -40,7 +41,7 @@ public class UseFaultRulesCheck extends AbstractXmlCheck {
 	    	
 	    	// If there is neither FaultRule or DefaultFaultRule, this is a violation.
 	    	if(faultRuleNodeList.getLength() + defaultFaultRuleNodeList.getLength() == 0) {	    
-	    		createViolation(1, "Encourage the use of target servers.");
+	    		reportIssue(document, "FaultRules or DefaultFaultRule must be used.");
 	    	}
     	}
 	}

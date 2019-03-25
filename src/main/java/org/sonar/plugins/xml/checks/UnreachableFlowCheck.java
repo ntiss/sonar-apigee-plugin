@@ -21,6 +21,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -31,13 +33,12 @@ import org.w3c.dom.NodeList;
  * @author Nicolas Tisserand
  */
 @Rule(key = "UnreachableFlowCheck")
-public class UnreachableFlowCheck extends AbstractXmlCheck {
+public class UnreachableFlowCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    XPathFactory xPathfactory = XPathFactory.newInstance();
 	    XPath xpath = xPathfactory.newXPath();
 	    
@@ -54,7 +55,7 @@ public class UnreachableFlowCheck extends AbstractXmlCheck {
 					(cond==null || cond.isEmpty() || "true".equalsIgnoreCase(cond)) ) {
 
 					// Create a violation if flow node is not the last one
-	    			createViolation(getWebSourceCode().getLineForNode(flowNode), "Flow without a condition should be last.");
+					reportIssue(flowNode, "Flow without a condition should be last.");
     			}
     		}	    
 		} catch (XPathExpressionException e) {

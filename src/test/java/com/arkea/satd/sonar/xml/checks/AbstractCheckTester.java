@@ -15,7 +15,9 @@
  */
 package com.arkea.satd.sonar.xml.checks;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -40,21 +42,31 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
   public TemporaryFolder temporaryFolder = new TemporaryFolder();
   
   private DefaultFileSystem filesystem = null;
-  
-
+ 
 	
 	protected Collection<Issue> getIssues(SonarXmlCheck check, String content) throws IOException {
 		
 		//Path BASE_DIR = Paths.get("");
-		
 		SensorContextTester context = SensorContextTester
 				.create(Paths.get(""));
 			/*	.setActiveRules((new ActiveRulesBuilder())
 					.create(rulekey)
 					.activate()
 					.build());		*/
+
+	    XmlFile xmlFile = createTempFile(content);
+	    check.scanFile(context, RuleKey.of(Xml.KEY, "ruleKey"), xmlFile);
+		return context.allIssues();	    
+	}
+  
+	protected XmlFile createTempFile(String content) throws IOException {
+/*
+		File f = File.createTempFile("temp-file-name", ".xml", createFileSystem().workDir());
+	    FileUtils.write(f, content, Charset.defaultCharset());
 		
-	    DefaultInputFile defaultInputFile = TestInputFileBuilder.create("", "")
+		*/
+		
+	    DefaultInputFile defaultInputFile = TestInputFileBuilder.create("key", "relPath")
 	  	      .setType(InputFile.Type.MAIN)
 	  	      .setContents(content)
 	  	      .setLanguage(Xml.KEY)
@@ -66,15 +78,14 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 	      xmlFile = XmlFile.create(defaultInputFile);
 	    } catch (IOException e) {
 	      throw new IllegalStateException("Unable to scan xml file", e);
-	    }		
-
-	    check.scanFile(context, RuleKey.of(Xml.KEY, "ruleKey"), xmlFile);
-		return context.allIssues();	    
+	    }
+	    
+	    return xmlFile;
+		
 	}
-  
-  
-  
-/*
+	
+  /*
+
   XmlSourceCode parseAndCheck(File file, AbstractXmlCheck check) {
     XmlSourceCode xmlSourceCode = new XmlSourceCode(new XmlFile(newInputFile(file), createFileSystem()));
 

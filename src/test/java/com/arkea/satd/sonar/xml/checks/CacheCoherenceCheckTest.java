@@ -18,37 +18,35 @@ package com.arkea.satd.sonar.xml.checks;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.BundleRecorder;
 import org.sonar.plugins.xml.checks.CacheCoherenceCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class CacheCoherenceCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new CacheCoherenceCheck());
-		return sourceCode.getXmlIssues();
-	}
+	private SonarXmlCheck check = new CacheCoherenceCheck();
 	
 	@Test
 	public void test_ok1() throws Exception {
 		
 		// Fake LookupCache file
-		XmlSourceCode lookupCacheXML = parse(createTempFile(
+		XmlFile lookupCacheXML = createTempFile(
 			"<LookupCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Lookup-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix</Prefix>\r\n" + 
 			"        <KeyFragment>fragment</KeyFragment>\r\n" + 
 			"    </CacheKey>\r\n" + 
-			"</LookupCache>"));
+			"</LookupCache>");
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(lookupCacheXML);
 
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<PopulateCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Populate-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix</Prefix>\r\n" + 
@@ -61,7 +59,7 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 	
 	@Test
 	public void test_ko1_no_corresponding() throws Exception {
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<PopulateCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Populate-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix/>\r\n" + 
@@ -70,12 +68,13 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 			"</PopulateCache>");
 		
 		assertEquals(1, issues.size());
-		assertTrue(issues.get(0).getMessage().startsWith("PopulateCache"));
+		Issue issue = (new ArrayList<>(issues)).get(0);
+		assertTrue(issue.primaryLocation().message().startsWith("PopulateCache"));
 	}
 	
 	@Test
 	public void test_ko2_no_corresponding() throws Exception {
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<LookupCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Lookup-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix</Prefix>\r\n" + 
@@ -84,7 +83,8 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 			"</LookupCache>");
 		
 		assertEquals(1, issues.size());
-		assertTrue(issues.get(0).getMessage().startsWith("LookupCache"));
+		Issue issue = (new ArrayList<>(issues)).get(0);
+		assertTrue(issue.primaryLocation().message().startsWith("LookupCache"));
 	}
 
 	
@@ -92,17 +92,17 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 	public void test_ko3_bad_corresponding() throws Exception {
 		
 		// Fake LookupCache file
-		XmlSourceCode lookupCacheXML = parse(createTempFile(
+		XmlFile lookupCacheXML = createTempFile(
 			"<LookupCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Lookup-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix</Prefix>\r\n" + 
 			"        <KeyFragment>fragment</KeyFragment>\r\n" + 
 			"    </CacheKey>\r\n" + 
-			"</LookupCache>"));
+			"</LookupCache>");
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(lookupCacheXML);
 
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<PopulateCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Populate-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix</Prefix>\r\n" + 
@@ -119,23 +119,23 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 		BundleRecorder.clear();
 		
 		// Fake LookupCache file
-		BundleRecorder.storeFile(parse(createTempFile(
+		BundleRecorder.storeFile(createTempFile(
 			"<LookupCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Lookup-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix1</Prefix>\r\n" + 
 			"        <KeyFragment>fragment</KeyFragment>\r\n" + 
 			"    </CacheKey>\r\n" + 
-			"</LookupCache>")));
+			"</LookupCache>"));
 		
-		BundleRecorder.storeFile(parse(createTempFile(
+		BundleRecorder.storeFile(createTempFile(
 			"<PopulateCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Populate-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix</Prefix>\r\n" + 
 			"        <KeyFragment ref=\"theRef\"/>\r\n" + 
 			"    </CacheKey>\r\n" + 
-			"</PopulateCache>")));		
+			"</PopulateCache>"));		
 
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<LookupCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Lookup-Cache-2\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix2</Prefix>\r\n" + 
