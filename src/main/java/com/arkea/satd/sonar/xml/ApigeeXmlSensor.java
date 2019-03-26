@@ -123,44 +123,7 @@ public class ApigeeXmlSensor implements Sensor {
 	    	// Do nothing
 	    }
 	}	
-	
-	
-/*
-	public static void saveIssue(SensorContext context, XmlSourceCode sourceCode) {
-		if(context!=null) {
-			for (XmlIssue xmlIssue : sourceCode.getXmlIssues()) {
-				NewIssue newIssue = context.newIssue().forRule(xmlIssue.getRuleKey());
-				NewIssueLocation location = newIssue.newLocation().on(sourceCode.getInputFile().wrapped())
-						.message(xmlIssue.getMessage());
-				if (xmlIssue.getLine() != null) {
-					location.at(sourceCode.getInputFile().selectLine(xmlIssue.getLine()));
-				}
-				newIssue.at(location).save();
-			}
-		}
-	}
-
-	
-	private static void saveIssue(SensorContext context, XmlFile xmlFile) {
-	
-	//createParsingErrorIssue(Exception e, SensorContext context, InputFile inputFile) {
-	    NewIssue newIssue = context.newIssue();
-
-		NewIssueLocation location = newIssue.newLocation().on(xmlFile.getInputFile().wrapped())
-				.message(xmlIssue.getMessage());
-	    
-	    
-	    NewIssueLocation primaryLocation = newIssue.newLocation()
-	      .message("Parse error: " + e.getMessage())
-	      .on(inputFile);
-	    newIssue
-	      .forRule(PARSING_ERROR_RULE_KEY)
-	      .at(primaryLocation)
-	      .save();
-	}	
-	*/
-	
-	
+		
 	@Override
 	public String toString() {
 		return getClass().getSimpleName();
@@ -180,7 +143,7 @@ public class ApigeeXmlSensor implements Sensor {
 		
 		
 		// Catch the context
-//		ApigeeXmlSensor.setContext(context);
+		ApigeeXmlSensor.setContext(context);
 
 	    List<InputFile> inputFiles = new ArrayList<>();
 	    fileSystem.inputFiles(mainFilesPredicate).forEach(inputFiles::add);
@@ -188,8 +151,6 @@ public class ApigeeXmlSensor implements Sensor {
 	    if (inputFiles.isEmpty()) {
 	      return;
 	    }
-
-//	    boolean isSonarLintContext = context.runtime().getProduct() == SonarProduct.SONARLINT;
 
 	    ProgressReport progressReport = new ProgressReport("Report about progress of Apigee XML analyzer", TimeUnit.SECONDS.toMillis(10));
 	    progressReport.start(inputFiles.stream().map(InputFile::toString).collect(Collectors.toList()));
