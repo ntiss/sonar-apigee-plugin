@@ -106,7 +106,5 @@ public class UnconditionalFlowCheckTest extends AbstractCheckTester {
 		);
 		assertEquals(0, issues.size());
 	}	
-	
-
 
 }

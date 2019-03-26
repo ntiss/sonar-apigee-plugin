@@ -29,19 +29,8 @@ import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 
-	/*
-	private Collection<Issue> getIssues(check, File theFile) throws IOException {
-		XmlFile sourceCode = parseAndCheck(theFile, new UnattachedPolicyCheck());
-		return sourceCode.getXmlIssues();
-	}
-	private Collection<Issue> getIssues(check, String content) throws IOException {
-		File f = createTempFile(content);
-		return getIssues(check, f);
-	}
-*/	
 	private SonarXmlCheck check = new UnattachedPolicyCheck();
 	
-
 	@Test
 	public void test_ok() throws Exception {
 		
@@ -175,27 +164,13 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 		//File tempScript = createTempFile("XSL-Transform-1.xsl", theScript, "XSL-Transform-1.xsl", "xsl");
 		
 		String tempFilename = "XSL-Transform-1.xsl";
-		XmlFile tempScript = createTempFile("XSL-Transform-1.xsl", "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+		XmlFile tempScript = createTempFile(tempFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n" + 
 				"</xsl:stylesheet>");
 
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(tempScript);
-		
-		// Fake XMLPolicy file
-	/*	XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
-				"<XSL async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"XSL-Transform-1\">\r\n" + 
-				"    <DisplayName>XSL Transform-1</DisplayName>\r\n" + 
-				"    <Properties/>\r\n" + 
-				"    <Source>request</Source>\r\n" + 
-				"    <ResourceURL>xsl://"+ tempFilename +"</ResourceURL>\r\n" + 
-				"    <Parameters ignoreUnresolvedVariables=\"true\" />\r\n" + 
-				"    <OutputVariable></OutputVariable>\r\n" + 
-				"</XSL>" 
-				);
-		BundleRecorder.storeFile(proxyEndpointXML);*/
-		
-		//Collection<Issue> issues = getIssues(check, tempScript);
+
 		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<XSL async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"XSL-Transform-1\">\r\n" + 
 				"    <DisplayName>XSL Transform-1</DisplayName>\r\n" + 
@@ -211,17 +186,6 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 	@Test
 	public void test_ok2_deal_with_xslt() throws Exception {
 
-		// Fake XSL Script
-/*		String tempFilename = "XSL-Transform-1.xsl";
-		XmlFile tempScript = createTempFile("XSL-Transform-1.xsl", "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
-				"<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n" + 
-				"</xsl:stylesheet>");
-		
-		//File tempScript = createTempFile(theScript, "XSL-Transform-1.xsl", "xsl");
-
-		BundleRecorder.clear();
-		BundleRecorder.storeFile(tempScript);
-	*/
 		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n" + 
 				"</xsl:stylesheet>");
@@ -229,7 +193,4 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 		// No issue : because it's not ckecked in UnattachedPolicyCheck, but in UnattachedResourceCheck
 		assertEquals(0, issues.size());
 	}	
-	
-		
-	
 }

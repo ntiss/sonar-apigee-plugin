@@ -17,49 +17,45 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.BundleRecorder;
 import org.sonar.plugins.xml.checks.UnattachedResourceCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class UnattachedResourceCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(File theFile) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(theFile, new UnattachedResourceCheck());
-		return sourceCode.getXmlIssues();
-	}
+	private SonarXmlCheck check = new UnattachedResourceCheck();
 	
 	@Test
 	public void test_ok_deal_with_xslt() throws Exception {
 
 		// Fake XSL Script
-		String theScript = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+		String tempFilename = "XSL-Transform-1.xsl";
+		XmlFile tempScript = createTempFile(tempFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n" + 
-				"</xsl:stylesheet>";
-		File tempScript = createTempFile(theScript, "XSL-Transform-1.xsl", "xsl");
+				"</xsl:stylesheet>");
 
 		BundleRecorder.clear();
-		BundleRecorder.storeFile(parse(tempScript));
+		BundleRecorder.storeFile(tempScript);		
 		
 		// Fake XMLPolicy file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<XSL async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"XSL-Transform-1\">\r\n" + 
 				"    <DisplayName>XSL Transform-1</DisplayName>\r\n" + 
 				"    <Properties/>\r\n" + 
 				"    <Source>request</Source>\r\n" + 
-				"    <ResourceURL>xsl://"+ tempScript.getName() +"</ResourceURL>\r\n" + 
+				"    <ResourceURL>xsl://"+ tempFilename +"</ResourceURL>\r\n" + 
 				"    <Parameters ignoreUnresolvedVariables=\"true\" />\r\n" + 
 				"    <OutputVariable></OutputVariable>\r\n" + 
 				"</XSL>" 
-				));
+				);
 		BundleRecorder.storeFile(proxyEndpointXML);
 		
-		List<XmlIssue> issues = getIssues(tempScript);
+		Collection<Issue> issues = getIssues(check, tempScript);
 		assertEquals(0, issues.size());
 	}	
 	
@@ -67,15 +63,15 @@ public class UnattachedResourceCheckTest extends AbstractCheckTester {
 	public void test_ko_deal_with_xslt() throws Exception {
 
 		// Fake XSL Script
-		String theScript = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+		String tempFilename = "XSL-Transform-1.xsl";
+		XmlFile tempScript = createTempFile(tempFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n" + 
-				"</xsl:stylesheet>";
-		File tempScript = createTempFile(theScript, "XSL-Transform-1.xsl", "xsl");
+				"</xsl:stylesheet>");
 
 		BundleRecorder.clear();
-		BundleRecorder.storeFile(parse(tempScript));
+		BundleRecorder.storeFile(tempScript);
 	
-		List<XmlIssue> issues = getIssues(tempScript);
+		Collection<Issue> issues = getIssues(check, tempScript);
 		assertEquals(1, issues.size());
 	}
 	
@@ -83,33 +79,33 @@ public class UnattachedResourceCheckTest extends AbstractCheckTester {
 	public void test_ok_deal_with_wsdl() throws Exception {
 
 		// Fake WSDL Script
-		String theScript = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+		String tempFilename = "Script-1.wsdl";
+		XmlFile tempScript = createTempFile(tempFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<wsdl:definitions xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\">\r\n" + 
 				"    <wsdl:types>\r\n" + 
 				"        <xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\r\n" + 
 				"            <xs:element name=\"request\" type=\"xs:string\"/>\r\n" + 
 				"        </xs:schema>\r\n" + 
 				"    </wsdl:types>\r\n" + 
-				"</wsdl:definitions>";
-		File tempScript = createTempFile(theScript, "Script-1.wsdl", "xsl");
+				"</wsdl:definitions>");
 
 		BundleRecorder.clear();
-		BundleRecorder.storeFile(parse(tempScript));
+		BundleRecorder.storeFile(tempScript);
 		
 		// Fake XMLPolicy file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<MessageValidation async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"SOAP-Message-Validation-1\">\r\n" + 
 				"    <DisplayName>SOAP Message Validation-1</DisplayName>\r\n" + 
 				"    <Properties/>\r\n" + 
 				"    <Element namespace=\"http://sample.com\"> sampleObject</Element>\r\n" + 
 				"    <SOAPMessage/>\r\n" + 
 				"    <Source>request</Source>\r\n" + 
-				"    <ResourceURL>wsdl://"+tempScript.getName()+"</ResourceURL>\r\n" + 
+				"    <ResourceURL>wsdl://"+tempFilename+"</ResourceURL>\r\n" + 
 				"</MessageValidation>" 
-				));
+				);
 		BundleRecorder.storeFile(proxyEndpointXML);
 		
-		List<XmlIssue> issues = getIssues(tempScript);
+		Collection<Issue> issues = getIssues(check, tempScript);
 		assertEquals(0, issues.size());
 	}	
 	
@@ -117,20 +113,20 @@ public class UnattachedResourceCheckTest extends AbstractCheckTester {
 	public void test_ko_deal_with_wsdl() throws Exception {
 
 		// Fake WSDL Script
-		String theScript = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+		String tempFilename = "Script-1.wsdl";
+		XmlFile tempScript = createTempFile(tempFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<wsdl:definitions xmlns:wsdl=\"http://schemas.xmlsoap.org/wsdl/\">\r\n" + 
 				"    <wsdl:types>\r\n" + 
 				"        <xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\r\n" + 
 				"            <xs:element name=\"request\" type=\"xs:string\"/>\r\n" + 
 				"        </xs:schema>\r\n" + 
 				"    </wsdl:types>\r\n" + 
-				"</wsdl:definitions>";
-		File tempScript = createTempFile(theScript, "XSL-Transform-1.xsl", "xsl");
+				"</wsdl:definitions>");
 
 		BundleRecorder.clear();
-		BundleRecorder.storeFile(parse(tempScript));
+		BundleRecorder.storeFile(tempScript);
 	
-		List<XmlIssue> issues = getIssues(tempScript);
+		Collection<Issue> issues = getIssues(check, tempScript);
 		assertEquals(1, issues.size());
 	}	
 
@@ -139,29 +135,30 @@ public class UnattachedResourceCheckTest extends AbstractCheckTester {
 	public void test_ok_deal_with_xsd() throws Exception {
 
 		// Fake XSD Script
-		String theScript = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+		String tempFilename = "Script-1.xsd";
+		XmlFile tempScript = createTempFile(tempFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\r\n" + 
 				"    <xs:element name=\"request\" type=\"xs:string\"/>\r\n" + 
-				"</xs:schema>";
-		File tempScript = createTempFile(theScript, "Script-1.wsdl", "xsl");
+				"</xs:schema>"
+			);
 
 		BundleRecorder.clear();
-		BundleRecorder.storeFile(parse(tempScript));
+		BundleRecorder.storeFile(tempScript);
 		
 		// Fake XMLPolicy file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<MessageValidation async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"SOAP-Message-Validation-1\">\r\n" + 
 				"    <DisplayName>XSD Message Validation-1</DisplayName>\r\n" + 
 				"    <Properties/>\r\n" + 
 				"    <Element namespace=\"http://sample.com\"> sampleObject</Element>\r\n" + 
 				"    <SOAPMessage/>\r\n" + 
 				"    <Source>request</Source>\r\n" + 
-				"    <ResourceURL>xsd://"+tempScript.getName()+"</ResourceURL>\r\n" + 
+				"    <ResourceURL>xsd://"+tempFilename+"</ResourceURL>\r\n" + 
 				"</MessageValidation>" 
-				));
+				);
 		BundleRecorder.storeFile(proxyEndpointXML);
 		
-		List<XmlIssue> issues = getIssues(tempScript);
+		Collection<Issue> issues = getIssues(check, tempScript);
 		assertEquals(0, issues.size());
 	}	
 	
@@ -169,16 +166,17 @@ public class UnattachedResourceCheckTest extends AbstractCheckTester {
 	public void test_ko_deal_with_xsd() throws Exception {
 
 		// Fake XSD Script
-		String theScript = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+		String tempFilename = "Script-1.xsd";
+		XmlFile tempScript = createTempFile(tempFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">\r\n" + 
 				"    <xs:element name=\"request\" type=\"xs:string\"/>\r\n" + 
-				"</xs:schema>";
-		File tempScript = createTempFile(theScript, "XSL-Transform-1.xsl", "xsl");
+				"</xs:schema>"
+			);
 
 		BundleRecorder.clear();
-		BundleRecorder.storeFile(parse(tempScript));
+		BundleRecorder.storeFile(tempScript);
 	
-		List<XmlIssue> issues = getIssues(tempScript);
+		Collection<Issue> issues = getIssues(check, tempScript);
 		assertEquals(1, issues.size());
 	}	
 	
