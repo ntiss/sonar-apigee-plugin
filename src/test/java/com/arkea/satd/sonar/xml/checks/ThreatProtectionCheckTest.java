@@ -17,27 +17,27 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.junit.Test;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.BundleRecorder;
 import org.sonar.plugins.xml.checks.ThreatProtectionCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class ThreatProtectionCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(String content) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(createTempFile(content), new ThreatProtectionCheck());
-		return sourceCode.getXmlIssues();
-	}
+	private SonarXmlCheck check = new ThreatProtectionCheck();
+	
 	
 	@Test
 	public void test_json_ok1_condition_in_step() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -50,11 +50,11 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"        <Response/>\r\n" + 
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<JSONThreatProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"JSON-Threat-Protection-1\">\r\n" + 
 			"    <DisplayName>JSON-Threat-Protection-1</DisplayName>\r\n" + 
@@ -62,14 +62,13 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 		);
 		
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 	
 	@Test
 	public void test_xml_ok1_condition_in_step() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -82,11 +81,11 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"        <Response/>\r\n" + 
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<XMLThreatProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"XML-Threat-Protection-1\">\r\n" + 
 			"    <DisplayName>XML-Threat-Protection-1</DisplayName>\r\n" + 
@@ -94,14 +93,13 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 		);
 		
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 
 	@Test
 	public void test_json_ok2_condition_in_step() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -122,25 +120,24 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"        </Flow>\r\n" + 
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 		
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<JSONThreatProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"JSON-Threat-Protection-1\">\r\n" + 
 			"    <DisplayName>JSON-Threat-Protection-1</DisplayName>\r\n" + 
 			"</JSONThreatProtection>"
 		);
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 	
 	@Test
 	public void test_json_ok3_condition_in_proxyEndpoint() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -160,25 +157,24 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"        </Flow>\r\n" + 
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<JSONThreatProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"JSON-Threat-Protection-1\">\r\n" + 
 			"    <DisplayName>JSON-Threat-Protection-1</DisplayName>\r\n" + 
 			"</JSONThreatProtection>"
 		);
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
 
 	@Test
 	public void test_json_ok4_condition_in_targetEnpoint() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<TargetEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow/>\r\n" + 
@@ -195,27 +191,24 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"        </Flow>\r\n" + 
 				"    </Flows>\r\n" + 
 				"</TargetEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<JSONThreatProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"JSON-Threat-Protection-1\">\r\n" + 
 			"    <DisplayName>JSON-Threat-Protection-1</DisplayName>\r\n" + 
 			"</JSONThreatProtection>"
 		);
 		assertEquals(0, issues.size());
-		assertEquals(0, proxyEndpointXML.getXmlIssues().size());
 	}
-	
-	
 	
 	@Test
 	public void test_json_ko1() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -227,28 +220,30 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"        <Response/>\r\n" + 
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<JSONThreatProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"JSON-Threat-Protection-1\">\r\n" + 
 			"    <DisplayName>JSON-Threat-Protection-1</DisplayName>\r\n" + 
 			"</JSONThreatProtection>"
 		);
 		
-		assertEquals(0, issues.size());
-		assertEquals(1, proxyEndpointXML.getXmlIssues().size());
+		assertEquals(1, issues.size());
+		
+		// assert also the location of the issue
+		Issue iss = issues.toArray(new Issue[] {})[0];
+		DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
+		assertEquals("proxyEndpoint.xml", dif.filename());
 	}
-
-	
 
 	@Test
 	public void test_xml_ko1() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -282,18 +277,25 @@ public class ThreatProtectionCheckTest extends AbstractCheckTester {
 				"        </Flow>\r\n" + 
 				"    </Flows>\r\n" + 
 				"</ProxyEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
-		List<XmlIssue> issues = getIssues(
+		Collection<Issue> issues = getIssues(check, 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 			"<XMLThreatProtection async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"XML-Threat-Protection-1\">\r\n" + 
 			"    <DisplayName>JSON-Threat-Protection-1</DisplayName>\r\n" + 
 			"</XMLThreatProtection>"
 		);
+
+		assertEquals(3, issues.size());
 		
-		assertEquals(0, issues.size());
-		assertEquals(3, proxyEndpointXML.getXmlIssues().size());
+		// assert also the location of all the issues
+		for(Iterator<Issue> it = issues.iterator(); it.hasNext();) {
+			Issue iss = it.next();
+			DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
+			assertEquals("proxyEndpoint.xml", dif.filename());		
+		}		
+	
 	}		
 }

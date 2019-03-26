@@ -21,11 +21,12 @@ import java.util.Collection;
 
 import org.junit.Test;
 import org.sonar.api.batch.sensor.issue.Issue;
+import org.sonar.plugins.xml.checks.TooMuchTargetEndpointsCheck;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class TooMuchTargetEndpointCheckTest extends AbstractCheckTester {
 
-	private SonarXmlCheck check = new TooMuchTargetEndpointCheck();
+	private SonarXmlCheck check = new TooMuchTargetEndpointsCheck();
 	
 	@Test
 	public void test_ok() throws Exception {

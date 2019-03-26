@@ -16,12 +16,14 @@
 package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.BundleRecorder;
 import org.sonar.plugins.xml.checks.CacheCoherenceCheck;
@@ -36,7 +38,7 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 	public void test_ok1() throws Exception {
 		
 		// Fake LookupCache file
-		XmlFile lookupCacheXML = createTempFile(
+		XmlFile lookupCacheXML = createTempFile("", 
 			"<LookupCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Lookup-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix</Prefix>\r\n" + 
@@ -92,7 +94,8 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 	public void test_ko3_bad_corresponding() throws Exception {
 		
 		// Fake LookupCache file
-		XmlFile lookupCacheXML = createTempFile(
+		String tempFileName = "lookupCache.xml";
+		XmlFile lookupCacheXML = createTempFile(tempFileName, 
 			"<LookupCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Lookup-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix</Prefix>\r\n" + 
@@ -112,6 +115,11 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 		);
 		
 		assertEquals(1, issues.size());
+		
+		// assert also the location of the issue
+		Issue iss = issues.toArray(new Issue[] {})[0];
+		DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
+		assertFalse(tempFileName.equals(dif.filename()));
 	}
 
 	@Test
@@ -119,7 +127,8 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 		BundleRecorder.clear();
 		
 		// Fake LookupCache file
-		BundleRecorder.storeFile(createTempFile(
+		String tempFileName1 = "lookupCache.xml";
+		BundleRecorder.storeFile(createTempFile(tempFileName1, 
 			"<LookupCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Lookup-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix1</Prefix>\r\n" + 
@@ -127,7 +136,8 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 			"    </CacheKey>\r\n" + 
 			"</LookupCache>"));
 		
-		BundleRecorder.storeFile(createTempFile(
+		String tempFileName2 = "populateCache.xml";
+		BundleRecorder.storeFile(createTempFile(tempFileName2, 
 			"<PopulateCache async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Populate-Cache-1\">\r\n" + 
 			"    <CacheKey>\r\n" + 
 			"        <Prefix>thePrefix</Prefix>\r\n" + 
@@ -144,6 +154,13 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 			"</LookupCache>");
 		
 		assertEquals(1, issues.size());
+		
+		// assert also the location of the issue
+		Issue iss = issues.toArray(new Issue[] {})[0];
+		DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
+		assertFalse(tempFileName1.equals(dif.filename()));
+		assertFalse(tempFileName2.equals(dif.filename()));
+		
 	}
 	
 	

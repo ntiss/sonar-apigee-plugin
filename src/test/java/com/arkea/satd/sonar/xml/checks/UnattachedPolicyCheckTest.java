@@ -17,34 +17,36 @@ package com.arkea.satd.sonar.xml.checks;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
 
 import org.junit.Test;
+import org.sonar.api.batch.fs.internal.DefaultInputFile;
+import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.plugins.xml.checks.BundleRecorder;
 import org.sonar.plugins.xml.checks.UnattachedPolicyCheck;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 
-	private List<XmlIssue> getIssues(File theFile) throws IOException {
-		XmlSourceCode sourceCode = parseAndCheck(theFile, new UnattachedPolicyCheck());
+	/*
+	private Collection<Issue> getIssues(check, File theFile) throws IOException {
+		XmlFile sourceCode = parseAndCheck(theFile, new UnattachedPolicyCheck());
 		return sourceCode.getXmlIssues();
 	}
-	private List<XmlIssue> getIssues(String content) throws IOException {
+	private Collection<Issue> getIssues(check, String content) throws IOException {
 		File f = createTempFile(content);
-		return getIssues(f);
+		return getIssues(check, f);
 	}
-	
+*/	
+	private SonarXmlCheck check = new UnattachedPolicyCheck();
 	
 
 	@Test
 	public void test_ok() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -56,7 +58,7 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 				"        <Response/>\r\n" + 
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
@@ -66,9 +68,9 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 				"    <Properties/>\r\n" + 
 				"    <APIKey ref=\"request.header.apikey\"/>\r\n" + 
 				"</VerifyAPIKey>";
-		BundleRecorder.storeFile(parse(createTempFile(thePolicy)));
+//		BundleRecorder.storeFile(createTempFile("proxyEndpoint.xml", thePolicy));
 		
-		List<XmlIssue> issues = getIssues(thePolicy);
+		Collection<Issue> issues = getIssues(check, thePolicy);
 		assertEquals(0, issues.size());
 	}
 
@@ -76,7 +78,7 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 	public void test_ok_inFaultRule() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <FaultRules>\r\n" + 
@@ -91,7 +93,7 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 				"        </FaultRule>\r\n" + 
 				"    </FaultRules>" +
 				"</ProxyEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
@@ -100,9 +102,9 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 				"    <DisplayName>Assign Message-UsedInFaultRule</DisplayName>\r\n" + 
 				"    <Properties/>\r\n" + 
 				"</AssignMessage>";
-		BundleRecorder.storeFile(parse(createTempFile(thePolicy)));
+//		BundleRecorder.storeFile(createTempFile("proxyEndpoint.xml", thePolicy));
 		
-		List<XmlIssue> issues = getIssues(thePolicy);
+		Collection<Issue> issues = getIssues(check, thePolicy);
 		assertEquals(0, issues.size());
 	}
 		
@@ -111,7 +113,7 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 	public void test_ko() throws Exception {
 		
 		// Fake ProxyEndpoint file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <PreFlow name=\"PreFlow\">\r\n" + 
@@ -123,20 +125,27 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 				"        <Response/>\r\n" + 
 				"    </PreFlow>\r\n" +  
 				"</ProxyEndpoint>" 
-				));
+				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(proxyEndpointXML);
 
-		String thePolicy = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		String thePolicyFilename = "thePolicy.xml";
+		XmlFile thePolicy = createTempFile(thePolicyFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<VerifyAPIKey async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"Verify-API-Key-1\">\r\n" + 
 				"    <DisplayName>Verify API Key-1</DisplayName>\r\n" + 
 				"    <Properties/>\r\n" + 
 				"    <APIKey ref=\"request.header.apikey\"/>\r\n" + 
-				"</VerifyAPIKey>";
-		BundleRecorder.storeFile(parse(createTempFile(thePolicy)));
+				"</VerifyAPIKey>");
+		BundleRecorder.storeFile(thePolicy);
 		
-		List<XmlIssue> issues = getIssues(thePolicy);
+		Collection<Issue> issues = getIssues(check, thePolicy);
 		assertEquals(1, issues.size());
+		
+		// assert also the location of the issue
+		Issue iss = issues.toArray(new Issue[] {})[0];
+		DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
+		assertEquals(thePolicyFilename, dif.filename());
+		
 	}
 	
 	@Test
@@ -153,9 +162,9 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 				"</Manifest>";
 
 		BundleRecorder.clear();
-		BundleRecorder.storeFile(parse(createTempFile(manifestXML)));
+		BundleRecorder.storeFile(createTempFile("proxyEndpoint.xml", manifestXML));
 		
-		List<XmlIssue> issues = getIssues(manifestXML);
+		Collection<Issue> issues = getIssues(check, manifestXML);
 		assertEquals(0, issues.size());
 	}	
 	
@@ -163,28 +172,39 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 	public void test_ok_deal_with_xslt() throws Exception {
 
 		// Fake XSL Script
-		String theScript = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+		//File tempScript = createTempFile("XSL-Transform-1.xsl", theScript, "XSL-Transform-1.xsl", "xsl");
+		
+		String tempFilename = "XSL-Transform-1.xsl";
+		XmlFile tempScript = createTempFile("XSL-Transform-1.xsl", "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n" + 
-				"</xsl:stylesheet>";
-		File tempScript = createTempFile(theScript, "XSL-Transform-1.xsl", "xsl");
+				"</xsl:stylesheet>");
 
 		BundleRecorder.clear();
-		BundleRecorder.storeFile(parse(tempScript));
+		BundleRecorder.storeFile(tempScript);
 		
 		// Fake XMLPolicy file
-		XmlSourceCode proxyEndpointXML = parse(createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+	/*	XmlFile proxyEndpointXML = createTempFile("proxyEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<XSL async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"XSL-Transform-1\">\r\n" + 
 				"    <DisplayName>XSL Transform-1</DisplayName>\r\n" + 
 				"    <Properties/>\r\n" + 
 				"    <Source>request</Source>\r\n" + 
-				"    <ResourceURL>xsl://"+ tempScript.getName() +"</ResourceURL>\r\n" + 
+				"    <ResourceURL>xsl://"+ tempFilename +"</ResourceURL>\r\n" + 
 				"    <Parameters ignoreUnresolvedVariables=\"true\" />\r\n" + 
 				"    <OutputVariable></OutputVariable>\r\n" + 
 				"</XSL>" 
-				));
-		BundleRecorder.storeFile(proxyEndpointXML);
+				);
+		BundleRecorder.storeFile(proxyEndpointXML);*/
 		
-		List<XmlIssue> issues = getIssues(tempScript);
+		//Collection<Issue> issues = getIssues(check, tempScript);
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<XSL async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"XSL-Transform-1\">\r\n" + 
+				"    <DisplayName>XSL Transform-1</DisplayName>\r\n" + 
+				"    <Properties/>\r\n" + 
+				"    <Source>request</Source>\r\n" + 
+				"    <ResourceURL>xsl://"+ tempFilename +"</ResourceURL>\r\n" + 
+				"    <Parameters ignoreUnresolvedVariables=\"true\" />\r\n" + 
+				"    <OutputVariable></OutputVariable>\r\n" + 
+				"</XSL>");
 		assertEquals(0, issues.size());
 	}	
 	
@@ -192,15 +212,19 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 	public void test_ok2_deal_with_xslt() throws Exception {
 
 		// Fake XSL Script
-		String theScript = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+/*		String tempFilename = "XSL-Transform-1.xsl";
+		XmlFile tempScript = createTempFile("XSL-Transform-1.xsl", "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
 				"<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n" + 
-				"</xsl:stylesheet>";
-		File tempScript = createTempFile(theScript, "XSL-Transform-1.xsl", "xsl");
+				"</xsl:stylesheet>");
+		
+		//File tempScript = createTempFile(theScript, "XSL-Transform-1.xsl", "xsl");
 
 		BundleRecorder.clear();
-		BundleRecorder.storeFile(parse(tempScript));
-	
-		List<XmlIssue> issues = getIssues(tempScript);
+		BundleRecorder.storeFile(tempScript);
+	*/
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n" + 
+				"<xsl:stylesheet version=\"1.0\" xmlns:xsl=\"http://www.w3.org/1999/XSL/Transform\">\r\n" + 
+				"</xsl:stylesheet>");
 		
 		// No issue : because it's not ckecked in UnattachedPolicyCheck, but in UnattachedResourceCheck
 		assertEquals(0, issues.size());

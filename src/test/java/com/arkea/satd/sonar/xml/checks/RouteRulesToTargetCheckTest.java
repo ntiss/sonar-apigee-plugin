@@ -34,42 +34,56 @@ public class RouteRulesToTargetCheckTest extends AbstractCheckTester {
 	public void test_ok() throws Exception {
 		
 		// Fake TargetEndpoint file
-		XmlFile targetEndpointXML = createTempFile("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		XmlFile targetEndpointXML = createTempFile("targetEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<TargetEndpoint name=\"existingTarget\">\r\n" + 
 				"</TargetEndpoint>"
 				);
 		BundleRecorder.clear();
 		BundleRecorder.storeFile(targetEndpointXML);
 
-		String theEndpoint = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <RouteRule name=\"myTarget\">\r\n" + 
 				"        <TargetEndpoint>existingTarget</TargetEndpoint>\r\n" + 
 				"    </RouteRule>\r\n" + 
-				"</ProxyEndpoint>";
-		BundleRecorder.storeFile(createTempFile(theEndpoint));
-
-		Collection<Issue> issues = getIssues(check, theEndpoint);
+				"</ProxyEndpoint>");
 		assertEquals(0, issues.size());
 	}
 
 	
 	@Test
-	public void test_ko() throws Exception {
+	public void test_ko1() throws Exception {
 		
-		BundleRecorder.clear();
-		String theEndpoint = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
 				"    <Description/>\r\n" + 
 				"    <RouteRule name=\"myTarget\">\r\n" + 
 				"        <TargetEndpoint>inexistantTarget</TargetEndpoint>\r\n" + 
 				"    </RouteRule>\r\n" + 
-				"</ProxyEndpoint>";
-		BundleRecorder.storeFile(createTempFile(theEndpoint));
-		
-		Collection<Issue> issues = getIssues(check, theEndpoint);
+				"</ProxyEndpoint>");
 		assertEquals(1, issues.size());
 	}
+
+	@Test
+	public void test_ko2() throws Exception {
+		
+		// Fake TargetEndpoint file
+		XmlFile targetEndpointXML = createTempFile("targetEndpoint.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<TargetEndpoint name=\"anotherExistingTarget\">\r\n" + 
+				"</TargetEndpoint>"
+				);
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(targetEndpointXML);
+
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <Description/>\r\n" + 
+				"    <RouteRule name=\"myTarget\">\r\n" + 
+				"        <TargetEndpoint>aTarget</TargetEndpoint>\r\n" + 
+				"    </RouteRule>\r\n" + 
+				"</ProxyEndpoint>");
+		assertEquals(1, issues.size());
+	}	
 	
 }

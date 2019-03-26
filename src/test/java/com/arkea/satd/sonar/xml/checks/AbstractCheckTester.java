@@ -15,9 +15,7 @@
  */
 package com.arkea.satd.sonar.xml.checks;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Collection;
@@ -35,6 +33,7 @@ import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 import com.arkea.satd.sonar.xml.AbstractXmlPluginTester;
+import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
 
 public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 
@@ -53,20 +52,34 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 					.create(rulekey)
 					.activate()
 					.build());		*/
-
-	    XmlFile xmlFile = createTempFile(content);
+		ApigeeXmlSensor.setContext(context);
+	    XmlFile xmlFile = createTempFile("defaultTempFilename", content);
 	    check.scanFile(context, RuleKey.of(Xml.KEY, "ruleKey"), xmlFile);
 		return context.allIssues();	    
 	}
   
-	protected XmlFile createTempFile(String content) throws IOException {
+	protected Collection<Issue> getIssues(SonarXmlCheck check, XmlFile xmlFile) throws IOException {
+		
+		//Path BASE_DIR = Paths.get("");
+		SensorContextTester context = SensorContextTester
+				.create(Paths.get(""));
+			/*	.setActiveRules((new ActiveRulesBuilder())
+					.create(rulekey)
+					.activate()
+					.build());		*/
+		ApigeeXmlSensor.setContext(context);
+	    check.scanFile(context, RuleKey.of(Xml.KEY, "ruleKey"), xmlFile);
+		return context.allIssues();	    
+	}	
+	
+	protected XmlFile createTempFile(String filename, String content) throws IOException {
 /*
 		File f = File.createTempFile("temp-file-name", ".xml", createFileSystem().workDir());
 	    FileUtils.write(f, content, Charset.defaultCharset());
 		
 		*/
 		
-	    DefaultInputFile defaultInputFile = TestInputFileBuilder.create("key", "relPath")
+	    DefaultInputFile defaultInputFile = TestInputFileBuilder.create("key", filename)
 	  	      .setType(InputFile.Type.MAIN)
 	  	      .setContents(content)
 	  	      .setLanguage(Xml.KEY)
