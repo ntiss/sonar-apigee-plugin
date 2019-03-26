@@ -25,7 +25,11 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+import org.sonar.api.batch.fs.InputComponent;
+import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.XmlTextRange;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -56,10 +60,10 @@ public abstract class AbstractBodyCheck extends SonarXmlCheck {
 		try {
 		    
 		    // Now check the Condition of the matching Steps
-		    for(XmlFile currentXml : listProxiesEndpoint) {
+		    for(XmlFile currentXmlFile : listProxiesEndpoint) {
 		    	
 				XPathExpression exprSteps = xpath.compile("//Step[Name[text() = '"+stepName+"']]");
-				NodeList stepNodes = (NodeList)exprSteps.evaluate(currentXml.getDocument(), XPathConstants.NODESET);
+				NodeList stepNodes = (NodeList)exprSteps.evaluate(currentXmlFile.getDocument(), XPathConstants.NODESET);
 				
 				for(int i=0; i<stepNodes.getLength(); i++) {
 					Node currentStep = stepNodes.item(i);
@@ -81,9 +85,18 @@ public abstract class AbstractBodyCheck extends SonarXmlCheck {
 					
 					// Finally : Create issue if needed
 					if(hasIssue) {
-						XmlIssue issue = new XmlIssue(getRuleKey(), currentXml.getLineForNode(currentStep), "An appropriate check for a message body was not found on the enclosing Step or Flow.");
-						currentXml.addViolation(issue); // Useful for JUnit test
-						ApigeeXmlSensor.saveIssue(ApigeeXmlSensor.getContext(), currentXml); // Mandatory to "commit" the issue in the final report
+						
+						final NewIssue issue = ApigeeXmlSensor.getContext().newIssue();
+						final XmlTextRange textRange = XmlFile.nodeLocation(currentStep);
+						
+						NewIssueLocation location = issue.newLocation()
+								.on((InputComponent) currentXmlFile.getInputFile())
+								.at(currentXmlFile.getInputFile().newRange(textRange.getStartLine(), textRange.getStartColumn(), textRange.getEndLine(), textRange.getEndColumn()))
+								.message("An appropriate check for a message body was not found on the enclosing Step or Flow.");
+
+						issue.at(location)
+							.forRule(ruleKey())
+							.save(); // Mandatory to "commit" the issue in the final report			
 					}
 				}
 		    }
@@ -91,5 +104,4 @@ public abstract class AbstractBodyCheck extends SonarXmlCheck {
 			// Nothing to do
 		}
 	}
-	
 }

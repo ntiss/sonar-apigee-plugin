@@ -16,6 +16,8 @@
 package org.sonar.plugins.xml.checks;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 
 /**
@@ -24,13 +26,12 @@ import org.w3c.dom.Document;
  * @author Nicolas Tisserand
  */
 @Rule(key = "UnattachedResourceCheck")
-public class UnattachedResourceCheck extends AbstractXmlCheck {
+public class UnattachedResourceCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null) {
 	    	
 	    	String rootNodeName = document.getDocumentElement().getNodeName();
@@ -43,11 +44,11 @@ public class UnattachedResourceCheck extends AbstractXmlCheck {
 		    		protocol = "xsd://";
 		    	}
 		    	
-		    	String resourceURL = protocol + xmlSourceCode.getInputFile().fileName();
+		    	String resourceURL = protocol + xmlFile.getInputFile().filename();
 		    	
 		    	// Verify that there is a least a policy :
 		    	if(BundleRecorder.searchPoliciesByResourceURL(resourceURL).isEmpty()) {
-		    		createViolation(1, "This resource is not attached to a Policy in the bundle.");
+		    		reportIssue(document.getDocumentElement(), "This resource is not attached to a Policy in the bundle.");
 		    	}
 		    }
 	    }

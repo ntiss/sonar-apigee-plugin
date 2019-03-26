@@ -15,13 +15,19 @@
  */
 package org.sonar.plugins.xml.checks;
 
+import java.util.Collections;
+
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.XmlTextRange;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 /**
@@ -30,13 +36,12 @@ import org.w3c.dom.Node;
  * @author Nicolas Tisserand
  */
 @Rule(key = "UnknownResourceFlowCheck")
-public class UnknownResourceFlowCheck extends AbstractXmlCheck {
+public class UnknownResourceFlowCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    XPathFactory xPathfactory = XPathFactory.newInstance();
 	    XPath xpath = xPathfactory.newXPath();
 	    
@@ -48,7 +53,12 @@ public class UnknownResourceFlowCheck extends AbstractXmlCheck {
 				condition!=null && 
 				condition.length()>0 && 
 				!"true".equalsIgnoreCase(condition)) {
-				createViolation(getWebSourceCode().getLineForNode(flowsNode.getNextSibling()) - 1, "There is no default flow in this proxy endpoint.");
+				
+				//reportIssue(getWebSourceCode().getLineForNode(flowsNode.getNextSibling()) - 1, "There is no default flow in this proxy endpoint.");
+				
+				// Find the closing tag
+				final XmlTextRange textRange = XmlFile.endLocation((Element)flowsNode);
+				reportIssue(textRange, "There is no default flow in this proxy endpoint.", Collections.emptyList());								
 			}			    
 		} catch (XPathExpressionException e) {
 			// Nothing to do

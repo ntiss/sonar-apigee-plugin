@@ -23,6 +23,8 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
 
 /**
@@ -31,13 +33,12 @@ import org.w3c.dom.Document;
  * @author Nicolas Tisserand
  */
 @Rule(key = "UnattachedPolicyCheck")
-public class UnattachedPolicyCheck extends AbstractXmlCheck {
+public class UnattachedPolicyCheck extends SonarXmlCheck {
 
 	@Override
-	public void validate(XmlSourceCode xmlSourceCode) {
-	    setWebSourceCode(xmlSourceCode);
-	    
-	    Document document = getWebSourceCode().getDocument(false);
+	public void scanFile(XmlFile xmlFile) {
+		
+	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null) {
 	    	
 	    	String rootNodeName = document.getDocumentElement().getNodeName();
@@ -55,9 +56,9 @@ public class UnattachedPolicyCheck extends AbstractXmlCheck {
 			    	if(BundleRecorder.searchPoliciesByName(attrName) != null) {
 			    		
 			    		// Search for a step with the same name
-			    		List<XmlSourceCode> stepsList = BundleRecorder.searchByStepName(attrName);
+			    		List<XmlFile> stepsList = BundleRecorder.searchByStepName(attrName);
 			    		if(stepsList==null || stepsList.isEmpty()) {
-			    			createViolation(1, "This policy is not attached to a Step in the bundle.");
+			    			reportIssue(document.getDocumentElement(), "This policy is not attached to a Step in the bundle.");
 			    		}
 			    	}
 			    	
