@@ -25,8 +25,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -55,8 +58,6 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 	private DefaultFileSystem fs;
 	private ApigeeXmlSensor sensor;
 	private SensorContextTester context;
-	private final RuleKey DESCRIPTION_CHECK_RULE_KEY = RuleKey.of(CheckRepository.REPOSITORY_KEY, "DescriptionCheck");
-	private final RuleKey UNKNOWN_RESOURCE_CHECK_RULE_KEY = RuleKey.of(CheckRepository.REPOSITORY_KEY, "TooMuchProxyEndpointsCheck");
 
 	/**
 	 * Expect issue for rule: DescriptionCheck
@@ -64,21 +65,45 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 	@Test
 	public void testSensor() throws Exception {
 
-		// Thread.sleep(5000);
-
 		init();
+		
+		// Test on one file
 		DefaultInputFile inputFile = createInputFile("apiproxy/MyAwfulProxy.xml");
 		fs.add(inputFile);
 
 		sensor.execute(context);
 		assertThat(context.allIssues())
 				.extracting("ruleKey")
-				.containsAll(Arrays.asList(DESCRIPTION_CHECK_RULE_KEY, UNKNOWN_RESOURCE_CHECK_RULE_KEY));
+				.containsOnly(RuleKey.of(CheckRepository.REPOSITORY_KEY, "TooMuchProxyEndpointsCheck"));
 
 		// Important : clean the context !!!!
 		ApigeeXmlSensor.setContext(null);
 	}
 
+	@Test
+	public void testSensorOnMyAwfulProxy() throws Exception {
+
+		init();
+
+		// Scan the awful bundle recursively and add all file in the context
+		String basePath = "src/test/resources/apiproxy";
+		Collection<File> allFiles = FileUtils.listFiles(new File(basePath), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		for(Iterator<File> it = allFiles.iterator(); it.hasNext();) {
+			File f = it.next();
+			String absolutePath = f.getAbsolutePath();
+			DefaultInputFile inputFile = createInputFile(absolutePath);
+			fs.add(inputFile);
+		}
+
+		sensor.execute(context);
+		assertThat(context.allIssues()).hasSize(45);
+
+		// Important : clean the context !!!!
+		ApigeeXmlSensor.setContext(null);
+	}	
+	
+	
+	@SuppressWarnings("rawtypes")
 	private void init() throws Exception {
 
 		File moduleBaseDir = new File("src/test/resources");
@@ -86,13 +111,14 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 
 		fs = new DefaultFileSystem(moduleBaseDir);
 		fs.setWorkDir(temporaryFolder.newFolder("temp").toPath());
-
-		ActiveRulesBuilder activeRuleBuilder = new ActiveRulesBuilder()
-				.create(DESCRIPTION_CHECK_RULE_KEY)
-				.activate()
-				.create(UNKNOWN_RESOURCE_CHECK_RULE_KEY)
-				.activate();
-
+	
+		// Activate all rules of the CheckRepository
+		ActiveRulesBuilder activeRuleBuilder = new ActiveRulesBuilder();
+		for(Class check : CheckRepository.getCheckClasses()) {
+			activeRuleBuilder
+				.create(RuleKey.of(CheckRepository.REPOSITORY_KEY, check.getSimpleName()))
+				.activate();	
+		}
 		CheckFactory checkFactory = new CheckFactory(activeRuleBuilder.build());
 
 		FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
