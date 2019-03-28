@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Manifest name="manifest">
+    <Policies>
+        <VersionInfo resourceName="Activate-Compression-Response" version="SHA-512:d01a2537fe467b3176c916d90ca5bccaa1245b1c8450fc20405901d43dc7ef8a9c9d24c553ee6e988c0b06129605714cfc946b3071a4ce3ffa81460d8c6f29f0"/>
+        <VersionInfo resourceName="Assign-Message-UsedInFaultRule" version="SHA-512:3168e886ca7d68afd9b5185c67dc4f13f52f5ea07166c1cb19e04f3f9ad7543b245f56ed38c6a812b01e377903e09e90937258d18bc788ca8ade0488e352d71b"/>
+        <VersionInfo resourceName="Extract-Variables-1" version="SHA-512:1ca511558be1575c6f33f24d89d6ab7fb262a90a403cff3ff59080d66b682a578941fe18036141eec81517c862a4ff014ecaf3853c5ce1000db5daafe746c986"/>
+        <VersionInfo resourceName="JSON-Threat-Protection-1" version="SHA-512:22d7bc3c235902cf738a2625e1ffd05e29e39c5c22d3ea3cab660868d2244889ca7ce366755d9bd8cf85e5ef2702635d0759c7a157e5c91f98fea3e43f7d29b7"/>
+        <VersionInfo resourceName="JSON-Threat-Protection-Unused" version="SHA-512:b3189bb745f71c9721a04245ab2a27a307d8e2bb0c6f78a02ced1f198b05fcb60b0f485a21dae0b2a747de73feb901088a970c5b5091fd95ce6675182da3f7e2"/>
+        <VersionInfo resourceName="Lookup-Cache-1" version="SHA-512:001a2b4150433c7c37c79cd08fb4a8a59423aa50ddbf5e2369e4cb6b4962ec1d579fe62a401f1340e2bbdf059bf992775e396017e1e886f9999cdce7383a645c"/>
+        <VersionInfo resourceName="Populate-Cache-1" version="SHA-512:823034c9e66c1c7b7b870bc97eed86bf308d6aa29a256144a29722f06eb0981a4096acbbe3887dced05f52c2d7a434f12da21dc55f09741ee6488d6d4601d1c1"/>
+        <VersionInfo resourceName="Python-1" version="SHA-512:675d9b61602685d341f0f10babd2e9b23641af49c8f604443ecf0a345453d0986c64624b1aa9465105580c7fe0d6370218e84aa3d4bfadea0b5670a2d897b9b5"/>
+        <VersionInfo resourceName="Raise-Fault-1" version="SHA-512:511cac3b3c2b017a30a5845b49be3d7e9131ca5759a04f0d347026779cf7fef77f412b4c4ae2fc9e9323f5425c81f7d0340ab8fbb01ae1240295375a44ef343f"/>
+        <VersionInfo resourceName="Service-Callout-1" version="SHA-512:d7996e3a51d0cea94012d31dd23eaef721498b0dd18cedef0179ad49b5734b1e9410378c68cfb229357335747b546ef10211f0f01d363d24d395cfd68a4043b7"/>
+        <VersionInfo resourceName="Spike-Arrest-1" version="SHA-512:448d7549bfdd1c5f270ed05c1ecfb7603b22e86278c66d9eb236aeb34a00835c0693672ad4d579abb2cd5828e4d1d95bfad4617df60eaaf51adffcc36191ec17"/>
+        <VersionInfo resourceName="Verify-API-Key-1" version="SHA-512:273585d6ea384279fcc12c442ff7a8f36b6198468e83fa62f48dec9ff95a9720fe24577487854324020af0c1423fbb12ac1d12760d6bfcee05b313dd02e92d1a"/>
+        <VersionInfo resourceName="XSL-Transform-1" version="SHA-512:24704412897ac6add2feacb4c61785c672807cfa2d7d6716b97166af9adbccedb6995bf8842e4628015caefe8d88dac891c3a7ab5222aa556b974359f2f4b4f2"/>
+        <VersionInfo resourceName="add-cors" version="SHA-512:1c4ac3fc2927cc3f48486afc4cbfc2d3a2a85e0d7e9aef77cd53ce3c5fa68e0aaa32bdf89c0232c287ebd02073eb3fb32f7a6a9d72ee3d53b958b3fa95879655"/>
+    </Policies>
+    <ProxyEndpoints>
+        <VersionInfo resourceName="default" version="SHA-512:9b38301566921814bdd452cdfe09f064f6a366d9c1d4a11e598b715a68a9902e6ce3cdce703f2638c03cf71ee7599b5735124dffa2ae21154c382da3e08216f7"/>
+    </ProxyEndpoints>
+    <Resources>
+        <VersionInfo resourceName="node://mock.js" version="SHA-512:73774d379f5ffeef2f7b78f568acee05ffc86ffa7f3acfda1737fe25825668e6b8db1244c6d2041f87c087ec24c26720d8a7bcd594f0ff806bfb32e5236bf018"/>
+        <VersionInfo resourceName="py://Python-1.py" version="SHA-512:f90ddd77e400dfe6a3fcf479b00b1ee29e7015c5bb8cd70f5f15b4886cc339275ff553fc8a053f8ddc7324f45168cffaf81f8c3ac93996f6536eef38e5e40768"/>
+        <VersionInfo resourceName="wsdl://Unattached-1.wsdl" version="SHA-512:182a909d139d57e25ec3acdcb0174f27f3656615877bacd6a0f48f351b00d272416e33f045e1d47cccb589db165cbb86776b2566d80ac4ae747cfd7e0c378759"/>
+        <VersionInfo resourceName="xsd://Unattached-1.xsd" version="SHA-512:17898484c6033cc553127cca2e30936dbf0a94fbe286f6150803070019eeff7d4fad90c7436a1484edb91d928e9205347bdbc4c788aab1317b5fabbd8a159489"/>
+        <VersionInfo resourceName="xsl://Unattached-Transform.xsl" version="SHA-512:08675fcd8aeb84ada9d85cedb925de64bfd2af9547da9eca0de3b0d992935672d24ee18bd43597f7af707086a8b10371c8aaa09262dd30f367b3c9521362f4fb"/>
+        <VersionInfo resourceName="xsl://XSL-Transform-1.xsl" version="SHA-512:08675fcd8aeb84ada9d85cedb925de64bfd2af9547da9eca0de3b0d992935672d24ee18bd43597f7af707086a8b10371c8aaa09262dd30f367b3c9521362f4fb"/>
+    </Resources>
+    <SharedFlows/>
+    <TargetEndpoints>
+        <VersionInfo resourceName="default" version="SHA-512:3eec57f8df94352751cdc3b36472604a47fd45ae1c005dd03f4dfc88019bccfc125a4a7f861d5a2ffad62851fe23d58ee902252070d3fe1358e5f91d03df52e2"/>
+        <VersionInfo resourceName="inexistantTarget" version="SHA-512:75aff70389252bab09c0bbddeb85fc5d0c40230143f8fa77baca215038bddf31e6f3b9264cdc771e8474675a48562b30cf82896e36985842764412859c8be144"/>
+    </TargetEndpoints>
+</Manifest>
