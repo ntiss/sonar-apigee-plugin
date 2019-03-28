@@ -33,13 +33,9 @@ import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.xml.Xml;
-import org.sonar.plugins.xml.checks.BundleRecorder;
-import org.sonar.plugins.xml.checks.ParsingErrorCheck;
 import org.sonarsource.analyzer.commons.ProgressReport;
 import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
-
-import com.arkea.satd.sonar.xml.checks.CheckRepository;
 
 /**
  * ApigeeXmlSensor provides analysis of xml files.
@@ -52,12 +48,7 @@ public class ApigeeXmlSensor implements Sensor {
 	private final Checks<Object> checks;
 	private final FileSystem fileSystem;
 	private final FilePredicate mainFilesPredicate;
-	private final boolean parsingErrorCheckEnabled;
-	private final FileLinesContextFactory fileLinesContextFactory;	
-	
-	private static final RuleKey PARSING_ERROR_RULE_KEY = RuleKey.of(Xml.REPOSITORY_KEY, ParsingErrorCheck.RULE_KEY);
 
-	
 	private static SensorContext staticContext;
 
 	public static void setContext(SensorContext ctx) {
@@ -65,54 +56,18 @@ public class ApigeeXmlSensor implements Sensor {
 	}
 	
 	public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory) {		
-		this.fileLinesContextFactory = fileLinesContextFactory;
 		this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY).addAnnotatedChecks((Iterable<?>) CheckRepository.getCheckClasses());
-		this.parsingErrorCheckEnabled = this.checks.of(PARSING_ERROR_RULE_KEY) != null;
 		this.fileSystem = fileSystem;
 		this.mainFilesPredicate = fileSystem.predicates().and(
 		fileSystem.predicates().hasType(InputFile.Type.MAIN),
 		fileSystem.predicates().hasLanguage(Xml.KEY));
 	}
 
-/*
-	public void analyse(SensorContext sensorContext) {
-		execute(sensorContext);
-	}
-*/
-	
-
 	private void runChecks(SensorContext context, XmlFile newXmlFile) {
 	    checks.all().stream()
 	      .map(SonarXmlCheck.class::cast)
 	      // checks.ruleKey(check) is never null because "check" is part of "checks.all()"
 	      .forEach(check -> runCheck(context, check, checks.ruleKey(check), newXmlFile));
-
-	    /*
-		XmlSourceCode sourceCode = new XmlSourceCode(xmlFile);
-
-		// Do not execute any XML rule when an XML file is corrupted (SONARXML-13)
-		try {
-			sourceCode.parseSource();
-			for (Object check : checks.all()) {
-				
-				RuleKey rkey = checks.ruleKey(check); 
-				if(rkey != null) {
-					((AbstractXmlCheck) check).setRuleKey(rkey);
-					((AbstractXmlCheck) check).validate(sourceCode);
-				}
-			}
-			saveIssue(context, sourceCode);
-			*/
-		/*
-	      try {
-	          saveSyntaxHighlighting(context, new XMLHighlighting(xmlFile).getHighlightingData(), xmlFile.getInputFile().wrapped());
-	        } catch (IOException e) {
-	          throw new IllegalStateException("Could not analyze file " + xmlFile.getAbsolutePath(), e);
-	        }	*/		
-	//	} catch(ParseException e) {
-			// Do nothing
-	//	}
-
 	}
 	
 	@VisibleForTesting
@@ -136,11 +91,8 @@ public class ApigeeXmlSensor implements Sensor {
 			.name("Apigee XML Sensor");
 	}
 
-	
-	
 	@Override
 	public void execute(SensorContext context) {
-		
 		
 		// Catch the context
 		ApigeeXmlSensor.setContext(context);
@@ -181,14 +133,9 @@ public class ApigeeXmlSensor implements Sensor {
 	      } else {
 	        progressReport.cancel();
 	      }
-	}		
-		
-		
+	    }		
 	}
 
-
-	
-	
 	public static SensorContext getContext() {
 		return staticContext;
 	}

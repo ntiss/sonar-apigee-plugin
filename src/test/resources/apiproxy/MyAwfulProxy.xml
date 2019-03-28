@@ -5,4 +5,9 @@
     <CreatedBy>nicolas.tisserand@arkea.com</CreatedBy>
     <Description>short</Description>
     <DisplayName>MyAwfulProxy</DisplayName>
+	<ProxyEndpoints>
+		<ProxyEndpoint>default1</ProxyEndpoint>
+		<ProxyEndpoint>default2</ProxyEndpoint>
+		<ProxyEndpoint>default3</ProxyEndpoint>
+	</ProxyEndpoints>   
 </APIProxy>

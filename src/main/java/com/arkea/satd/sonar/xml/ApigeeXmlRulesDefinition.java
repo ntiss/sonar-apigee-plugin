@@ -23,8 +23,6 @@ import org.sonar.plugins.xml.SonarRuntime;*/
 import org.sonar.plugins.xml.Xml;
 import org.sonarsource.analyzer.commons.RuleMetadataLoader;
 
-import com.arkea.satd.sonar.xml.checks.CheckRepository;
-
 /**
  * Repository for XML rules.
  * 

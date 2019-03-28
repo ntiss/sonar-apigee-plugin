@@ -21,8 +21,6 @@ import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.plugins.xml.Xml;
 import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
 
-import com.arkea.satd.sonar.xml.checks.CheckRepository;
-
 /**
  * Default XML Apige profile.
  * 
@@ -34,7 +32,7 @@ public final class ApigeeXmlSonarWayProfile implements BuiltInQualityProfilesDef
 
 	public static final String PROFILE_NAME = "Sonar way Apigee";
 
-	private static final String SONAR_WAY_PATH = "org/sonar/l10n/xml/rules/xml/Sonar_way_apigee_profile.json";
+	private static final String SONAR_WAY_PATH = "org/sonar/l10n/xml/rules/xml/__Sonar_way_apigee_profile.json";
 
 	public ApigeeXmlSonarWayProfile(SonarRuntime sonarRuntime) {
 		this.sonarRuntime = sonarRuntime;
