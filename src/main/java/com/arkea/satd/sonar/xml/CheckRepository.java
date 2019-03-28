@@ -61,6 +61,10 @@ public class CheckRepository {
 
 	@SuppressWarnings("rawtypes")
 	public static List<Class> getCheckClasses() {
+		
+		// IMPORTANT !! 
+		// If you add a new check class here, don't forget to add it also in src/main/resources/org/sonar/l10n/xml/rules/xml/__Sonar_way_apigee_profile.json
+		//
 		return Arrays.asList(
 				AvoidPythonCheck.class,
 				CacheCoherenceCheck.class,
