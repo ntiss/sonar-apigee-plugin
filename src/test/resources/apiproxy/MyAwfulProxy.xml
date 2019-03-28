@@ -1,13 +1,47 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<APIProxy revision="3" name="MyAwfulProxy">
+<APIProxy revision="2" name="MyAwfulProxy">
+    <Basepaths>/awful</Basepaths>
     <ConfigurationVersion majorVersion="4" minorVersion="0"/>
-    <CreatedAt>1513763491458</CreatedAt>
+    <CreatedAt>1525698476942</CreatedAt>
     <CreatedBy>nicolas.tisserand@arkea.com</CreatedBy>
-    <Description>short</Description>
+    <Description>This APIProxy presents a maximum of bad practices in order to improve the SonarQube plugin</Description>
     <DisplayName>MyAwfulProxy</DisplayName>
-	<ProxyEndpoints>
-		<ProxyEndpoint>default1</ProxyEndpoint>
-		<ProxyEndpoint>default2</ProxyEndpoint>
-		<ProxyEndpoint>default3</ProxyEndpoint>
-	</ProxyEndpoints>   
+    <LastModifiedAt>1525698476942</LastModifiedAt>
+    <LastModifiedBy>nicolas.tisserand@arkea.com</LastModifiedBy>
+    <ManifestVersion>SHA-512:66c8bc505a1d4ace635e38efca8fda5f8f30164f43930fd72cc4be5e1e3849801af86b4a81ff4ec9149b8757c4a2f3f0bb3bf5018cfc507aea99d2b73db28ec7</ManifestVersion>
+    <Policies>
+        <Policy>Activate-Compression-Response</Policy>
+        <Policy>Assign-Message-UsedInFaultRule</Policy>
+        <Policy>Extract-Variables-1</Policy>
+        <Policy>JSON-Threat-Protection-1</Policy>
+        <Policy>JSON-Threat-Protection-Unused</Policy>
+        <Policy>Lookup-Cache-1</Policy>
+        <Policy>Populate-Cache-1</Policy>
+        <Policy>Python-1</Policy>
+        <Policy>Raise-Fault-1</Policy>
+        <Policy>Service-Callout-1</Policy>
+        <Policy>Spike-Arrest-1</Policy>
+        <Policy>Verify-API-Key-1</Policy>
+        <Policy>XSL-Transform-1</Policy>
+        <Policy>add-cors</Policy>
+    </Policies>
+    <ProxyEndpoints>
+        <ProxyEndpoint>default1</ProxyEndpoint>
+        <ProxyEndpoint>default2</ProxyEndpoint>
+        <ProxyEndpoint>default3</ProxyEndpoint>
+    </ProxyEndpoints>
+    <Resources>
+        <Resource>xsl://Unattached-Transform.xsl</Resource>
+        <Resource>xsl://XSL-Transform-1.xsl</Resource>
+        <Resource>node://mock.js</Resource>
+        <Resource>wsdl://Unattached-1.wsdl</Resource>
+        <Resource>xsd://Unattached-1.xsd</Resource>
+        <Resource>py://Python-1.py</Resource>
+    </Resources>
+    <Spec></Spec>
+    <TargetServers/>
+    <TargetEndpoints>
+        <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>inexistantTarget</TargetEndpoint>
+    </TargetEndpoints>
 </APIProxy>
