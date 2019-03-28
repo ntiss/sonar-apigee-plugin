@@ -15,7 +15,6 @@
  */
 package com.arkea.satd.sonar.xml;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -112,8 +111,12 @@ public class ApigeeXmlSensor implements Sensor {
 	    	
 			// First loop to store ALL files.
 			for (InputFile inputFile : inputFiles) {
-				XmlFile xmlFile = XmlFile.create(inputFile);
-				BundleRecorder.storeFile(xmlFile);
+				try {
+					XmlFile xmlFile = XmlFile.create(inputFile);
+					BundleRecorder.storeFile(xmlFile);
+				} catch(Exception e) {
+					// Case of parse exception
+			    }
 			}
 	    	
 			// Second loop to checks files one by one.
@@ -122,11 +125,15 @@ public class ApigeeXmlSensor implements Sensor {
 	          cancelled = true;
 	          break;
 	        }
-	        runChecks(context, XmlFile.create(inputFile));
-	    //    scanFile(context, inputFile, isSonarLintContext);
+			
+	        try {
+				XmlFile xmlFile = XmlFile.create(inputFile);
+				runChecks(context, xmlFile);
+			} catch(Exception e) {
+				// Case of parse exception
+		    }	        
 	        progressReport.nextFile();
 	      }
-	    } catch(IOException e) {
 	    } finally {
 	      if (!cancelled) {
 	        progressReport.stop();
