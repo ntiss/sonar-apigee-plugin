@@ -29,7 +29,6 @@ import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
-import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.xml.Xml;
 import org.sonarsource.analyzer.commons.ProgressReport;
