@@ -54,7 +54,7 @@ public class ApigeeXmlSensor implements Sensor {
 		staticContext = ctx;
 	}
 	
-	public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory, FileLinesContextFactory fileLinesContextFactory) {		
+	public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory) {		
 		this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY).addAnnotatedChecks((Iterable<?>) CheckRepository.getCheckClasses());
 		this.fileSystem = fileSystem;
 		this.mainFilesPredicate = fileSystem.predicates().and(

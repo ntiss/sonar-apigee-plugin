@@ -16,9 +16,6 @@
 package com.arkea.satd.sonar;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -33,7 +30,6 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
-import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
@@ -42,8 +38,6 @@ import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
-import org.sonar.api.measures.FileLinesContext;
-import org.sonar.api.measures.FileLinesContextFactory;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.xml.Xml;
 
@@ -121,10 +115,7 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 		}
 		CheckFactory checkFactory = new CheckFactory(activeRuleBuilder.build());
 
-		FileLinesContextFactory fileLinesContextFactory = mock(FileLinesContextFactory.class);
-		when(fileLinesContextFactory.createFor(any(InputFile.class))).thenReturn(mock(FileLinesContext.class));
-
-		sensor = new ApigeeXmlSensor(fs, checkFactory, fileLinesContextFactory);
+		sensor = new ApigeeXmlSensor(fs, checkFactory);
 	}
 
 	private DefaultInputFile createInputFile(String name) throws FileNotFoundException {

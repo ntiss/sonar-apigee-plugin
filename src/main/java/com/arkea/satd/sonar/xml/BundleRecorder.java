@@ -58,7 +58,6 @@ public class BundleRecorder {
 
 		Document document = xmlFile.getDocument();
 		String fileName = xmlFile.getInputFile().uri().getPath();
-		//fileName = xmlFile.getInputFile().relativePath();
 		
 	    if (document.getDocumentElement() != null) {
 	    	

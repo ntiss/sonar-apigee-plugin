@@ -34,8 +34,6 @@ import org.w3c.dom.Node;
 @Rule(key = "AvoidPythonCheck")
 public class AvoidPythonCheck extends SonarXmlCheck {
 	
-	//public static final String RULE_KEY = "AvoidPythonCheck";
-
 	public AvoidPythonCheck() {
 		super();
 	}

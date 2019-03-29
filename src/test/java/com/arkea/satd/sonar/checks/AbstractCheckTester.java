@@ -20,7 +20,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.Collection;
 
-import org.junit.rules.TemporaryFolder;
 import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
@@ -36,9 +35,6 @@ import com.arkea.satd.sonar.AbstractXmlPluginTester;
 import com.arkea.satd.sonar.xml.ApigeeXmlSensor;
 
 public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
-
-  @org.junit.Rule
-  public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
 	protected Collection<Issue> getIssues(SonarXmlCheck check, String content) throws IOException {
 		

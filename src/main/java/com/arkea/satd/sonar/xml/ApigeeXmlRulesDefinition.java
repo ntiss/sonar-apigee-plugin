@@ -16,10 +16,6 @@ package com.arkea.satd.sonar.xml;
 
 import org.sonar.api.SonarRuntime;
 import org.sonar.api.server.rule.RulesDefinition;
-/*import org.sonar.plugins.xml.Context;
-import org.sonar.plugins.xml.NewRepository;
-import org.sonar.plugins.xml.RuleMetadataLoader;
-import org.sonar.plugins.xml.SonarRuntime;*/
 import org.sonar.plugins.xml.Xml;
 import org.sonarsource.analyzer.commons.RuleMetadataLoader;
 

@@ -54,8 +54,6 @@ public class UnknownResourceFlowCheck extends SonarXmlCheck {
 				condition.length()>0 && 
 				!"true".equalsIgnoreCase(condition)) {
 				
-				//reportIssue(getWebSourceCode().getLineForNode(flowsNode.getNextSibling()) - 1, "There is no default flow in this proxy endpoint.");
-				
 				// Find the closing tag
 				final XmlTextRange textRange = XmlFile.endLocation((Element)flowsNode);
 				reportIssue(textRange, "There is no default flow in this proxy endpoint.", Collections.emptyList());								
