@@ -39,11 +39,10 @@
 	<properties>
 		<license.title>SonarQube XML Plugin</license.title>
 		<!-- backward compatible with LTS -->
-		<sonarQubeMinVersion>5.6</sonarQubeMinVersion>
-		<java.plugin.version>4.7.1.9272</java.plugin.version>
 		<maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
 		<sonar.version>7.0</sonar.version>
+		<sonar-xml.version>2.0.1.2020</sonar-xml.version>
 		<sslr.version>1.21</sslr.version>
 
 		<!-- Release: enable publication to Bintray -->
@@ -63,7 +62,7 @@
 		<dependency>
 			<groupId>org.sonarsource.xml</groupId>
 			<artifactId>sonar-xml-plugin</artifactId>
-			<version>2.0.1.2020</version>
+			<version>${sonar-xml.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		
@@ -145,7 +144,7 @@
 			<plugin>
 				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
-				<version>1.17</version>
+				<version>1.18.0.372</version>
 				<extensions>true</extensions>
 				<configuration>
 					<pluginKey>apigee</pluginKey>
@@ -155,7 +154,8 @@
 					<basePlugin>xml</basePlugin>
 					<skipDependenciesPackaging>false</skipDependenciesPackaging>
 					<sonarLintSupported>false</sonarLintSupported>
-					<sonarQubeMinVersion>${sonarQubeMinVersion}</sonarQubeMinVersion>
+					<sonarQubeMinVersion>6.7</sonarQubeMinVersion>
+					<requirePlugins>xml:2.0.1</requirePlugins>
 				</configuration>
 			</plugin>
 
