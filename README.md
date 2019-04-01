@@ -74,7 +74,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 >
 >:heavy_multiplication_x: : not yet implemented
 >
->:x: : won't be implemented. See details in Description column 
+>:o: : won't be implemented. See details in Description column 
 
 
 ### Bundle level
@@ -140,9 +140,9 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| PO010 | &nbsp; | Service Callout Target - Target Server | Encourage use of target servers. |
 |:heavy_multiplication_x:| PO011 | &nbsp; | Service Callout Target - Dynamic URLs | Error on dynamic URLs in target server URL tag. |
 |:heavy_multiplication_x:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. |
-|:x:| PO013 | &nbsp; | Resource Call Out - Javascript | Analyzed by sonar-javascript-plugin. |
-|:x:| PO014 | &nbsp; | Resource Call Out - Java |  Analyzed by sonar-java-plugin. |
-|:x:| PO015 | &nbsp; | Resource Call Out - Python |  Analyzed by sonar-python-plugin. |
+|:o:| PO013 | &nbsp; | Resource Call Out - Javascript | Analyzed by sonar-javascript-plugin. |
+|:o:| PO014 | &nbsp; | Resource Call Out - Java |  Analyzed by sonar-java-plugin. |
+|:o:| PO015 | &nbsp; | Resource Call Out - Python |  Analyzed by sonar-python-plugin. |
 |:heavy_multiplication_x:| PO016 | &nbsp; | Statistics Collector - duplicate variables | Warn on duplicate variables. |
 |:heavy_multiplication_x:| PO017 | &nbsp; | Misconfigured - FaultRules/Fault Rule in Policy | FaultRules are configured in ProxyEndpoints and TargetEndpoints. |
 |:heavy_check_mark:| PO018 | Major | Regex Lookahead/Lookbehind are Expensive - Threat Protection Policy | Regular expressions that include lookahead or lookbehind perform slowly on large payloads and are typically not required.|
