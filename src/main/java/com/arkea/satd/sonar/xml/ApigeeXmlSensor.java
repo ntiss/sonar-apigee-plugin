@@ -15,7 +15,10 @@
  */
 package com.arkea.satd.sonar.xml;
 
-import static org.sonar.plugins.xml.compat.CompatibilityHelper.wrap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FileSystem;
@@ -25,19 +28,12 @@ import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.batch.sensor.issue.NewIssue;
-import org.sonar.api.batch.sensor.issue.NewIssueLocation;
+import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.api.rule.RuleKey;
-import org.sonar.plugins.xml.checks.AbstractXmlCheck;
-import org.sonar.plugins.xml.checks.BundleRecorder;
-import org.sonar.plugins.xml.checks.XmlFile;
-import org.sonar.plugins.xml.checks.XmlIssue;
-import org.sonar.plugins.xml.checks.XmlSourceCode;
-import org.sonar.plugins.xml.compat.CompatibleInputFile;
-import org.sonar.plugins.xml.language.Xml;
-import org.sonar.plugins.xml.parsers.ParseException;
-
-import com.arkea.satd.sonar.xml.checks.CheckRepository;
+import org.sonar.plugins.xml.Xml;
+import org.sonarsource.analyzer.commons.ProgressReport;
+import org.sonarsource.analyzer.commons.xml.XmlFile;
+import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 /**
  * ApigeeXmlSensor provides analysis of xml files.
@@ -57,51 +53,30 @@ public class ApigeeXmlSensor implements Sensor {
 		staticContext = ctx;
 	}
 	
-	public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory) {
-		this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY).addAnnotatedChecks((Iterable<?>) CheckRepository.getChecks());
+	public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory) {		
+		this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY).addAnnotatedChecks((Iterable<?>) CheckRepository.getCheckClasses());
 		this.fileSystem = fileSystem;
-		this.mainFilesPredicate = fileSystem.predicates().and(fileSystem.predicates().hasType(InputFile.Type.MAIN), fileSystem.predicates().hasLanguage(Xml.KEY));
+		this.mainFilesPredicate = fileSystem.predicates().and(
+		fileSystem.predicates().hasType(InputFile.Type.MAIN),
+		fileSystem.predicates().hasLanguage(Xml.KEY));
 	}
 
-	public void analyse(SensorContext sensorContext) {
-		execute(sensorContext);
+	private void runChecks(SensorContext context, XmlFile newXmlFile) {
+	    checks.all().stream()
+	      .map(SonarXmlCheck.class::cast)
+	      // checks.ruleKey(check) is never null because "check" is part of "checks.all()"
+	      .forEach(check -> runCheck(context, check, checks.ruleKey(check), newXmlFile));
 	}
-
-	private void runChecks(SensorContext context, XmlFile xmlFile) {
-		XmlSourceCode sourceCode = new XmlSourceCode(xmlFile);
-
-		// Do not execute any XML rule when an XML file is corrupted (SONARXML-13)
-		try {
-			sourceCode.parseSource();
-			for (Object check : checks.all()) {
-				
-				RuleKey rkey = checks.ruleKey(check); 
-				if(rkey != null) {
-					((AbstractXmlCheck) check).setRuleKey(rkey);
-					((AbstractXmlCheck) check).validate(sourceCode);
-				}
-			}
-			saveIssue(context, sourceCode);
-		} catch(ParseException e) {
-			// Do nothing
-		}
-
-	}
-
-	public static void saveIssue(SensorContext context, XmlSourceCode sourceCode) {
-		if(context!=null) {
-			for (XmlIssue xmlIssue : sourceCode.getXmlIssues()) {
-				NewIssue newIssue = context.newIssue().forRule(xmlIssue.getRuleKey());
-				NewIssueLocation location = newIssue.newLocation().on(sourceCode.getInputFile().wrapped())
-						.message(xmlIssue.getMessage());
-				if (xmlIssue.getLine() != null) {
-					location.at(sourceCode.getInputFile().selectLine(xmlIssue.getLine()));
-				}
-				newIssue.at(location).save();
-			}
-		}
-	}
-
+	
+	@VisibleForTesting
+	  void runCheck(SensorContext context, SonarXmlCheck check, RuleKey ruleKey, XmlFile newXmlFile) {
+	    try {
+	      check.scanFile(context, ruleKey, newXmlFile);
+	    } catch (Exception e) {
+	    	// Do nothing
+	    }
+	}	
+		
 	@Override
 	public String toString() {
 		return getClass().getSimpleName();
@@ -109,26 +84,62 @@ public class ApigeeXmlSensor implements Sensor {
 
 	@Override
 	public void describe(SensorDescriptor descriptor) {
-		descriptor.onlyOnLanguage(Xml.KEY).name("Apigee XML Sensor");
+		descriptor
+			.onlyOnLanguage(Xml.KEY)
+			.name("Apigee XML Sensor");
 	}
 
 	@Override
 	public void execute(SensorContext context) {
+		
 		// Catch the context
 		ApigeeXmlSensor.setContext(context);
-		
-		// First loop to store ALL files.
-		for (CompatibleInputFile inputFile : wrap(fileSystem.inputFiles(mainFilesPredicate), context)) {
-			XmlFile xmlFile = new XmlFile(inputFile, fileSystem);
-			XmlSourceCode xmlSourceCode = new XmlSourceCode(xmlFile);
-			BundleRecorder.storeFile(xmlSourceCode);
-		}
-		
-		// Second loop to checks files one by one.
-		for (CompatibleInputFile inputFile : wrap(fileSystem.inputFiles(mainFilesPredicate), context)) {
-			XmlFile xmlFile = new XmlFile(inputFile, fileSystem);
-			runChecks(context, xmlFile);
-		}
+
+	    List<InputFile> inputFiles = new ArrayList<>();
+	    fileSystem.inputFiles(mainFilesPredicate).forEach(inputFiles::add);
+
+	    if (inputFiles.isEmpty()) {
+	      return;
+	    }
+
+	    ProgressReport progressReport = new ProgressReport("Report about progress of Apigee XML analyzer", TimeUnit.SECONDS.toMillis(10));
+	    progressReport.start(inputFiles.stream().map(InputFile::toString).collect(Collectors.toList()));
+
+	    boolean cancelled = false;
+	    try {
+	    	
+			// First loop to store ALL files.
+			for (InputFile inputFile : inputFiles) {
+				try {
+					XmlFile xmlFile = XmlFile.create(inputFile);
+					BundleRecorder.storeFile(xmlFile);
+				} catch(Exception e) {
+					// Case of parse exception
+			    }
+			}
+	    	
+			// Second loop to checks files one by one.
+	      for (InputFile inputFile : inputFiles) {
+	        if (context.isCancelled()) {
+	          cancelled = true;
+	          break;
+	        }
+			
+	        try {
+				XmlFile xmlFile = XmlFile.create(inputFile);
+				runChecks(context, xmlFile);
+			} catch(Exception e) {
+				// Case of parse exception
+		    }	        
+	        progressReport.nextFile();
+	      }
+	    } finally {
+	      if (!cancelled) {
+	        progressReport.stop();
+	      } else {
+	        progressReport.cancel();
+	      }
+	    }		
 	}
 
 	public static SensorContext getContext() {

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ProxyEndpoint name="default">
+    <Description>short</Description>
+    <PreFlow name="PreFlow">
+        <Request>
+            <Step>
+                <Name>Verify-API-Key-1</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
+            </Step>
+            <Step>
+                <Name>Spike-Arrest-1</Name>
+                <Condition>request.verb != "OPTIONS"</Condition>
+            </Step>
+            <Step>
+                <Name>JSON-Threat-Protection-1</Name>
+            </Step>
+            <Step>
+                <Name>Service-Callout-1</Name>
+            </Step>
+            <Step>
+                <Name>Python-1</Name>
+            </Step>
+            <Step>
+                <Name>Lookup-Cache-1</Name>
+            </Step>
+            <Step>
+                <Name>XSL-Transform-1</Name>
+            </Step>
+        </Request>
+        <Response/>
+    </PreFlow>
+    <Flows>
+        <Flow name="OptionPreflight">
+            <Description/>
+            <Request/>
+            <Response/>
+            <Condition>request.verb == "OPTIONS"</Condition>
+        </Flow>
+        <Flow name="GET_check">
+            <Condition>(proxy.pathsuffix MatchesPath "/check") and (request.verb = "GET")</Condition>
+            <Description>Check</Description>
+            <Request/>
+            <Response/>
+        </Flow>
+        <Flow name="GET-todos">
+            <Condition>(proxy.pathsuffix MatchesPath "/todos/{id}") and (request.verb = "GET")</Condition>
+            <Description>Get todo</Description>
+            <Request/>
+            <Response/>
+        </Flow>
+        <Flow name="PUT-todos">
+            <Condition>(proxy.pathsuffix MatchesPath "/todos/{id}") and (request.verb = "PUT")</Condition>
+            <Description>Update todo</Description>
+            <Request/>
+            <Response/>
+        </Flow>
+        <Flow name="LIST-todos">
+            <Condition>(proxy.pathsuffix MatchesPath "/todos") and (request.verb = "GET")</Condition>
+            <Description>List todos</Description>
+            <Request/>
+            <Response/>
+        </Flow>
+        <Flow name="POST-todos">
+            <Condition>(proxy.pathsuffix MatchesPath "/todos") and (request.verb = "POST")</Condition>
+            <Description>Create todo</Description>
+            <Request>
+                <Step>
+                    <Name>Extract-Variables-1</Name>
+                </Step>
+            </Request>
+            <Response/>
+        </Flow>
+        <Flow name="unknownResource2">
+            <Description>Flow used when no other has been used</Description>
+            <Request/>
+            <Response/>
+        </Flow>
+        <Flow name="GET-user">
+            <Condition>(proxy.pathsuffix MatchesPath "/users/{id}") and (request.verb = "GET")</Condition>
+            <Description>Get user</Description>
+            <Request/>
+            <Response/>
+        </Flow>
+        <Flow name="PUT-user">
+            <Condition>(proxy.pathsuffix MatchesPath "/users/{id}") and (request.verb = "PUT")</Condition>
+            <Description>Update user</Description>
+            <Request/>
+            <Response/>
+        </Flow>
+        <Flow name="unknownResource">
+            <Description>Flow used when no other has been used</Description>
+            <Request>
+                <Step>
+                    <Name>Raise-Fault-1</Name>
+                </Step>
+            </Request>
+            <Response/>
+        </Flow>
+        <Flow name="LIST-books">
+            <Condition>(proxy.pathsuffix MatchesPath "/users") and (request.verb = "GET")</Condition>
+            <Description>List users</Description>
+            <Request/>
+            <Response/>
+        </Flow>
+        <Flow name="POST-book">
+            <Condition>(proxy.pathsuffix MatchesPath "/users") and (request.verb = "POST")</Condition>
+            <Description>Create user</Description>
+            <Request/>
+            <Response/>
+        </Flow>
+    </Flows>
+    <PostFlow name="PostFlow">
+        <Request/>
+        <Response>
+            <Step>
+                <Name>add-cors</Name>
+            </Step>
+            <Step>
+                <Name>Activate-Compression-Response</Name>
+                <Condition>request.header.Accept-Encoding == "gzip"</Condition>
+            </Step>
+            <Step>
+                <Name>Populate-Cache-1</Name>
+            </Step>
+        </Response>
+    </PostFlow>
+    <FaultRules>
+        <FaultRule name="baderror">
+            <Condition>message.status.code=403</Condition>
+            <Step>
+                <Name>Assign-Message-UsedInFaultRule</Name>
+            </Step>
+            <Step>
+                <Name>Raise-Fault-1</Name>
+            </Step>
+        </FaultRule>
+        <FaultRule name="defaulterror">
+            <Step>
+                <Name>Raise-Fault-1</Name>
+            </Step>
+        </FaultRule>
+    </FaultRules>
+    <HTTPProxyConnection>
+        <BasePath>/awful</BasePath>
+        <VirtualHost>default</VirtualHost>
+    </HTTPProxyConnection>
+    <RouteRule name="NoRoute">
+        <Condition>request.verb == "OPTIONS"</Condition>
+    </RouteRule>
+    <RouteRule name="mock-nodejs">
+        <Condition>request.header.mock = "nodejs"</Condition>
+    </RouteRule>
+    <RouteRule name="bugTarget">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+    <RouteRule name="mock-stoplight">
+        <Condition>request.header.mock = "stoplight"</Condition>
+    </RouteRule>
+    <RouteRule name="bugTarget2">
+        <TargetEndpoint>inexistantTarget</TargetEndpoint>
+    </RouteRule>
+    <RouteRule name="default">
+        <TargetEndpoint>default</TargetEndpoint>
+    </RouteRule>
+</ProxyEndpoint>
