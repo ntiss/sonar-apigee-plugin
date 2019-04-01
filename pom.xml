@@ -33,8 +33,13 @@
 
 	<issueManagement>
 	  <system>GitHub Issues</system>
-	  <url>https://github.com/CreditMutuelArkea/sonar-apigee-plugin/issues</url>
+	  <url>https://jira.sonarsource.com/browse/SONARXML</url>
 	</issueManagement>
+
+	<ciManagement>
+		<system>Travis-ci</system>
+		<url>https://travis-ci.org/CreditMutuelArkea/sonar-apigee-plugin</url>
+	</ciManagement>
 
 	<properties>
 		<license.title>SonarQube XML Plugin</license.title>
