@@ -1,0 +1,18 @@
+{
+  "title": "Avoid Python language",
+  "type": "CODE_SMELL",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "1min"
+  },
+  "tags": [
+  	"apigee",
+    "performance",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major",
+  "ruleSpecification": "PO-500",
+  "sqKey": "AvoidPythonCheck"
+  
+}

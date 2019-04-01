@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ServiceCallout async="false" continueOnError="false" enabled="true" name="Service-Callout-1">
+    <DisplayName>Service Callout-1</DisplayName>
+    <Properties/>
+    <Request clearPayload="true" variable="request">
+        <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>
+    </Request>
+    <Response>response</Response>
+    <HTTPTargetConnection>
+        <Properties/>
+        <URL>http://example.com</URL>
+    </HTTPTargetConnection>
+</ServiceCallout>
