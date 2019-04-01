@@ -10,11 +10,11 @@ The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/
 All rules are not yet implemented ([see below](#implemented-rules)).
 Apigee Shared Flows are not supported.
 
-This plugin has been successfully tested with Sonarqube : 6.7.1, 6.7.6 LTS and 7.0, 7.3 and 7.7.
+This plugin has been successfully tested with Sonarqube : 6.7.1, 6.7.6 LTS, 7.0, 7.3 and 7.7.
 
 WARNING : 
 * If you run older releases of Sonar, please consider upgrading, or stay with the release 1.3.1 of this plugin and with sonar-xml plugin 1.4.3.
-* if you upgrade sonar-xml from 1.4.3 to 2.0.1-*, you **MUST** upgrade this sonar-apigee-plugin at the same time.
+* If you upgrade sonar-xml from 1.4.3 to 2.0.1-*, you **MUST** upgrade this sonar-apigee-plugin at the same time.
 
 
 *Warning :* This plugin is not compatible with the plugin Sonar-xml 2.0.x. If you use this plugin, please consider not upgrading sonar-xml plugin until development is finished and merged on [this branch](https://github.com/CreditMutuelArkea/sonar-apigee-plugin/tree/2.0.0).
