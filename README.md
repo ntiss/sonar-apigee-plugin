@@ -17,8 +17,6 @@ WARNING :
 * If you upgrade sonar-xml from 1.4.3 to 2.0.1-*, you **MUST** upgrade this sonar-apigee-plugin at the same time.
 
 
-*Warning :* This plugin is not compatible with the plugin Sonar-xml 2.0.x. If you use this plugin, please consider not upgrading sonar-xml plugin until development is finished and merged on [this branch](https://github.com/CreditMutuelArkea/sonar-apigee-plugin/tree/2.0.0).
-
 ## Usage
 
 ### Some screenshots
