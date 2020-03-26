@@ -22,6 +22,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonar.check.Rule;
+import org.sonar.check.RuleProperty;
 import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
@@ -35,6 +36,19 @@ import org.w3c.dom.NodeList;
  */
 @Rule(key = "TooMuchTargetEndpointsCheck")
 public class TooMuchTargetEndpointsCheck extends SonarXmlCheck {
+
+	@RuleProperty(type = "INTEGER",
+		    defaultValue = "5",
+		    description = "Maximum targts count allowed in a proxy")
+		protected int maxAllowedTargets = 5;
+		
+	public int getMaxAllowedTargets() {
+		return maxAllowedTargets;
+	}
+
+	public void setMaxAllowedTargets(int maxAllowedTargets) {
+		this.maxAllowedTargets = maxAllowedTargets;
+	}
 
 	@Override
 	public void scanFile(XmlFile xmlFile) {
@@ -51,8 +65,8 @@ public class TooMuchTargetEndpointsCheck extends SonarXmlCheck {
 			    XPathExpression exprDisplayName = xpath.compile("count(/APIProxy/TargetEndpoints/TargetEndpoint)");
 			    double targetsCount = (double)exprDisplayName.evaluate(document, XPathConstants.NUMBER);
 			    
-		    	// If there are more than 5 TargetEndpoint, this is a violation.
-		    	if(targetsCount > 5) {
+		    	// If there are more than 'maxAllowedTargets' TargetEndpoint, this is a violation.
+		    	if(targetsCount > maxAllowedTargets) {
 		    		// Search for the <TargetEndpoints> node (it's a better location to indicate the violation
 		    		NodeList targetEndpointsNodeList = document.getDocumentElement().getElementsByTagName("TargetEndpoints");
 		    		if(targetEndpointsNodeList!=null && targetEndpointsNodeList.getLength()>0) {

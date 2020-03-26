@@ -100,7 +100,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| PD001 | Blocker | RouteRules to Targets | RouteRules should map to defined Targets |
 |:heavy_check_mark:| PD002 | Blocker | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
 |:heavy_check_mark:| PD003 | Blocker | Unreachable Route Rules | RouteRule without a condition should be last. |
-|:heavy_check_mark:| PD501 | Major | Too much proxy endpoints | Discourage the declaration of multiple proxy endpoints in a same proxy. |
+|:heavy_check_mark:| PD501 | Major | Too much proxy endpoints | Discourage the declaration of multiple proxy endpoints in a same proxy. . The threshold is defined in the Quality Profile. Default value is 2. |
 
 
 ### Target Definition level
@@ -108,7 +108,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_check_mark:| TD001 | Major | Mgmt Server as Target | Discourage calls to the Management Server from a Proxy via target. |
 |:heavy_check_mark:| TD002 | Major | Use Target Servers | Encourage the use of target servers |
-|:heavy_check_mark:| TD501 | Major | Too much Target Endpoints | Discourage the use of numerous target endpoints |
+|:heavy_check_mark:| TD501 | Major | Too much Target Endpoints | Discourage the use of numerous target endpoints. The threshold is defined in the Quality Profile. Default value is 5. |
 
 
 ### Flow level

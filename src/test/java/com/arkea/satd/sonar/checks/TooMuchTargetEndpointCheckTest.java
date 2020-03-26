@@ -21,16 +21,15 @@ import java.util.Collection;
 
 import org.junit.Test;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 import com.arkea.satd.sonar.xml.checks.TooMuchTargetEndpointsCheck;
 
 public class TooMuchTargetEndpointCheckTest extends AbstractCheckTester {
 
-	private SonarXmlCheck check = new TooMuchTargetEndpointsCheck();
+	private TooMuchTargetEndpointsCheck check = new TooMuchTargetEndpointsCheck();
 	
 	@Test
-	public void test_ok() throws Exception {
+	public void test_default_ok() throws Exception {
 		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<APIProxy revision=\"1\" name=\"myAPI\">\r\n" + 
 				"    <TargetEndpoints>\r\n" + 
@@ -48,7 +47,7 @@ public class TooMuchTargetEndpointCheckTest extends AbstractCheckTester {
 	
 	
 	@Test
-	public void test_ko() throws Exception {
+	public void test_default_ko() throws Exception {
 		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<APIProxy revision=\"1\" name=\"myAPI\">\r\n" + 
 				"    <TargetEndpoints>\r\n" + 
@@ -64,5 +63,40 @@ public class TooMuchTargetEndpointCheckTest extends AbstractCheckTester {
 		);
 		assertEquals(1, issues.size());
 	}	
+
+	@Test
+	public void test_configured_ok() throws Exception {
+		check.setMaxAllowedTargets(3);
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<APIProxy revision=\"1\" name=\"myAPI\">\r\n" + 
+				"    <TargetEndpoints>\r\n" + 
+				"        <TargetEndpoint>TGT-1</TargetEndpoint>\r\n" + 
+				"        <TargetEndpoint>TGT-2</TargetEndpoint>\r\n" + 
+				"        <TargetEndpoint>TGT-3</TargetEndpoint>\r\n" + 
+				"    </TargetEndpoints>\r\n" + 
+				"</APIProxy>"
+
+		);
+		assertEquals(0, issues.size());
+	}
+	
+	
+	@Test
+	public void test_configured_ko() throws Exception {
+		check.setMaxAllowedTargets(3);
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<APIProxy revision=\"1\" name=\"myAPI\">\r\n" + 
+				"    <TargetEndpoints>\r\n" + 
+				"        <TargetEndpoint>TGT-1</TargetEndpoint>\r\n" + 
+				"        <TargetEndpoint>TGT-2</TargetEndpoint>\r\n" + 
+				"        <TargetEndpoint>TGT-3</TargetEndpoint>\r\n" + 
+				"        <TargetEndpoint>TGT-4</TargetEndpoint>\r\n" + 
+				"    </TargetEndpoints>\r\n" + 
+				"</APIProxy>"
+
+		);
+		assertEquals(1, issues.size());
+	}	
 		
+
 }
