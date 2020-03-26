@@ -257,6 +257,111 @@ public class ExtractVariablesCheckTest extends AbstractCheckTester {
 					);
 		assertEquals(0, issues.size());
 	}
+
+	@Test
+	public void test_json_withSource_ok1() throws Exception {
+		
+		// Fake ProxyEndpoint file
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <Description/>\r\n" + 
+				"    <PreFlow name=\"PreFlow\">\r\n" + 
+				"        <Request>\r\n" + 
+				"            <Step>\r\n" + 
+				"                <Name>EV-Extract-Things</Name>\r\n" + 
+				"                <Condition>customVariable.content != null</Condition>\r\n" + 
+				"            </Step>\r\n" + 
+				"        </Request>\r\n" + 
+				"        <Response/>\r\n" + 
+				"    </PreFlow>\r\n" +  
+				"</ProxyEndpoint>" 
+				);
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(proxyEndpointXML);
+
+		Collection<Issue> issues = getIssues(check, 
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+			"<ExtractVariables async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"EV-Extract-Things\">\r\n" + 
+			"    <JSONPayload>\r\n" + 
+			"        <Variable name=\"aVariable\" type=\"string\">\r\n" + 
+			"            <JSONPath>$.here</JSONPath>\r\n" + 
+			"        </Variable>\r\n" + 
+			"    </JSONPayload>\r\n" + 
+			"    <Source>customVariable.content</Source>\r\n" + 
+			"</ExtractVariables>"
+				);
+		assertEquals(0, issues.size());
+	}
+		
+	@Test
+	public void test_json_withSource_ko1() throws Exception {
+		
+		// Fake ProxyEndpoint file
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <Description/>\r\n" + 
+				"    <PreFlow name=\"PreFlow\">\r\n" + 
+				"        <Request>\r\n" + 
+				"            <Step>\r\n" + 
+				"                <Name>EV-Extract-Things</Name>\r\n" + 
+				"                <Condition>customVariable != null</Condition>\r\n" + 
+				"            </Step>\r\n" + 
+				"        </Request>\r\n" + 
+				"        <Response/>\r\n" + 
+				"    </PreFlow>\r\n" +  
+				"</ProxyEndpoint>" 
+				);
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(proxyEndpointXML);
+
+		Collection<Issue> issues = getIssues(check, 
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+			"<ExtractVariables async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"EV-Extract-Things\">\r\n" + 
+			"    <JSONPayload>\r\n" + 
+			"        <Variable name=\"aVariable\" type=\"string\">\r\n" + 
+			"            <JSONPath>$.here</JSONPath>\r\n" + 
+			"        </Variable>\r\n" + 
+			"    </JSONPayload>\r\n" + 
+			"    <Source>customVariable.content</Source>\r\n" + 
+			"</ExtractVariables>"
+				);
+		assertEquals(1, issues.size());
+	}
+	
+	@Test
+	public void test_json_withSource_ko2() throws Exception {
+		
+		// Fake ProxyEndpoint file
+		XmlFile proxyEndpointXML = createTempFile("", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <Description/>\r\n" + 
+				"    <PreFlow name=\"PreFlow\">\r\n" + 
+				"        <Request>\r\n" + 
+				"            <Step>\r\n" + 
+				"                <Name>EV-Extract-Things</Name>\r\n" + 
+				"                <Condition>customVariable.content != null</Condition>\r\n" + 
+				"            </Step>\r\n" + 
+				"        </Request>\r\n" + 
+				"        <Response/>\r\n" + 
+				"    </PreFlow>\r\n" +  
+				"</ProxyEndpoint>" 
+				);
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(proxyEndpointXML);
+
+		Collection<Issue> issues = getIssues(check, 
+			"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+			"<ExtractVariables async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"EV-Extract-Things\">\r\n" + 
+			"    <JSONPayload>\r\n" + 
+			"        <Variable name=\"aVariable\" type=\"string\">\r\n" + 
+			"            <JSONPath>$.here</JSONPath>\r\n" + 
+			"        </Variable>\r\n" + 
+			"    </JSONPayload>\r\n" + 
+			"    <!-- Source>customVariable.content</Source -->\r\n" + 
+			"</ExtractVariables>"
+				);
+		assertEquals(1, issues.size());
+	}
 	
 	@Test
 	public void test_queryparam_ok() throws Exception {
