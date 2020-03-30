@@ -64,10 +64,10 @@ public class TooMuchPoliciesCheck extends SonarXmlCheck {
 		    
 		    try {
 			    XPathExpression exprDisplayName = xpath.compile("count(/*/Policies/Policy)");
-			    double proxiesCount = (double)exprDisplayName.evaluate(document, XPathConstants.NUMBER);
+			    double policiesCount = (double)exprDisplayName.evaluate(document, XPathConstants.NUMBER);
 			    
 		    	// If there are more than 'maxAllowedPolicies' policies, this is a violation.
-		    	if(proxiesCount > maxAllowedPolicies) {
+		    	if(policiesCount > maxAllowedPolicies) {
 		    
 		    		// Search for the <ProxyEndpoints> node (it's a better location to indicate the violation
 		    		NodeList policiesNodeList = document.getDocumentElement().getElementsByTagName("Policies");
