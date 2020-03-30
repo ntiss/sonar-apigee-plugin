@@ -54,11 +54,11 @@ public class PolicyNameConventionCheckTest extends AbstractCheckTester {
 	}
 
 	@Test
-	public void test_ok4() throws Exception {
+	public void test_no_separator() throws Exception {
 		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n"
 				+ "<XMLToJSON async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"xTOjtransform_54654\">\r\n"
 				+ "</XMLToJSON>");
-		assertEquals(0, issues.size());
+		assertEquals(1, issues.size());
 	}
 	
 	@Test

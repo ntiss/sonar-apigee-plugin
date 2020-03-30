@@ -67,7 +67,7 @@ public class PolicyNameConventionCheck extends SonarXmlCheck {
 		supportedPolicies.put("GenerateJWT", Arrays.asList("jwt", "gjwt", "gj") );
 		supportedPolicies.put("VerifyJWT", Arrays.asList("jwt", "vjwt", "vj") );
 		supportedPolicies.put("DecodeJWT", Arrays.asList("jwt", "djwt", "dj") );		
-		supportedPolicies.put("KeyValueMapOperations", Arrays.asList("keyvaluemapoperations", "kvm", "kvmops") );
+		supportedPolicies.put("KeyValueMapOperations", Arrays.asList("keyvaluemapoperations", "kvm", "kvmops", "kv") );
 		supportedPolicies.put("Ldap", Arrays.asList("ldap") );
 		supportedPolicies.put("MessageLogging", Arrays.asList("messagelogging", "logging", "ml") );
 		supportedPolicies.put("OAuthV2", Arrays.asList("oauthv2", "oauth", "oa", "accesstoken", "verify") );
@@ -112,7 +112,7 @@ public class PolicyNameConventionCheck extends SonarXmlCheck {
 
 	    		boolean isCompliant = false;
 	    		for(String prefix : knownPrefixes) {
-	    			Pattern pattern = Pattern.compile(prefix + "[_-]?.*", Pattern.CASE_INSENSITIVE);
+	    			Pattern pattern = Pattern.compile(prefix + "[_-].*", Pattern.CASE_INSENSITIVE);   // A separator is mandatory after the prefix  : either '-' or '_' 
 	    			Matcher  matcher = pattern.matcher(nameAttr);
 	    			
 	    			if(matcher.matches()) {
