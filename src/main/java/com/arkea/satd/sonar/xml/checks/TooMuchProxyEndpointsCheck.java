@@ -56,7 +56,7 @@ public class TooMuchProxyEndpointsCheck extends SonarXmlCheck {
 	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null && "APIProxy".equals(document.getDocumentElement().getNodeName())) {
 	    	
-	    	// Search for targets definitions of an APIProxy document
+	    	// Search for endpoints definitions of an APIProxy document
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
 		    XPath xpath = xPathfactory.newXPath();
 		    
