@@ -43,7 +43,7 @@ As Apigee also deals with Javascript and Python, it would be pertinent to instal
 
 Then :
  * Set the "Sonar way Apigee" quality profile as default. You can also create a new profile and add it the rules coming from ApigeeXML and CommonXML repositories.
- * Add `.wsdl` as suffix to be analyzed in the XML Language administration.
+ * Add `.wsdl` and `.xslt` as suffixes to be analyzed in the XML Language administration.
  * Configure your Quality Gates as needed
 
 ### Build
