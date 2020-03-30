@@ -62,13 +62,14 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 		init();
 		
 		// Test on one file
-		DefaultInputFile inputFile = createInputFile("apiproxy/MyAwfulProxy.xml");
+		DefaultInputFile inputFile = createInputFile("MyAwfulProxy/apiproxy/MyAwfulProxy.xml");
 		fs.add(inputFile);
 
 		sensor.execute(context);
 		assertThat(context.allIssues())
 				.extracting("ruleKey")
-				.containsOnly(RuleKey.of(CheckRepository.REPOSITORY_KEY, "TooMuchProxyEndpointsCheck"));
+				.containsExactlyInAnyOrder(RuleKey.of(CheckRepository.REPOSITORY_KEY, "TooMuchProxyEndpointsCheck"),
+						RuleKey.of(CheckRepository.REPOSITORY_KEY, "TooMuchTargetEndpointsCheck"));
 
 		// Important : clean the context !!!!
 		ApigeeXmlSensor.setContext(null);
@@ -78,9 +79,9 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 	public void testSensorOnMyAwfulProxy() throws Exception {
 
 		init();
-
+		
 		// Scan the awful bundle recursively and add all file in the context
-		String basePath = "src/test/resources/apiproxy";
+		String basePath = "src/test/resources/MyAwfulProxy/apiproxy";
 		Collection<File> allFiles = FileUtils.listFiles(new File(basePath), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
 		for(Iterator<File> it = allFiles.iterator(); it.hasNext();) {
 			File f = it.next();
@@ -90,7 +91,30 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 		}
 
 		sensor.execute(context);
-		assertThat(context.allIssues()).hasSize(45);
+		assertThat(context.allIssues()).hasSize(46);
+		
+		// Important : clean the context !!!!
+		ApigeeXmlSensor.setContext(null);
+	}	
+	
+
+	@Test
+	public void testSensorOnMyAwfulSharedFlow() throws Exception {
+
+		init();
+
+		// Scan the awful bundle recursively and add all file in the context
+		String basePath = "src/test/resources/MyAwfulSharedFlow/sharedflowbundle";
+		Collection<File> allFiles = FileUtils.listFiles(new File(basePath), TrueFileFilter.INSTANCE, TrueFileFilter.INSTANCE);
+		for(Iterator<File> it = allFiles.iterator(); it.hasNext();) {
+			File f = it.next();
+			String absolutePath = f.getAbsolutePath();
+			DefaultInputFile inputFile = createInputFile(absolutePath);
+			fs.add(inputFile);
+		}
+
+		sensor.execute(context);
+		assertThat(context.allIssues()).hasSize(14);
 
 		// Important : clean the context !!!!
 		ApigeeXmlSensor.setContext(null);

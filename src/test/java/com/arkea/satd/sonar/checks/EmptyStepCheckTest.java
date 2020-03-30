@@ -30,7 +30,7 @@ public class EmptyStepCheckTest extends AbstractCheckTester {
 	private SonarXmlCheck check = new EmptyStepCheck();
 
 	@Test
-	public void test_ok() throws Exception {
+	public void test_for_proxy_ok() throws Exception {
 		Collection<Issue> issues = getIssues(check,
 				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
@@ -63,7 +63,25 @@ public class EmptyStepCheckTest extends AbstractCheckTester {
 	}
 	
 	@Test
-	public void test_ko1() throws Exception {
+	public void test_for_sharedflow_ok() throws Exception {
+		Collection<Issue> issues = getIssues(check, 
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + 
+				"<SharedFlow name=\"default\">" + 
+				"    <Step>" + 
+				"        <Name>OA-verifyAccessToken</Name>" + 
+				"        <Condition>request.verb != \"OPTIONS\"</Condition>" + 
+				"    </Step>" + 
+				"    <Step>" + 
+				"        <Name>RF-raise401</Name>" + 
+				"        <Condition>request.verb != \"OPTIONS\" and oauthV2.OA-verifyAccessToken.failed == \"true\"</Condition>" + 
+				"    </Step>" + 
+				"</SharedFlow>"
+		);
+		assertEquals(0, issues.size());
+	}
+
+	@Test
+	public void test_for_proxy_ko1() throws Exception {
 		Collection<Issue> issues = getIssues(check,
 				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
@@ -99,7 +117,7 @@ public class EmptyStepCheckTest extends AbstractCheckTester {
 	
 	
 	@Test
-	public void test_ko3() throws Exception {
+	public void test_for_proxy_ko3() throws Exception {
 		Collection<Issue> issues = getIssues(check,
 				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
@@ -136,5 +154,43 @@ public class EmptyStepCheckTest extends AbstractCheckTester {
 		);
 		assertEquals(3, issues.size());
 	}		
+	
+	@Test
+	public void test_for_sharedflow_ko1() throws Exception {
+		Collection<Issue> issues = getIssues(check, 
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + 
+				"<SharedFlow name=\"default\">" + 
+				"    <Step>" + 
+				"        <Name>OA-verifyAccessToken</Name>" + 
+				"        <Condition>request.verb != \"OPTIONS\"</Condition>" + 
+				"    </Step>" + 
+				"    <Step>" + 
+				"    </Step>" + 
+				"</SharedFlow>"
+		);
+		assertEquals(1, issues.size());
+	}
+	
+	@Test
+	public void test_for_sharedflow_ko3() throws Exception {
+		Collection<Issue> issues = getIssues(check, 
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + 
+				"<SharedFlow name=\"default\">" + 
+				"    <Step>" + 
+				"        <Name>OA-verifyAccessToken</Name>" + 
+				"        <Condition>request.verb != \"OPTIONS\"</Condition>" + 
+				"    </Step>" + 
+				"    <Step/>" + 
+				"    <Step attr=\"2\">\r\n" + 
+				"    </Step>\r\n" + 
+				"    <Step attr=\"3\">\r\n" + 
+				"    <!-- comment -->\r\n" + 
+				"    </Step>\r\n" + 
+				"</SharedFlow>"
+		);
+		assertEquals(3, issues.size());
+	}
+	
+	
 
 }

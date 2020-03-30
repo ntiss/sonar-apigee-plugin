@@ -56,7 +56,8 @@ public class DescriptionPatternCheck extends SonarXmlCheck {
 	public void scanFile(XmlFile xmlFile) {
 		
 	    Document document = xmlFile.getDocument();
-	    if (document.getDocumentElement() != null && "APIProxy".equals(document.getDocumentElement().getNodeName())) {
+	    if (document.getDocumentElement() != null && ("APIProxy".equals(document.getDocumentElement().getNodeName()) || 
+	    											  "SharedFlowBundle".equals(document.getDocumentElement().getNodeName()))) {
 
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
 		    XPath xpath = xPathfactory.newXPath();

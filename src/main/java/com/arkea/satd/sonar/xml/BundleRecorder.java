@@ -63,14 +63,14 @@ public class BundleRecorder {
 	    	
 	    	String rootNodeName = document.getDocumentElement().getNodeName();
 	    	
-	    	if("ProxyEndpoint".equals(rootNodeName)) {
-				// ProxyEndpoint storage
+	    	if("ProxyEndpoint".equals(rootNodeName) || "SharedFlow".equals(rootNodeName)) {
+				// ProxyEndpoint and SharedFlow storage
 		    	proxiesEndpoint.put(fileName, xmlFile);
 	    	} else if ("TargetEndpoint".equals(rootNodeName)) {
 				// TargetEndpoint storage
 		    	targetsEndpoint.put(fileName, xmlFile);
-	    	} else if ("APIProxy".equals(rootNodeName) || "Manifest".equals(rootNodeName)) {
-				// APIProxy & Manifest storage
+	    	} else if ("APIProxy".equals(rootNodeName) || "SharedFlowBundle".equals(rootNodeName) || "Manifest".equals(rootNodeName)) {
+				// APIProxy, SharedFlowBundle & Manifest storage
 		    	// No need to store for the moment 
 	    	} else if ("xsl:stylesheet".equals(rootNodeName) || "wsdl:definitions".equals(rootNodeName) || "xs:schema".equals(rootNodeName) ) {
 				// Resource storage
@@ -99,7 +99,7 @@ public class BundleRecorder {
 		fullXmlFile.addAll(targetsEndpoint.values());
 		
 		
-		// Search for "stepName" in both ProxyEndpoint and TargetEndpoint
+		// Search for "stepName" in both ProxyEndpoint, SharedFlow and TargetEndpoint
 		for(XmlFile currentXml : fullXmlFile) {
 			Document document = currentXml.getDocument();
 			try {
