@@ -86,7 +86,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_multiplication_x:| BN004 | &nbsp; | Unused variables. | Within a bundle variables created should be used in conditions, resource callouts, or policies. |
 |:heavy_check_mark:| BN005 | Minor | Unattached policies. | Unattached policies are dead code and should be removed from production bundles. |
 |:heavy_check_mark:| BN006 | &nbsp; | Bundle size - policies. | Large bundles are a symptom of poor design. A high number of policies is predictive of an oversized bundle. |
-|:heavy_multiplication_x:| BN007 | &nbsp; | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. |
+|:heavy_check_mark:| BN007 | &nbsp; | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. The threshold is defined in the Quality Profile. Default value is 20. |
 |:heavy_multiplication_x:| BN008 | &nbsp; | IgnoreUnresolvedVariables and FaultRules | Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors. |
 |:heavy_multiplication_x:| BN009 | &nbsp; | Statistics Collector - duplicate policies | Warn on duplicate policies when no conditions are present or conditions are duplicates. |
 |:heavy_check_mark:| BN500 | Info | Description length | A Description tag should have more than N chars to be useful. "N" can be modified in the Quality Profile. The default value is 5. |
@@ -100,7 +100,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| PD001 | Blocker | RouteRules to Targets | RouteRules should map to defined Targets |
 |:heavy_check_mark:| PD002 | Blocker | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
 |:heavy_check_mark:| PD003 | Blocker | Unreachable Route Rules | RouteRule without a condition should be last. |
-|:heavy_check_mark:| PD501 | Major | Too much proxy endpoints | Discourage the declaration of multiple proxy endpoints in a same proxy. . The threshold is defined in the Quality Profile. Default value is 2. |
+|:heavy_check_mark:| PD501 | Major | Too much proxy endpoints | Discourage the declaration of multiple proxy endpoints in a same proxy. The threshold is defined in the Quality Profile. Default value is 2. |
 
 
 ### Target Definition level
