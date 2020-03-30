@@ -42,6 +42,10 @@
     <TargetServers/>
     <TargetEndpoints>
         <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>default</TargetEndpoint>
+        <TargetEndpoint>default</TargetEndpoint>
         <TargetEndpoint>inexistantTarget</TargetEndpoint>
     </TargetEndpoints>
 </APIProxy>
