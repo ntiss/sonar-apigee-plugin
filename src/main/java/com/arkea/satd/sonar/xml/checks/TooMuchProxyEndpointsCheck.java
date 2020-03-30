@@ -46,8 +46,8 @@ public class TooMuchProxyEndpointsCheck extends SonarXmlCheck {
 		return maxAllowedEndpoints;
 	}
 
-	public void setMaxAllowedEndpoints(int maxAllowedTargets) {
-		this.maxAllowedEndpoints = maxAllowedTargets;
+	public void setMaxAllowedEndpoints(int maxAllowedEndpoints) {
+		this.maxAllowedEndpoints = maxAllowedEndpoints;
 	}
 
 	@Override
