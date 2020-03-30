@@ -1,0 +1,15 @@
+{
+  "title": "Large bundles are a symptom of poor design",
+  "type": "CODE_SMELL",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "60min"
+  },
+  "tags": [
+  	"apigee",
+    "convention",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major"
+}

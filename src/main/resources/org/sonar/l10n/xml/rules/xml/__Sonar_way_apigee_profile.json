@@ -18,6 +18,7 @@
 	"ServiceCalloutRequestVariableNameCheck",
 	"ServiceCalloutResponseVariableNameCheck",
 	"ThreatProtectionCheck",
+	"TooMuchPoliciesCheck",
 	"TooMuchProxyEndpointsCheck",
 	"TooMuchTargetEndpointsCheck",
 	"UnattachedPolicyCheck",

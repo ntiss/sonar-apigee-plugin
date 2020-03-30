@@ -35,6 +35,7 @@ import com.arkea.satd.sonar.xml.checks.RouteRulesToTargetCheck;
 import com.arkea.satd.sonar.xml.checks.ServiceCalloutRequestVariableNameCheck;
 import com.arkea.satd.sonar.xml.checks.ServiceCalloutResponseVariableNameCheck;
 import com.arkea.satd.sonar.xml.checks.ThreatProtectionCheck;
+import com.arkea.satd.sonar.xml.checks.TooMuchPoliciesCheck;
 import com.arkea.satd.sonar.xml.checks.TooMuchProxyEndpointsCheck;
 import com.arkea.satd.sonar.xml.checks.TooMuchTargetEndpointsCheck;
 import com.arkea.satd.sonar.xml.checks.UnattachedPolicyCheck;
@@ -83,6 +84,7 @@ public class CheckRepository {
 				ServiceCalloutRequestVariableNameCheck.class,
 				ServiceCalloutResponseVariableNameCheck.class,
 				ThreatProtectionCheck.class,
+				TooMuchPoliciesCheck.class,
 				TooMuchProxyEndpointsCheck.class,
 				TooMuchTargetEndpointsCheck.class,
 				UnattachedPolicyCheck.class,
