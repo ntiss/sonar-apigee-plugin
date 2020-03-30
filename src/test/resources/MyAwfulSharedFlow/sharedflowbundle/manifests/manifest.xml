@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Manifest name="manifest">
+    <Policies>
+        <VersionInfo resourceName="Extract-Variables-1" version="SHA-512:866d2947d7535ad57873362febc7f2cc6774d3719344b5da7f5e00c72ade83ec8d1f39d316f0c3f8335e951702159e449482c641b2ee28e513a6c267f0ef6967"/>
+        <VersionInfo resourceName="JSON-Threat-Protection-1" version="SHA-512:22d7bc3c235902cf738a2625e1ffd05e29e39c5c22d3ea3cab660868d2244889ca7ce366755d9bd8cf85e5ef2702635d0759c7a157e5c91f98fea3e43f7d29b7"/>
+        <VersionInfo resourceName="Lookup-Cache-1" version="SHA-512:c7ad60d9a4c9ad61749c9fa9f800c9b8423fd72071634d2816c869ef30a7fbbf110c54d9eeb01a3d8fa20c1dabe813fe07021586361119ce7b7ccafbd1995da2"/>
+        <VersionInfo resourceName="Python-1" version="SHA-512:675d9b61602685d341f0f10babd2e9b23641af49c8f604443ecf0a345453d0986c64624b1aa9465105580c7fe0d6370218e84aa3d4bfadea0b5670a2d897b9b5"/>
+        <VersionInfo resourceName="Unused-Raise-Fault-1" version="SHA-512:f7076f644e6a8e56d72b213c0ed09142950adbed7fbe79c7feab4f67289a59419047a672e93cd1f7d0b7793f12f9301e4956d067aa0eb2316312720033d44ae6"/>
+    </Policies>
+    <ProxyEndpoints/>
+    <Resources>
+        <VersionInfo resourceName="jsc://UnattachedScript-1.js" version="SHA-512:20e82d1c33c1a43743ab65b6786fa39b518e191a5159dd08be023120e0dcb49daa61f8f5cbb3e40f2db8d2fdc0952807a9813131a204cff745b5b8eb94ba3ffb"/>
+        <VersionInfo resourceName="py://Python-1.py" version="SHA-512:c5598b2a4cf65aea268368d9b0e067f7d1ba66f69e076392a40ce194eed8c3a8f45c965c9115b0d34a7d86e4165d3d0908f6f2b8de4c225e41590240251370d3"/>
+    </Resources>
+    <SharedFlows>
+        <VersionInfo resourceName="default" version="SHA-512:bfd0e3b105869e244e3c6e546f4b6a12b9b6479242c3c33406d706dab4aa8e4a80d8a79c123a28ebcd140df9418cdc027874b5cbb77eda840b4043cbc73efa7e"/>
+    </SharedFlows>
+    <TargetEndpoints/>
+</Manifest>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SharedFlow name="default">
+    <Step>
+        <Name>JSON-Threat-Protection-1</Name>
+    </Step>
+    <Step>
+        <Name>Lookup-Cache-1</Name>
+    </Step>
+    <Step>
+        <Name>Extract-Variables-1</Name>
+    </Step>
+    <Step>
+        <Name>Python-1</Name>
+    </Step>
+</SharedFlow>
