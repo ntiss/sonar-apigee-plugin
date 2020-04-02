@@ -47,7 +47,7 @@ public class AvoidPythonCheck extends SonarXmlCheck {
 		    XPath xpath = xPathfactory.newXPath();
 		    
 		    try {
-		    	// Select in one shot the Description which are too short
+		    	// Select in one shot the ResourceURL starting with py://
 			    Node resourceURLNode = (Node)xpath.evaluate("//Script//ResourceURL[starts-with(., 'py://')]", document, XPathConstants.NODE);
 
 		    	if(resourceURLNode!=null) {
