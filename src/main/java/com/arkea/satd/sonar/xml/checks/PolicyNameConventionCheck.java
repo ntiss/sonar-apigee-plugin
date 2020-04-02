@@ -88,7 +88,7 @@ public class PolicyNameConventionCheck extends SonarXmlCheck {
 		supportedPolicies.put("MessageValidation", Arrays.asList("messagevalidation", "mv", "messval") );
 		supportedPolicies.put("SpikeArrest", Arrays.asList("spikearrest", "spike", "sa") );
 		supportedPolicies.put("SharedFlow", Arrays.asList("sf") );
-		supportedPolicies.put("StatisticsCollector", Arrays.asList("stats", "statcoll") );
+		supportedPolicies.put("StatisticsCollector", Arrays.asList("stats", "statcoll", "sc", "___collect") );
 		supportedPolicies.put("VerifyAPIKey", Arrays.asList("verifyapikey", "apikey", "va", "verify") );
 		supportedPolicies.put("XMLThreatProtection", Arrays.asList("xmltp", "tp") );
 		supportedPolicies.put("XMLToJSON", Arrays.asList("xmltojson", "x2j", "xtoj") );
