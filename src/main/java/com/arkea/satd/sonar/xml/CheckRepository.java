@@ -32,6 +32,7 @@ import com.arkea.satd.sonar.xml.checks.NondistributedQuotaCheck;
 import com.arkea.satd.sonar.xml.checks.PolicyDisplayNameCheck;
 import com.arkea.satd.sonar.xml.checks.PolicyNameConventionCheck;
 import com.arkea.satd.sonar.xml.checks.RegexLookAroundCheck;
+import com.arkea.satd.sonar.xml.checks.ResponseCacheErrorResponseCheck;
 import com.arkea.satd.sonar.xml.checks.RouteRulesToTargetCheck;
 import com.arkea.satd.sonar.xml.checks.ServiceCalloutRequestVariableNameCheck;
 import com.arkea.satd.sonar.xml.checks.ServiceCalloutResponseVariableNameCheck;
@@ -83,6 +84,7 @@ public class CheckRepository {
 				PolicyDisplayNameCheck.class,
 				PolicyNameConventionCheck.class,
 				RegexLookAroundCheck.class,
+				ResponseCacheErrorResponseCheck.class,
 				RouteRulesToTargetCheck.class,
 				ServiceCalloutRequestVariableNameCheck.class,
 				ServiceCalloutResponseVariableNameCheck.class,

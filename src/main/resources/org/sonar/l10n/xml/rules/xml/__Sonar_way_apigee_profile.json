@@ -15,6 +15,7 @@
 	"PolicyDisplayNameCheck",
 	"PolicyNameConventionCheck",
 	"RegexLookAroundCheck",
+	"ResponseCacheErrorResponseCheck",
 	"RouteRulesToTargetCheck",
 	"ServiceCalloutRequestVariableNameCheck",
 	"ServiceCalloutResponseVariableNameCheck",

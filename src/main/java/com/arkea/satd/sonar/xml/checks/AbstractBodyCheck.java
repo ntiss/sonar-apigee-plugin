@@ -48,9 +48,12 @@ public abstract class AbstractBodyCheck extends SonarXmlCheck {
 	 * This method performs a check on the Condition tag that is applied to the concerned step 
 	 * @param stepName name of the step to work on
 	 * @param pattern the regex to check
+	 * @return true if an issue has been reported
 	 */
-	protected void checkConditionInStepOrParent(String stepName, String pattern) {
-
+	protected boolean checkConditionInStepOrParent(String stepName, String pattern) {
+		
+		boolean hasIssue = false;
+		
 		XPathFactory xPathfactory = XPathFactory.newInstance();
 	    XPath xpath = xPathfactory.newXPath();
 
@@ -73,7 +76,7 @@ public abstract class AbstractBodyCheck extends SonarXmlCheck {
 					
 					// Analyse the content of the condition
 					Matcher matcher = ptrn.matcher(condition);	    
-					boolean hasIssue = !matcher.find();
+					hasIssue = !matcher.find();
 					
 					// Check also on flow condition :
 					// if the parent is a flow we might revert the decision if it has an appropriate condition
@@ -104,5 +107,7 @@ public abstract class AbstractBodyCheck extends SonarXmlCheck {
 		} catch (XPathExpressionException e) {
 			// Nothing to do
 		}
+		
+		return hasIssue;
 	}
 }
