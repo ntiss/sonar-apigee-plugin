@@ -15,6 +15,7 @@
 	"NondistributedQuotaCheck",
 	"PolicyDisplayNameCheck",
 	"PolicyNameConventionCheck",
+	"QuotaPolicyReuseCheck",
 	"RegexLookAroundCheck",
 	"ResponseCacheErrorResponseCheck",
 	"RouteRulesToTargetCheck",
