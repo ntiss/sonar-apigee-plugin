@@ -28,6 +28,7 @@ import com.arkea.satd.sonar.xml.checks.EmptyStepCheck;
 import com.arkea.satd.sonar.xml.checks.ExtractVariablesCheck;
 import com.arkea.satd.sonar.xml.checks.FaultRuleAndDefaultFaultRuleCheck;
 import com.arkea.satd.sonar.xml.checks.FaultRuleConditionCheck;
+import com.arkea.satd.sonar.xml.checks.NondistributedQuotaCheck;
 import com.arkea.satd.sonar.xml.checks.PolicyDisplayNameCheck;
 import com.arkea.satd.sonar.xml.checks.PolicyNameConventionCheck;
 import com.arkea.satd.sonar.xml.checks.RegexLookAroundCheck;
@@ -78,6 +79,7 @@ public class CheckRepository {
 				ExtractVariablesCheck.class,
 				FaultRuleAndDefaultFaultRuleCheck.class,
 				FaultRuleConditionCheck.class,
+				NondistributedQuotaCheck.class,
 				PolicyDisplayNameCheck.class,
 				PolicyNameConventionCheck.class,
 				RegexLookAroundCheck.class,
