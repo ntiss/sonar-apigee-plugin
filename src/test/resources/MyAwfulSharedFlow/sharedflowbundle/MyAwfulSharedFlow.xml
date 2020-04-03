@@ -14,6 +14,7 @@
         <Policy>Lookup-Cache-1</Policy>
         <Policy>Python-1</Policy>
         <Policy>Unused-Raise-Fault-1</Policy>
+        <Policy>theResponseCache</Policy>
     </Policies>
     <Resources>
         <Resource>py://Python-1.py</Resource>

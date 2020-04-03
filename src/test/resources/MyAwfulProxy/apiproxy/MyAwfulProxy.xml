@@ -23,6 +23,9 @@
         <Policy>Spike-Arrest-1</Policy>
         <Policy>Verify-API-Key-1</Policy>
         <Policy>XSL-Transform-1</Policy>
+        <Policy>theResponseCache</Policy>
+        <Policy>__collect-statistics-request__</Policy>
+        <Policy>__collect-statistics-request2__</Policy>
         <Policy>add-cors</Policy>
     </Policies>
     <ProxyEndpoints>
