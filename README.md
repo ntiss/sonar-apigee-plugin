@@ -139,7 +139,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| PO009 | Major | Service Callout Target - Mgmt Server | Targeting management server may result in higher than expected latency use with caution. |
 |:heavy_multiplication_x:| PO010 | &nbsp; | Service Callout Target - Target Server | Encourage use of target servers. |
 |:heavy_multiplication_x:| PO011 | &nbsp; | Service Callout Target - Dynamic URLs | Error on dynamic URLs in target server URL tag. |
-|:heavy_multiplication_x:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. |
+|:o:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. This Sonarqube plugin is not a linter. |
 |:o:| PO013 | &nbsp; | Resource Call Out - Javascript | Analyzed by sonar-javascript-plugin. |
 |:o:| PO014 | &nbsp; | Resource Call Out - Java |  Analyzed by sonar-java-plugin. |
 |:o:| PO015 | &nbsp; | Resource Call Out - Python |  Analyzed by sonar-python-plugin. |
