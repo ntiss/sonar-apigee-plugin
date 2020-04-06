@@ -85,10 +85,10 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| BN003 | Major | Cache Coherence | A bundle that includes cache reads should include cache writes with the same keys. |
 |:heavy_multiplication_x:| BN004 | &nbsp; | Unused variables. | Within a bundle variables created should be used in conditions, resource callouts, or policies. |
 |:heavy_check_mark:| BN005 | Minor | Unattached policies. | Unattached policies are dead code and should be removed from production bundles. |
-|:heavy_check_mark:| BN006 | &nbsp; | Bundle size - policies. | Large bundles are a symptom of poor design. A high number of policies is predictive of an oversized bundle. The threshold is defined in the Quality Profile. Default value is 20. |
-|:heavy_check_mark:| BN007 | &nbsp; | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. The threshold is defined in the Quality Profile. Default value is 20. |
+|:heavy_check_mark:| BN006 | Major | Bundle size - policies. | Large bundles are a symptom of poor design. A high number of policies is predictive of an oversized bundle. The threshold is defined in the Quality Profile. Default value is 20. |
+|:heavy_check_mark:| BN007 | Major | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. The threshold is defined in the Quality Profile. Default value is 20. |
 |:heavy_multiplication_x:| BN008 | &nbsp; | IgnoreUnresolvedVariables and FaultRules | Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors. |
-|:heavy_check_mark:| BN009 | &nbsp; | Statistics Collector - duplicate policies | Warn on duplicate policies when no conditions are present or conditions are duplicates. |
+|:heavy_check_mark:| BN009 | Major | Statistics Collector - duplicate policies | Warn on duplicate policies when no conditions are present or conditions are duplicates. |
 |:heavy_check_mark:| BN500 | Info | Description length | A Description tag should have more than N chars to be useful. "N" can be modified in the Quality Profile. The default value is 5. |
 |:heavy_check_mark:| BN501 | Blocker | Description pattern | The Description of the APIProxy must be compliant with a pattern defined in the Quality Profile. For example : `.*\(code=([A-Z0-9]{4})\).*`. The default pattern is  `.*` |
 |:heavy_check_mark:| BN502 | Minor | Unattached resources. | Unattached resources are dead code and should be removed from production bundles. This rule only checks XSL, XSD and  WSDL resources. Don't forget to add `.wsdl` as suffix to be analyzed in the XMLPlugin administration. |
@@ -149,9 +149,9 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| PO019 | Major | Reserved words as variables - ServiceCallout Request | Using "request" as the name of a Request may cause unexpected side effects.|
 |:heavy_check_mark:| PO020 | Major | Reserved words as variables - ServiceCallout Response | Using "response" as the name of a Response may cause unexpected side effects.|
 |:heavy_multiplication_x:| PO021 | &nbsp; | Statistics Collector - reserved variables | Warn on insertion of duplicate variables. |
-|:heavy_check_mark:| PO022 | &nbsp; | Nondistributed Quota | When using nondistributed quota the number of allowed calls is influenced by the number of Message Processors (MPs) deployed. This may lead to higher than expected transactions for a given quota as MPs now autoscale. |
-|:heavy_check_mark:| PO023 | &nbsp; | Quota Policy Reuse | When the same Quota policy is used more than once you must ensure that the conditions of execution are mutually exclusive or that you intend for a call to count more than once per message processed. |
-|:heavy_check_mark:| PO024 | &nbsp; | Cache Error Responses | By default the ResponseCache policy will cache non 200 responses. Either create a condition or use policy configuration options to exclude non 200 responses. |
+|:heavy_check_mark:| PO022 | Major | Nondistributed Quota | When using nondistributed quota the number of allowed calls is influenced by the number of Message Processors (MPs) deployed. This may lead to higher than expected transactions for a given quota as MPs now autoscale. |
+|:heavy_check_mark:| PO023 | Major | Quota Policy Reuse | When the same Quota policy is used more than once you must ensure that the conditions of execution are mutually exclusive or that you intend for a call to count more than once per message processed. |
+|:heavy_check_mark:| PO024 | Major | Cache Error Responses | By default the ResponseCache policy will cache non 200 responses. Either create a condition or use policy configuration options to exclude non 200 responses. |
 |:heavy_check_mark:| PO500 | Major | Avoid Python language | Python scripts can introduce performance bottlenecks for simple executions, as it is interpreted at runtime. |
 
 
