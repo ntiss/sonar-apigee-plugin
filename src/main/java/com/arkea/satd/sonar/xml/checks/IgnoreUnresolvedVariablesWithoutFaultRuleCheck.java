@@ -53,20 +53,15 @@ public class IgnoreUnresolvedVariablesWithoutFaultRuleCheck extends SonarXmlChec
 		    try {
 				Node ignoreUnresolvedVariablesNode = (Node)xpath.evaluate("//IgnoreUnresolvedVariables/[text()='true']", document, XPathConstants.NODE);
 		    	
-				boolean isIgnoreUnresolvedVariablesEnabled = false;
-				if(ignoreUnresolvedVariablesNode!=null) {
-					isIgnoreUnresolvedVariablesEnabled = true;
-				} else {
+				boolean isIgnoreUnresolvedVariablesEnabled = ignoreUnresolvedVariablesNode!=null;
+				if(ignoreUnresolvedVariablesNode==null) {
 					// Be careful, the default value of <IgnoreUnresolvedVariables> depends on the policy type !!
 					// So if the tag is absent, it could be either "true" or "false"
 					String policyType = (String)xpath.evaluate("/n(a)me", document, XPathConstants.STRING);
 					
 					// These policies assume that no tag means "true". Ugly?
-					List<String> defaultAtTrue = Arrays.asList(new String[]{"AssignMessage", "BasicAuthentication", "RaiseFault"});
-					
-					if(defaultAtTrue.contains(policyType)) {
-						isIgnoreUnresolvedVariablesEnabled = true;
-					}
+					List<String> defaultAtTrue = Arrays.asList("AssignMessage", "BasicAuthentication", "RaiseFault");
+					isIgnoreUnresolvedVariablesEnabled = defaultAtTrue.contains(policyType);
 				}
 				
 		    	if(isIgnoreUnresolvedVariablesEnabled) {
@@ -79,9 +74,13 @@ public class IgnoreUnresolvedVariablesWithoutFaultRuleCheck extends SonarXmlChec
 		    		for(XmlFile currentXmlFile : endpointsList) {
 		    			NodeList faultRuleNodeList = (NodeList)xpath.evaluate("//[(name()='FaultRule' or name()='DefaultFaultRule')]", currentXmlFile.getDocument(), XPathConstants.NODESET);
 		    			
+		    			Node issueLocation = ignoreUnresolvedVariablesNode;
+		    			if(issueLocation==null) {
+		    				issueLocation = document;
+		    			}
 		    			// Report an issue if there is no FaultRule nor DefaultFaultRule
 		    			if(faultRuleNodeList.getLength()==0) {
-		    				reportIssue(ignoreUnresolvedVariablesNode, "Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors.");
+		    				reportIssue(issueLocation, "Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors.");
 		    				break;
 		    			}
 		    		}

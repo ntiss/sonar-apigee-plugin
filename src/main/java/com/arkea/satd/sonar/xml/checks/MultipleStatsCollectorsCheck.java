@@ -140,55 +140,51 @@ public class MultipleStatsCollectorsCheck extends SonarXmlCheck {
 		    					}	
 		    					String stepJBreadcrumb = stepJGrandParentNodeName + "/" + stepJParentNodeName + "@" + stepJFlowName + "/" + stepJ.hashCode();
 		    					
-		    					if(!stepIBreadcrumb.equals(stepJBreadcrumb)) {  // Exclude the comparison with itself
-			    					// And now the big condition bunch...
-			    					if ((isIAttachedToGlobalFlow   & isJAttachedToGlobalFlow )   ||                                 // Two policies are in the same global flow
-			    						(isIAttachedToDefaultFault & isJAttachedToDefaultFault ) ||                                 // Two policies are in the same defaultFaultRule
-			    						(isIAttachedToFlow         & isJAttachedToFlow  & stepIFlowName.equals(stepJFlowName) ) ||  // Two policies are in the same flow (exact name)
-			    						(isIAttachedToFault        & isJAttachedToFault & stepIFlowName.equals(stepJFlowName) ) ||  // Two policies are in the same faultRule (exact name)
-			    						(isIAttachedToFlow         & isJAttachedToGlobalFlow )   ||                                 // A policy in a Flow, the other in PreFlow or PostFlow
-			    						(isIAttachedToGlobalFlow         & isJAttachedToFlow )                                      // A policy in PreFlow or PostFlow, the other in a Flow
-			    						) {
-			    						
-			    						// Check that all steps have a non-null <Condition>
-    									String conditionI = (String)xpath.evaluate("Condition/text()", stepI, XPathConstants.STRING);
-    									boolean noConditionForStepI = conditionI==null || conditionI.isEmpty() || "true".equals(conditionI);
-    									
-    									String conditionJ = (String)xpath.evaluate("Condition/text()", stepJ, XPathConstants.STRING);
-    									boolean noConditionForStepJ = conditionJ==null || conditionJ.isEmpty() || "true".equals(conditionJ);
-    									
-    									if(noConditionForStepI || noConditionForStepJ) {
-    										
-	    									// Report the issue at the policy level
-	    									if(!hasIssueAtPolicyLevel && stepIName.equals(currentPolicyAttrName)) {
-	    										reportIssue(document.getDocumentElement(), "This policy is attached to a step without a condition. If you have more than two Statistics Collector policies, only the last one in the flow will execute.  Include a condition to make sure the correct one executes.");
-	    										// Don't trigger this issue multiple times
-	    										hasIssueAtPolicyLevel = true;
-	    									}
-    										
-    										// Report also the issue next to the StepI node
-	    									final NewIssue issueStepI = ApigeeXmlSensor.getContext().newIssue();
-	    									final XmlTextRange textRangeStepI = XmlFile.nodeLocation(stepI);
-	    									
-	    									XmlFile stepIXmlFile = collectorsStepsMap.get(stepI);
-	    									NewIssueLocation locationStepI = issueStepI.newLocation()
-	    											.on((InputComponent) stepIXmlFile.getInputFile())
-	    											.at(stepIXmlFile.getInputFile().newRange(textRangeStepI.getStartLine(), textRangeStepI.getStartColumn(), textRangeStepI.getEndLine(), textRangeStepI.getEndColumn()))
-	    											.message("This policy is attached to a step without a condition. If you have more than two Statistics Collector policies, only the last one in the flow will execute.  Include a condition to make sure the correct one executes.");
-
-	    									issueStepI.at(locationStepI)
-	    										.forRule(ruleKey())
-	    										.save(); // Mandatory to "commit" the issue in the final report		
-    						
-    										// Don't report the issue  to the StepJ node
-	    									// It will be done during the double loop iteration
-	
+		    					if(!stepIBreadcrumb.equals(stepJBreadcrumb) &&  // Exclude the comparison with itself
+			    					 (  (isIAttachedToGlobalFlow   && isJAttachedToGlobalFlow )   ||                                  // Two policies are in the same global flow
+			    						(isIAttachedToDefaultFault && isJAttachedToDefaultFault ) ||                                  // Two policies are in the same defaultFaultRule
+			    						(isIAttachedToFlow         && isJAttachedToFlow  && stepIFlowName.equals(stepJFlowName) ) ||  // Two policies are in the same flow (exact name)
+			    						(isIAttachedToFault        && isJAttachedToFault && stepIFlowName.equals(stepJFlowName) ) ||  // Two policies are in the same faultRule (exact name)
+			    						(isIAttachedToFlow         && isJAttachedToGlobalFlow )   ||                                  // A policy in a Flow, the other in PreFlow or PostFlow
+			    						(isIAttachedToGlobalFlow   && isJAttachedToFlow )                                             // A policy in PreFlow or PostFlow, the other in a Flow
+			    					 )) {
+		    						
+		    						// Check that all steps have a non-null <Condition>
+									String conditionI = (String)xpath.evaluate("Condition/text()", stepI, XPathConstants.STRING);
+									boolean noConditionForStepI = conditionI==null || conditionI.isEmpty() || "true".equals(conditionI);
+									
+									String conditionJ = (String)xpath.evaluate("Condition/text()", stepJ, XPathConstants.STRING);
+									boolean noConditionForStepJ = conditionJ==null || conditionJ.isEmpty() || "true".equals(conditionJ);
+									
+									if(noConditionForStepI || noConditionForStepJ) {
+										
+    									// Report the issue at the policy level
+    									if(!hasIssueAtPolicyLevel && stepIName.equals(currentPolicyAttrName)) {
+    										reportIssue(document.getDocumentElement(), "This policy is attached to a step without a condition. If you have more than two Statistics Collector policies, only the last one in the flow will execute.  Include a condition to make sure the correct one executes.");
+    										// Don't trigger this issue multiple times
+    										hasIssueAtPolicyLevel = true;
     									}
-			    					}
+										
+										// Report also the issue next to the StepI node
+    									final NewIssue issueStepI = ApigeeXmlSensor.getContext().newIssue();
+    									final XmlTextRange textRangeStepI = XmlFile.nodeLocation(stepI);
+    									
+    									XmlFile stepIXmlFile = collectorsStepsMap.get(stepI);
+    									NewIssueLocation locationStepI = issueStepI.newLocation()
+    											.on((InputComponent) stepIXmlFile.getInputFile())
+    											.at(stepIXmlFile.getInputFile().newRange(textRangeStepI.getStartLine(), textRangeStepI.getStartColumn(), textRangeStepI.getEndLine(), textRangeStepI.getEndColumn()))
+    											.message("This policy is attached to a step without a condition. If you have more than two Statistics Collector policies, only the last one in the flow will execute.  Include a condition to make sure the correct one executes.");
 
+    									issueStepI.at(locationStepI)
+    										.forRule(ruleKey())
+    										.save(); // Mandatory to "commit" the issue in the final report		
+						
+										// Don't report the issue  to the StepJ node
+    									// It will be done during the double loop iteration
+
+									}
 		    					}
-		    					
-		    				}	    					
+	    					}
 	    				}
 	    			}
 			    

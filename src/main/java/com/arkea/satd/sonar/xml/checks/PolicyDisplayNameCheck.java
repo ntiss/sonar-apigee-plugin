@@ -66,7 +66,6 @@ public class PolicyDisplayNameCheck extends SonarXmlCheck {
 	
 				} catch (XPathExpressionException e) {
 					// Nothing to do
-					e.printStackTrace();
 				}
 		    }	
 		}
