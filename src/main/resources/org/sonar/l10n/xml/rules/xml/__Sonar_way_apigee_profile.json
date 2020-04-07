@@ -11,6 +11,7 @@
 	"ExtractVariablesCheck",
 	"FaultRuleAndDefaultFaultRuleCheck",
 	"FaultRuleConditionCheck",
+	"IgnoreUnresolvedVariablesWithoutFaultRuleCheck",
 	"MultipleStatsCollectorsCheck",
 	"NondistributedQuotaCheck",
 	"PolicyDisplayNameCheck",
