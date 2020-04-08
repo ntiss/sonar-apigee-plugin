@@ -1,0 +1,14 @@
+{
+  "title": "Warn on duplicate policies when no conditions are present or conditions are duplicates..",
+  "type": "BUG",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+  	"apigee",
+    "bug"
+  ],
+  "defaultSeverity": "Major"
+}

@@ -47,7 +47,7 @@ public class EmptyStepCheck extends SonarXmlCheck {
 	    
 	    try {
 	    	// Select in one shot the Step nodes which are empty
-		    XPathExpression exprDisplayName = xpath.compile("//ProxyEndpoint//Step[not(normalize-space())]");
+		    XPathExpression exprDisplayName = xpath.compile("//*[name() = 'ProxyEndpoint' or name() = 'SharedFlow']//Step[not(normalize-space())]");
 		    NodeList descriptionNodeList = (NodeList)exprDisplayName.evaluate(document, XPathConstants.NODESET);
 
 	    	if(descriptionNodeList!=null) {

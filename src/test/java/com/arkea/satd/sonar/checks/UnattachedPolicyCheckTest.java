@@ -58,7 +58,6 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 				"    <Properties/>\r\n" + 
 				"    <APIKey ref=\"request.header.apikey\"/>\r\n" + 
 				"</VerifyAPIKey>";
-//		BundleRecorder.storeFile(createTempFile("proxyEndpoint.xml", thePolicy));
 		
 		Collection<Issue> issues = getIssues(check, thePolicy);
 		assertEquals(0, issues.size());
@@ -92,12 +91,36 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 				"    <DisplayName>Assign Message-UsedInFaultRule</DisplayName>\r\n" + 
 				"    <Properties/>\r\n" + 
 				"</AssignMessage>";
-//		BundleRecorder.storeFile(createTempFile("proxyEndpoint.xml", thePolicy));
 		
 		Collection<Issue> issues = getIssues(check, thePolicy);
 		assertEquals(0, issues.size());
 	}
 		
+	@Test
+	public void test_ok_forSharedFlow() throws Exception {
+		
+		// Fake ProxyEndpoint file
+		XmlFile sharedFlowXML = createTempFile("sharedFlow.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + 
+				"<SharedFlow name=\"default\">" + 
+				"    <Step>" + 
+				"        <Name>OA-verifyAccessToken</Name>" + 
+				"        <Condition>request.verb != \"OPTIONS\"</Condition>" + 
+				"    </Step>" + 
+				"</SharedFlow>" 
+				);
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(sharedFlowXML);
+
+		String thePolicy = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<OAuthV2 async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"OA-verifyAccessToken\">\r\n" + 
+				"    <DisplayName>OA-verifyAccessToken</DisplayName>\r\n" + 
+				"    <Properties/>\r\n" + 
+				"    <Operation>VerifyAccessToken</Operation>\r\n" + 
+				"</OAuthV2>";
+
+		Collection<Issue> issues = getIssues(check, thePolicy);
+		assertEquals(0, issues.size());
+	}
 	
 	@Test
 	public void test_ko() throws Exception {
@@ -137,7 +160,43 @@ public class UnattachedPolicyCheckTest extends AbstractCheckTester {
 		assertEquals(thePolicyFilename, dif.filename());
 		
 	}
+
+	@Test
+	public void test_ko_forSharedFlow() throws Exception {
+		
+		// Fake SharedFlow file
+		XmlFile sharedFlowXML = createTempFile("sharedFlow.xml", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>" + 
+				"<SharedFlow name=\"default\">" + 
+				"    <Step>" + 
+				"        <Name>OA-verifyAccessToken-2</Name>" + 
+				"        <Condition>request.verb != \"OPTIONS\"</Condition>" + 
+				"    </Step>" + 
+				"</SharedFlow>" 
+				);
+		BundleRecorder.clear();
+		BundleRecorder.storeFile(sharedFlowXML);
+
+		
+		String thePolicyFilename = "thePolicy.xml";
+		XmlFile thePolicy = createTempFile(thePolicyFilename, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<OAuthV2 async=\"false\" continueOnError=\"false\" enabled=\"true\" name=\"OA-verifyAccessToken\">\r\n" + 
+				"    <DisplayName>OA-verifyAccessToken</DisplayName>\r\n" + 
+				"    <Properties/>\r\n" + 
+				"    <Operation>VerifyAccessToken</Operation>\r\n" + 
+				"</OAuthV2>");
+		BundleRecorder.storeFile(thePolicy);
+
+		Collection<Issue> issues = getIssues(check, thePolicy);
+		assertEquals(1, issues.size());
+
+		// assert also the location of the issue
+		Issue iss = issues.toArray(new Issue[] {})[0];
+		DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
+		assertEquals(thePolicyFilename, dif.filename());
+		
+}
 	
+
 	@Test
 	public void test_ok_exclude_manifest() throws Exception {
 

@@ -53,36 +53,46 @@ public class PolicyNameConventionCheck extends SonarXmlCheck {
 		supportedPolicies.put("LookupCache", Arrays.asList("lookup", "lu", "lucache", "cache", "lc") );
 		supportedPolicies.put("PopulateCache", Arrays.asList("populate", "pop", "populatecache", "pc", "cache") );
 		supportedPolicies.put("ResponseCache", Arrays.asList("responsecache", "rc", "cache") );
+		supportedPolicies.put("ConcurrentRatelimit", Arrays.asList("concurrentratelimit", "crl", "cr") );
+		supportedPolicies.put("ConnectorCallout", Arrays.asList("connectorcallout", "cc") );		
 		supportedPolicies.put("ExtractVariables", Arrays.asList("extract", "ev", "vars") );
-		supportedPolicies.put("FlowCallout", Arrays.asList("flowcallout", "flow", "fc") );
+		supportedPolicies.put("FlowCallout", Arrays.asList("flowcallout", "flow", "fc", "sf") );
 		supportedPolicies.put("JavaCallout", Arrays.asList("javacallout", "java", "javac") );
 		supportedPolicies.put("Javascript", Arrays.asList("jsc", "js", "javascript") );
 		supportedPolicies.put("JSONThreatProtection", Arrays.asList("jsonthreat", "threat", "jtp", "tp") );
 		supportedPolicies.put("JSONToXML", Arrays.asList("jsontoxml", "j2x", "jtox") );
-		supportedPolicies.put("KeyValueMapOperations", Arrays.asList("keyvaluemapoperations", "kvm", "kvmops") );
+		supportedPolicies.put("GenerateJWS", Arrays.asList("jws", "gjws", "gj") );
+		supportedPolicies.put("VerifyJWS", Arrays.asList("jws", "vjws", "vj") );
+		supportedPolicies.put("DecodeJWS", Arrays.asList("jws", "djws", "dj") );
+		supportedPolicies.put("GenerateJWT", Arrays.asList("jwt", "gjwt", "gj") );
+		supportedPolicies.put("VerifyJWT", Arrays.asList("jwt", "vjwt", "vj") );
+		supportedPolicies.put("DecodeJWT", Arrays.asList("jwt", "djwt", "dj") );		
+		supportedPolicies.put("KeyValueMapOperations", Arrays.asList("keyvaluemapoperations", "kvm", "kvmops", "kv") );
 		supportedPolicies.put("Ldap", Arrays.asList("ldap") );
 		supportedPolicies.put("MessageLogging", Arrays.asList("messagelogging", "logging", "ml") );
-		supportedPolicies.put("MessageValidation", Arrays.asList("messagevalidation", "mv", "messval") );
-		supportedPolicies.put("OAuthV1", Arrays.asList("oauthv1", "oauth", "oa", "accesstoken", "verify") );
 		supportedPolicies.put("OAuthV2", Arrays.asList("oauthv2", "oauth", "oa", "accesstoken", "verify") );
-		supportedPolicies.put("GetOAuthV1Info", Arrays.asList("oauthv1", "getoauth", "getoa") );
-		supportedPolicies.put("GetOAuthV2Info", Arrays.asList("oauthv2info", "oauthinfo", "oai", "accesstoken") );
-		supportedPolicies.put("VerifyAPIKey", Arrays.asList("verifyapikey", "apikey", "va", "verify") );
-		supportedPolicies.put("SpikeArrest", Arrays.asList("spikearrest", "spike", "sa") );
+		supportedPolicies.put("GetOAuthV2Info", Arrays.asList("oauthv2info", "oauthinfo", "oai", "accesstoken", "getoauth", "getoa", "go") );
+		supportedPolicies.put("SetOAuthV2Info", Arrays.asList("oauthv2info", "oauthinfo", "oai", "accesstoken", "setoauth", "setoa", "so") );
+		supportedPolicies.put("DeleteOAuthV2Info", Arrays.asList("oauthv2info", "oauthinfo", "oai", "accesstoken", "deloauth", "deloa", "do") );
+		supportedPolicies.put("OAuthV1", Arrays.asList("oauthv1", "oauth", "oa", "accesstoken", "verify") );
+		supportedPolicies.put("GetOAuthV1Info", Arrays.asList("oauthv1", "getoauth", "getoa", "go") );
+		supportedPolicies.put("DeleteOAuthV1Info", Arrays.asList("oauthv1", "deloauth", "deloa", "do") );
+		supportedPolicies.put("Script", Arrays.asList("script", "scr", "py") );
+		supportedPolicies.put("Quota", Arrays.asList("quota", "q", "qu") );
 		supportedPolicies.put("RaiseFault", Arrays.asList("raisefault", "rf", "fault") );
 		supportedPolicies.put("RegularExpressionProtection", Arrays.asList("regex", "re", "tp") );
-		supportedPolicies.put("GenerateSAMLAssertion", Arrays.asList("saml", "sa") );
-		supportedPolicies.put("Quota", Arrays.asList("quota", "q") );
-		supportedPolicies.put("Script", Arrays.asList("script", "scr") );
+		supportedPolicies.put("ResetQuota", Arrays.asList("quota", "resetq", "rq") );
+		supportedPolicies.put("GenerateSAMLAssertion", Arrays.asList("saml", "sa", "gsaml", "gs") );
+		supportedPolicies.put("ValidateSAMLAssertion", Arrays.asList("saml", "sa", "vsaml", "vs") );
 		supportedPolicies.put("ServiceCallout", Arrays.asList("callout", "sc") );
+		supportedPolicies.put("MessageValidation", Arrays.asList("messagevalidation", "mv", "messval") );
+		supportedPolicies.put("SpikeArrest", Arrays.asList("spikearrest", "spike", "sa") );
 		supportedPolicies.put("SharedFlow", Arrays.asList("sf") );
-		supportedPolicies.put("StatisticsCollector", Arrays.asList("stats", "statcoll") );
+		supportedPolicies.put("StatisticsCollector", Arrays.asList("stats", "statcoll", "sc", "___collect") );
+		supportedPolicies.put("VerifyAPIKey", Arrays.asList("verifyapikey", "apikey", "va", "verify") );
 		supportedPolicies.put("XMLThreatProtection", Arrays.asList("xmltp", "tp") );
 		supportedPolicies.put("XMLToJSON", Arrays.asList("xmltojson", "x2j", "xtoj") );
 		supportedPolicies.put("XSL", Arrays.asList("xsl") );				
-		supportedPolicies.put("GenerateJWT", Arrays.asList("jwt") );
-		supportedPolicies.put("DecodeJWT", Arrays.asList("jwt") );
-		supportedPolicies.put("VerifyJWT", Arrays.asList("jwt") );
 
 	}
 	
@@ -102,7 +112,7 @@ public class PolicyNameConventionCheck extends SonarXmlCheck {
 
 	    		boolean isCompliant = false;
 	    		for(String prefix : knownPrefixes) {
-	    			Pattern pattern = Pattern.compile(prefix + "[_-]?.*", Pattern.CASE_INSENSITIVE);
+	    			Pattern pattern = Pattern.compile(prefix + "[_-].*", Pattern.CASE_INSENSITIVE);   // A separator is mandatory after the prefix  : either '-' or '_' 
 	    			Matcher  matcher = pattern.matcher(nameAttr);
 	    			
 	    			if(matcher.matches()) {

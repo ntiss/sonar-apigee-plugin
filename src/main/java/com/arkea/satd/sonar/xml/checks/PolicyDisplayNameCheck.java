@@ -41,27 +41,34 @@ public class PolicyDisplayNameCheck extends SonarXmlCheck {
 	public void scanFile(XmlFile xmlFile) {
 		
 	    Document document = xmlFile.getDocument();
-	    
-	    XPathFactory xPathfactory = XPathFactory.newInstance();
-	    XPath xpath = xPathfactory.newXPath();
-	    
-		try {
-			XPathExpression exprName = xpath.compile("/*/@name");
-		    String nameAttr = (String)exprName.evaluate(document, XPathConstants.STRING);
+	    Node rootNode = document.getDocumentElement();
+	    if (rootNode != null) {
+	    	
+		    // Exclusion of StatisticsCollector policies that have ugly generated names
+	    	String rootName = rootNode.getNodeName();
+		    if(!"StatisticsCollector".equals(rootName)) {
+		    	
+		    	try {
+				    XPathFactory xPathfactory = XPathFactory.newInstance();
+				    XPath xpath = xPathfactory.newXPath();
+				    XPathExpression exprName = xpath.compile("/*/@name");
+				    String nameAttr = (String)exprName.evaluate(document, XPathConstants.STRING);
+					
+					XPathExpression exprDisplayName = xpath.compile("//DisplayName[text() != /*/@name]");
+				    Node displayNameNode = (Node)exprDisplayName.evaluate(document, XPathConstants.NODE);
 			
-			XPathExpression exprDisplayName = xpath.compile("//DisplayName[text() != /*/@name]");
-		    Node displayNameNode = (Node)exprDisplayName.evaluate(document, XPathConstants.NODE);
+				    if(displayNameNode!=null) {
+					    String displayNameText = displayNameNode.getTextContent();
+					    
+						// Create a violation for the root node
+						reportIssue(displayNameNode, "It is recommended that the policy name attribute ("+nameAttr+") match the display name of the policy ("+displayNameText+").");
+				    }
 	
-		    if(displayNameNode!=null) {
-			    String displayNameText = displayNameNode.getTextContent();
-			    
-				// Create a violation for the root node
-				reportIssue(displayNameNode, "It is recommended that the policy name attribute ("+nameAttr+") match the display name of the policy ("+displayNameText+").");
-		    }
-		} catch (XPathExpressionException e) {
-			// Nothing to do
+				} catch (XPathExpressionException e) {
+					// Nothing to do
+				}
+		    }	
 		}
 	}
-	
 
 }

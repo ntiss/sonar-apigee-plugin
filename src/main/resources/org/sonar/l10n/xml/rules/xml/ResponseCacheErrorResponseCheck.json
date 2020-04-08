@@ -1,0 +1,15 @@
+{
+  "title": "ExcludeErrorResponse is not enabled",
+  "type": "BUG",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "5min"
+  },
+  "tags": [
+  	"apigee",
+  	"bug",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major",
+}

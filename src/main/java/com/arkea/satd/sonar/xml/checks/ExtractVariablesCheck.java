@@ -15,6 +15,8 @@
  */
 package com.arkea.satd.sonar.xml.checks;
 
+import java.util.regex.Pattern;
+
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -48,8 +50,16 @@ public class ExtractVariablesCheck extends AbstractBodyCheck {
 			if(hasPayloadExtraction.booleanValue()) {
 				// Perform the check
 				String nameAttr = (String)xpath.evaluate("/ExtractVariables/@name", document, XPathConstants.STRING);
-				checkConditionInStepOrParent(nameAttr, 
-											"(response.content|response.form|request.content|request.form|message.content|message.form|message.verb|request.verb|request.header.Content-Length|response.header.Content-Length)");
+				String source = (String)xpath.evaluate("/ExtractVariables/Source/text()", document, XPathConstants.STRING);
+				
+				String regex = "(response.content|response.form|request.content|request.form|message.content|message.form|message.verb|request.verb|request.header.Content-Length|response.header.Content-Length)";
+
+				// Take the Source tag in consideration.
+				if (source != null && !source.isEmpty()) {
+					regex = !Pattern.matches(source, regex) ? source : regex;
+				}
+
+				checkConditionInStepOrParent(nameAttr, regex);
 			}				
 		} catch (XPathExpressionException e) {
 			// Nothing to do

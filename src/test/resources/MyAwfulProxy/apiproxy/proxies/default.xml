@@ -67,6 +67,9 @@
                 <Step>
                     <Name>Extract-Variables-1</Name>
                 </Step>
+                <Step>
+	                <Name>__collect-statistics-request2__</Name>
+	            </Step>
             </Request>
             <Response/>
         </Flow>
@@ -122,6 +125,12 @@
             <Step>
                 <Name>Populate-Cache-1</Name>
             </Step>
+            <Step>
+                <Name>theResponseCache</Name>
+            </Step>
+            <Step>
+                <Name>__collect-statistics-request__</Name>
+            </Step>
         </Response>
     </PostFlow>
     <FaultRules>
@@ -137,6 +146,9 @@
         <FaultRule name="defaulterror">
             <Step>
                 <Name>Raise-Fault-1</Name>
+            </Step>
+            <Step>
+                <Name>__collect-statistics-request2__</Name>
             </Step>
         </FaultRule>
     </FaultRules>

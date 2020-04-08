@@ -28,14 +28,21 @@ import com.arkea.satd.sonar.xml.checks.EmptyStepCheck;
 import com.arkea.satd.sonar.xml.checks.ExtractVariablesCheck;
 import com.arkea.satd.sonar.xml.checks.FaultRuleAndDefaultFaultRuleCheck;
 import com.arkea.satd.sonar.xml.checks.FaultRuleConditionCheck;
+import com.arkea.satd.sonar.xml.checks.IgnoreUnresolvedVariablesWithoutFaultRuleCheck;
+import com.arkea.satd.sonar.xml.checks.MultipleStatsCollectorsCheck;
+import com.arkea.satd.sonar.xml.checks.NondistributedQuotaCheck;
 import com.arkea.satd.sonar.xml.checks.PolicyDisplayNameCheck;
 import com.arkea.satd.sonar.xml.checks.PolicyNameConventionCheck;
+import com.arkea.satd.sonar.xml.checks.QuotaPolicyReuseCheck;
 import com.arkea.satd.sonar.xml.checks.RegexLookAroundCheck;
+import com.arkea.satd.sonar.xml.checks.ResponseCacheErrorResponseCheck;
 import com.arkea.satd.sonar.xml.checks.RouteRulesToTargetCheck;
 import com.arkea.satd.sonar.xml.checks.ServiceCalloutRequestVariableNameCheck;
 import com.arkea.satd.sonar.xml.checks.ServiceCalloutResponseVariableNameCheck;
 import com.arkea.satd.sonar.xml.checks.ThreatProtectionCheck;
+import com.arkea.satd.sonar.xml.checks.TooMuchPoliciesCheck;
 import com.arkea.satd.sonar.xml.checks.TooMuchProxyEndpointsCheck;
+import com.arkea.satd.sonar.xml.checks.TooMuchResourcesCheck;
 import com.arkea.satd.sonar.xml.checks.TooMuchTargetEndpointsCheck;
 import com.arkea.satd.sonar.xml.checks.UnattachedPolicyCheck;
 import com.arkea.satd.sonar.xml.checks.UnattachedResourceCheck;
@@ -76,14 +83,21 @@ public class CheckRepository {
 				ExtractVariablesCheck.class,
 				FaultRuleAndDefaultFaultRuleCheck.class,
 				FaultRuleConditionCheck.class,
+				IgnoreUnresolvedVariablesWithoutFaultRuleCheck.class,
+				MultipleStatsCollectorsCheck.class,
+				NondistributedQuotaCheck.class,
 				PolicyDisplayNameCheck.class,
 				PolicyNameConventionCheck.class,
+				QuotaPolicyReuseCheck.class,
 				RegexLookAroundCheck.class,
+				ResponseCacheErrorResponseCheck.class,
 				RouteRulesToTargetCheck.class,
 				ServiceCalloutRequestVariableNameCheck.class,
 				ServiceCalloutResponseVariableNameCheck.class,
 				ThreatProtectionCheck.class,
+				TooMuchPoliciesCheck.class,
 				TooMuchProxyEndpointsCheck.class,
+				TooMuchResourcesCheck.class,
 				TooMuchTargetEndpointsCheck.class,
 				UnattachedPolicyCheck.class,
 				UnattachedResourceCheck.class,

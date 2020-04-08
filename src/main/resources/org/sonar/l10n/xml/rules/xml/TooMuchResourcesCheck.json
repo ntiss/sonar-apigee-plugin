@@ -1,0 +1,15 @@
+{
+  "title": "A high number of resource callouts is indicative of underutilizing out of the box Apigee policies",
+  "type": "CODE_SMELL",
+  "status": "ready",	
+  "remediation": {
+    "func": "Constant\/Issue",
+    "constantCost": "60min"
+  },
+  "tags": [
+  	"apigee",
+    "convention",
+    "bad-practice"
+  ],
+  "defaultSeverity": "Major"
+}
