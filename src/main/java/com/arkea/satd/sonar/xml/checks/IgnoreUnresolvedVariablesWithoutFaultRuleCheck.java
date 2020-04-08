@@ -46,33 +46,32 @@ public class IgnoreUnresolvedVariablesWithoutFaultRuleCheck extends SonarXmlChec
 		
 	    Document document = xmlFile.getDocument();
 	    if (document.getDocumentElement() != null) {
-    	
+	    	String rootNodeName = document.getDocumentElement().getNodeName();
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
 		    XPath xpath = xPathfactory.newXPath();
 		    
 		    try {
-				Node ignoreUnresolvedVariablesNode = (Node)xpath.evaluate("//IgnoreUnresolvedVariables/[text()='true']", document, XPathConstants.NODE);
+				Node ignoreUnresolvedVariablesNode = (Node)xpath.evaluate("//IgnoreUnresolvedVariables[text()='true']", document, XPathConstants.NODE);
 		    	
 				boolean isIgnoreUnresolvedVariablesEnabled = ignoreUnresolvedVariablesNode!=null;
 				if(ignoreUnresolvedVariablesNode==null) {
 					// Be careful, the default value of <IgnoreUnresolvedVariables> depends on the policy type !!
 					// So if the tag is absent, it could be either "true" or "false"
-					String policyType = (String)xpath.evaluate("/n(a)me", document, XPathConstants.STRING);
 					
 					// These policies assume that no tag means "true". Ugly?
 					List<String> defaultAtTrue = Arrays.asList("AssignMessage", "BasicAuthentication", "RaiseFault");
-					isIgnoreUnresolvedVariablesEnabled = defaultAtTrue.contains(policyType);
+					isIgnoreUnresolvedVariablesEnabled = defaultAtTrue.contains(rootNodeName);
 				}
 				
 		    	if(isIgnoreUnresolvedVariablesEnabled) {
 		    		
-		    		String policyName = (String)xpath.evaluate("/@name", document, XPathConstants.STRING);
+		    		String policyName = (String)xpath.evaluate("//@name", document, XPathConstants.STRING);
 		    		
 			    	// Search for a faultRule or a defaultFaultRule in the endpoint where this policy is attached to
 		    		List<XmlFile> endpointsList = BundleRecorder.searchByStepName(policyName);
 		    		
 		    		for(XmlFile currentXmlFile : endpointsList) {
-		    			NodeList faultRuleNodeList = (NodeList)xpath.evaluate("//[(name()='FaultRule' or name()='DefaultFaultRule')]", currentXmlFile.getDocument(), XPathConstants.NODESET);
+		    			NodeList faultRuleNodeList = (NodeList)xpath.evaluate("//*[(name()='FaultRule' or name()='DefaultFaultRule')]", currentXmlFile.getDocument(), XPathConstants.NODESET);
 		    			
 		    			Node issueLocation = ignoreUnresolvedVariablesNode;
 		    			if(issueLocation==null) {

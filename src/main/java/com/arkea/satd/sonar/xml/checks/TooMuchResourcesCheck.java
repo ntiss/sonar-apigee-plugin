@@ -26,7 +26,7 @@ import org.sonar.check.RuleProperty;
 import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 
 /**
@@ -70,12 +70,8 @@ public class TooMuchResourcesCheck extends SonarXmlCheck {
 		    	if(resourcesCount > maxAllowedResources) {
 		    
 		    		// Search for the <ProxyEndpoints> node (it's a better location to indicate the violation
-		    		NodeList resourcesNodeList = document.getDocumentElement().getElementsByTagName("Resources");
-		    		if(resourcesNodeList!=null && resourcesNodeList.getLength()>0) {
-		    			reportIssue(resourcesNodeList.item(0), "A high number of resource callouts is indicative of underutilizing out of the box Apigee policies.");
-		    		} else {
-		    			reportIssue(document, "A high number of resource callouts is indicative of underutilizing out of the box Apigee policies.");
-		    		}	    		
+		    		Node resourcesNode = (Node)xpath.evaluate("/*/Resources", document, XPathConstants.NODE);
+		    		reportIssue(resourcesNode, "A high number of resource callouts is indicative of underutilizing out of the box Apigee policies.");
 		    	}
 			} catch (XPathExpressionException e) {
 				// Nothing to do

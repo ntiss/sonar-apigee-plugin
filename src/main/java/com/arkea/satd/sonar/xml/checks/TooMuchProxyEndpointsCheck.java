@@ -26,7 +26,7 @@ import org.sonar.check.RuleProperty;
 import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 
 /**
@@ -68,12 +68,8 @@ public class TooMuchProxyEndpointsCheck extends SonarXmlCheck {
 		    	if(proxiesCount > maxAllowedEndpoints) {
 		    
 		    		// Search for the <ProxyEndpoints> node (it's a better location to indicate the violation
-		    		NodeList proxyEndpointsNodeList = document.getDocumentElement().getElementsByTagName("ProxyEndpoints");
-		    		if(proxyEndpointsNodeList!=null && proxyEndpointsNodeList.getLength()>0) {
-		    			reportIssue(proxyEndpointsNodeList.item(0), "Discourage the declaration of multiple proxy endpoints in a same proxy.");
-		    		} else {
-		    			reportIssue(document, "Discourage the declaration of multiple proxy endpoints in a same proxy.");
-		    		}	    		
+		    		Node proxyEndpointsNode = (Node)xpath.evaluate("/APIProxy/ProxyEndpoints", document, XPathConstants.NODE);
+		    		reportIssue(proxyEndpointsNode, "Discourage the declaration of multiple proxy endpoints in a same proxy.");
 		    	}
 			} catch (XPathExpressionException e) {
 				// Nothing to do

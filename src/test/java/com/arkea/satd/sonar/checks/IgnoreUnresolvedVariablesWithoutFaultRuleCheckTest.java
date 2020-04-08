@@ -195,11 +195,11 @@ public class IgnoreUnresolvedVariablesWithoutFaultRuleCheckTest extends Abstract
 			"            <JSONPath>$.here</JSONPath>\r\n" + 
 			"        </Variable>\r\n" + 
 			"    </JSONPayload>\r\n" + 
-			"    <IgnoreUnresolvedVariables>false</IgnoreUnresolvedVariables>\r\n" + 				
+			"    <IgnoreUnresolvedVariables>true</IgnoreUnresolvedVariables>\r\n" + 				
 			"</ExtractVariables>"
 		);
 		
-		assertEquals(0, issues.size());		
+		assertEquals(1, issues.size());		
 	}
 	
 	@Test
@@ -228,7 +228,7 @@ public class IgnoreUnresolvedVariablesWithoutFaultRuleCheckTest extends Abstract
 			"</AssignMessage>"
 		);
 		
-		assertEquals(0, issues.size());		
+		assertEquals(1, issues.size());		
 	}
 
 }

@@ -26,7 +26,7 @@ import org.sonar.check.RuleProperty;
 import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 
 /**
@@ -68,12 +68,8 @@ public class TooMuchTargetEndpointsCheck extends SonarXmlCheck {
 		    	// If there are more than 'maxAllowedTargets' TargetEndpoint, this is a violation.
 		    	if(targetsCount > maxAllowedTargets) {
 		    		// Search for the <TargetEndpoints> node (it's a better location to indicate the violation
-		    		NodeList targetEndpointsNodeList = document.getDocumentElement().getElementsByTagName("TargetEndpoints");
-		    		if(targetEndpointsNodeList!=null && targetEndpointsNodeList.getLength()>0) {
-		    			reportIssue(targetEndpointsNodeList.item(0), "Discourage the use of numerous target endpoints.");
-		    		} else {
-		    			reportIssue(document, "Discourage the use of numerous target endpoints.");
-		    		}
+		    		Node targetEndpointsNode = (Node)xpath.evaluate("/APIProxy/TargetEndpoints", document, XPathConstants.NODE);
+	    			reportIssue(targetEndpointsNode, "Discourage the use of numerous target endpoints.");
 		    	}
 			} catch (XPathExpressionException e) {
 				// Nothing to do

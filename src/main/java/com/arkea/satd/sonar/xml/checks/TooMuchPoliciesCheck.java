@@ -26,7 +26,7 @@ import org.sonar.check.RuleProperty;
 import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
 
 
 /**
@@ -70,12 +70,8 @@ public class TooMuchPoliciesCheck extends SonarXmlCheck {
 		    	if(policiesCount > maxAllowedPolicies) {
 		    
 		    		// Search for the <ProxyEndpoints> node (it's a better location to indicate the violation
-		    		NodeList policiesNodeList = document.getDocumentElement().getElementsByTagName("Policies");
-		    		if(policiesNodeList!=null && policiesNodeList.getLength()>0) {
-		    			reportIssue(policiesNodeList.item(0), "Large bundles can be problematic in development and difficult to maintain.");
-		    		} else {
-		    			reportIssue(document, "Large bundles can be problematic in development and difficult to maintain.");
-		    		}	    		
+		    		Node policiesNode = (Node)xpath.evaluate("/*/Policies", document, XPathConstants.NODE);
+	    			reportIssue(policiesNode, "Large bundles can be problematic in development and difficult to maintain.");
 		    	}
 			} catch (XPathExpressionException e) {
 				// Nothing to do
