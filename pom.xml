@@ -32,8 +32,8 @@
 	</developers>
 
 	<issueManagement>
-	  <system>GitHub Issues</system>
-	  <url>https://jira.sonarsource.com/browse/SONARXML</url>
+		<system>GitHub Issues</system>
+		<url>https://github.com/CreditMutuelArkea/sonar-apigee-plugin/issues</url>
 	</issueManagement>
 
 	<ciManagement>
