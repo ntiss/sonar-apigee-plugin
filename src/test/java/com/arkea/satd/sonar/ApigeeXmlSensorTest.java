@@ -114,7 +114,7 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 		}
 
 		sensor.execute(context);
-		assertThat(context.allIssues()).hasSize(18);
+		assertThat(context.allIssues()).hasSize(19);
 
 		// Important : clean the context !!!!
 		ApigeeXmlSensor.setContext(null);

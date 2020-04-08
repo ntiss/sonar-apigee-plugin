@@ -41,55 +41,43 @@ public class ResponseCacheErrorResponseCheck extends AbstractBodyCheck {
 	@Override
 	public void scanFile(XmlFile xmlFile) {
 	    Document document = xmlFile.getDocument();
-	    if (document.getDocumentElement() != null) {
+	    if (document.getDocumentElement() != null && "ResponseCache".equals(document.getDocumentElement().getNodeName())) {
     	
-	    	String rootNodeName = document.getDocumentElement().getNodeName();
-	    	if("ResponseCache".equals(rootNodeName) ) {
+		    XPathFactory xPathfactory = XPathFactory.newInstance();
+		    XPath xpath = xPathfactory.newXPath();
+		    
+		    try {
 
-			    XPathFactory xPathfactory = XPathFactory.newInstance();
-			    XPath xpath = xPathfactory.newXPath();
-			    
-			    try {
+		    	Node errorLocation = null;
+	    		String excludeErrorValue = (String)xpath.evaluate("/ResponseCache/ExcludeErrorResponse/text()", document, XPathConstants.STRING);
+	    		
+	    		// If there is no condition or "false" value  (i.e not "true")
+	    		if(excludeErrorValue==null || excludeErrorValue.isEmpty() || !"true".equalsIgnoreCase(excludeErrorValue)) {
 	
-			    	Node errorLocation = null;
-		    		String excludeErrorValue = (String)xpath.evaluate("/ResponseCache/ExcludeErrorResponse/text()", document, XPathConstants.STRING);
-		    		if(excludeErrorValue==null || excludeErrorValue.isEmpty() || !"true".equalsIgnoreCase(excludeErrorValue)) {
-		
-		    			// Select in one shot the ExcludeErrorResponse tag
-		    			Node excludeErrorNode = (Node)xpath.evaluate("/ResponseCache/ExcludeErrorResponse", document, XPathConstants.NODE);
+	    			// Select in one shot the ExcludeErrorResponse tag
+	    			Node excludeErrorNode = (Node)xpath.evaluate("/ResponseCache/ExcludeErrorResponse", document, XPathConstants.NODE);
+    			
+	    			// The future error location
+	    			errorLocation = excludeErrorNode!=null ? excludeErrorNode : document.getDocumentElement();
+	    		}
+		    	
+    			// Hey, the flag is not enabled, but let's check if there is a condition that checks response.* at the step
+		    	if(errorLocation!=null) {
+	    			String policyAttrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
 	    			
-		    			// The future error location
-		    			errorLocation = excludeErrorNode;
-				    	if(errorLocation==null) {
-				    		// Report the issue at the file level
-				    		errorLocation = document.getDocumentElement();
-				    	} 
-		    		}
-			    	
-	
-			    	
-	    			// Hey, the flag is not enabled, but let's check if there is a condition that checks response.* at the step
-			    	if(errorLocation!=null) {
-		    			String policyAttrName = (String)xpath.evaluate("/*/@name", document, XPathConstants.STRING);
-		    			
-		    			// Try to detect in Step or parent level
-		    			boolean hasIssueAtStepOrFlowLevel = checkConditionInStepOrParent(policyAttrName, "response\\..*");
-		    			
-		    			// If there is a condition at the step or parent level, 
-		    			// then revert the decision : don't report the issue at the <ExcludeErrorResponse> tag level
-		    			if(!hasIssueAtStepOrFlowLevel) {
-		    				errorLocation = null;
-		    			}
-			    	}
-			    	// There is an issue to report
-			    	if(errorLocation!=null) {
-			    		reportIssue(errorLocation, "ExcludeErrorResponse is not enabled.");
-			    	}
-			    	
-				} catch (XPathExpressionException e) {
-					// Nothing to do
-				}
-	    	}
+	    			// Try to detect in Step or parent level
+	    			boolean hasIssueAtStepOrFlowLevel = checkConditionInStepOrParent(policyAttrName, "response\\..*");
+	    			
+	    			// Report the issue at the <ExcludeErrorResponse> tag level only if there is no condition at the step or parent level
+	    			if(hasIssueAtStepOrFlowLevel) {
+	    				reportIssue(errorLocation, "ExcludeErrorResponse is not enabled.");
+	    			}
+	    			
+		    	}
+		    	
+			} catch (XPathExpressionException e) {
+				// Nothing to do
+			}
 	    }		
 	}
 	

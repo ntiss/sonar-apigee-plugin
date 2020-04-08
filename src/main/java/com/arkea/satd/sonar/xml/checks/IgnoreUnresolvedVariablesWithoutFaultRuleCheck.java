@@ -49,15 +49,16 @@ public class IgnoreUnresolvedVariablesWithoutFaultRuleCheck extends SonarXmlChec
 	    	String rootNodeName = document.getDocumentElement().getNodeName();
 		    XPathFactory xPathfactory = XPathFactory.newInstance();
 		    XPath xpath = xPathfactory.newXPath();
+		    Node errorLocation = document.getDocumentElement();
 		    
 		    try {
 				Node ignoreUnresolvedVariablesNode = (Node)xpath.evaluate("//IgnoreUnresolvedVariables[text()='true']", document, XPathConstants.NODE);
-		    	
+				errorLocation = ignoreUnresolvedVariablesNode!=null ? ignoreUnresolvedVariablesNode : document;
+				
 				boolean isIgnoreUnresolvedVariablesEnabled = ignoreUnresolvedVariablesNode!=null;
-				if(ignoreUnresolvedVariablesNode==null) {
+				if(!isIgnoreUnresolvedVariablesEnabled) {
 					// Be careful, the default value of <IgnoreUnresolvedVariables> depends on the policy type !!
 					// So if the tag is absent, it could be either "true" or "false"
-					
 					// These policies assume that no tag means "true". Ugly?
 					List<String> defaultAtTrue = Arrays.asList("AssignMessage", "BasicAuthentication", "RaiseFault");
 					isIgnoreUnresolvedVariablesEnabled = defaultAtTrue.contains(rootNodeName);
@@ -70,19 +71,16 @@ public class IgnoreUnresolvedVariablesWithoutFaultRuleCheck extends SonarXmlChec
 			    	// Search for a faultRule or a defaultFaultRule in the endpoint where this policy is attached to
 		    		List<XmlFile> endpointsList = BundleRecorder.searchByStepName(policyName);
 		    		
+		    		int sumOfFaultRules = 0;
 		    		for(XmlFile currentXmlFile : endpointsList) {
 		    			NodeList faultRuleNodeList = (NodeList)xpath.evaluate("//*[(name()='FaultRule' or name()='DefaultFaultRule')]", currentXmlFile.getDocument(), XPathConstants.NODESET);
-		    			
-		    			Node issueLocation = ignoreUnresolvedVariablesNode;
-		    			if(issueLocation==null) {
-		    				issueLocation = document;
-		    			}
-		    			// Report an issue if there is no FaultRule nor DefaultFaultRule
-		    			if(faultRuleNodeList.getLength()==0) {
-		    				reportIssue(issueLocation, "Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors.");
-		    				break;
-		    			}
+		    			sumOfFaultRules += faultRuleNodeList.getLength();
 		    		}
+		    		
+	    			// Report an issue if there is no FaultRule nor DefaultFaultRule
+	    			if(sumOfFaultRules==0) {
+	    				reportIssue(errorLocation, "Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors.");
+	    			}
 		    	}
 
 			} catch (XPathExpressionException e) {

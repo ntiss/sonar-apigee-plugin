@@ -56,14 +56,12 @@ public class QuotaPolicyReuseCheck extends SonarXmlCheck {
     	
 	    	String rootNodeName = document.getDocumentElement().getNodeName();
 	    	if("Quota".equals(rootNodeName) ) {
-
-			    XPathFactory xPathfactory = XPathFactory.newInstance();
-			    XPath xpath = xPathfactory.newXPath();
 			    
 			    try {
 			    	// Select in one shot the name of the policy
+				    XPathFactory xPathfactory = XPathFactory.newInstance();
+				    XPath xpath = xPathfactory.newXPath();
 			    	String currentPolicyAttrName = (String)xpath.evaluate("/Quota/@name", document, XPathConstants.STRING);
-			    	
 			    	
 	    			Map<Node, XmlFile> quotaStepsMap = BundleRecorder.searchStepsByName(currentPolicyAttrName);
 

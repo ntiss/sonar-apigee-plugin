@@ -42,11 +42,8 @@ public class NondistributedQuotaCheck extends SonarXmlCheck {
 	@Override
 	public void scanFile(XmlFile xmlFile) {
 	    Document document = xmlFile.getDocument();
-	    if (document.getDocumentElement() != null) {
+	    if (document.getDocumentElement() != null && "Quota".equals(document.getDocumentElement().getNodeName()) ) {
     	
-	    	String rootNodeName = document.getDocumentElement().getNodeName();
-	    	if("Quota".equals(rootNodeName) ) {
-
 			    XPathFactory xPathfactory = XPathFactory.newInstance();
 			    XPath xpath = xPathfactory.newXPath();
 			    
@@ -67,7 +64,6 @@ public class NondistributedQuotaCheck extends SonarXmlCheck {
 				} catch (XPathExpressionException e) {
 					// Nothing to do
 				}
-	    	}
 	    }		
 	}
 	
