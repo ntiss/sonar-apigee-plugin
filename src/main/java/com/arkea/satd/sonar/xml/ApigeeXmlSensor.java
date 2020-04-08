@@ -95,6 +95,9 @@ public class ApigeeXmlSensor implements Sensor {
 		// Catch the context
 		ApigeeXmlSensor.setContext(context);
 
+		// Clear the BundleRecorder from eventual previous execution
+		BundleRecorder.clear();
+
 	    List<InputFile> inputFiles = new ArrayList<>();
 	    fileSystem.inputFiles(mainFilesPredicate).forEach(inputFiles::add);
 

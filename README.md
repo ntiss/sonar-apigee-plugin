@@ -43,7 +43,7 @@ As Apigee also deals with Javascript and Python, it would be pertinent to instal
 
 Then :
  * Set the "Sonar way Apigee" quality profile as default. You can also create a new profile and add it the rules coming from ApigeeXML and CommonXML repositories.
- * Add `.wsdl` as suffix to be analyzed in the XML Language administration.
+ * Add `.wsdl` and `.xslt` as suffixes to be analyzed in the XML Language administration.
  * Configure your Quality Gates as needed
 
 ### Build
@@ -85,10 +85,10 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| BN003 | Major | Cache Coherence | A bundle that includes cache reads should include cache writes with the same keys. |
 |:heavy_multiplication_x:| BN004 | &nbsp; | Unused variables. | Within a bundle variables created should be used in conditions, resource callouts, or policies. |
 |:heavy_check_mark:| BN005 | Minor | Unattached policies. | Unattached policies are dead code and should be removed from production bundles. |
-|:heavy_multiplication_x:| BN006 | &nbsp; | Bundle size - policies. | Large bundles are a symptom of poor design. A high number of policies is predictive of an oversized bundle. |
-|:heavy_multiplication_x:| BN007 | &nbsp; | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. |
-|:heavy_multiplication_x:| BN008 | &nbsp; | IgnoreUnresolvedVariables and FaultRules | Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors. |
-|:heavy_multiplication_x:| BN009 | &nbsp; | Statistics Collector - duplicate policies | Warn on duplicate policies when no conditions are present or conditions are duplicates. |
+|:heavy_check_mark:| BN006 | Major | Bundle size - policies. | Large bundles are a symptom of poor design. A high number of policies is predictive of an oversized bundle. The threshold is defined in the Quality Profile. Default value is 20. |
+|:heavy_check_mark:| BN007 | Major | Bundle size - resource callouts. | Large bundles are a symptom of poor design. A high number of resource callouts is indicative of underutilizing out of the box Apigee policies. The threshold is defined in the Quality Profile. Default value is 20. |
+|:heavy_check_mark:| BN008 | Major | IgnoreUnresolvedVariables and FaultRules | Use of IgnoreUnresolvedVariables without the use of FaultRules may lead to unexpected errors. |
+|:heavy_check_mark:| BN009 | Major | Statistics Collector - duplicate policies | Warn on duplicate policies when no conditions are present or conditions are duplicates. |
 |:heavy_check_mark:| BN500 | Info | Description length | A Description tag should have more than N chars to be useful. "N" can be modified in the Quality Profile. The default value is 5. |
 |:heavy_check_mark:| BN501 | Blocker | Description pattern | The Description of the APIProxy must be compliant with a pattern defined in the Quality Profile. For example : `.*\(code=([A-Z0-9]{4})\).*`. The default pattern is  `.*` |
 |:heavy_check_mark:| BN502 | Minor | Unattached resources. | Unattached resources are dead code and should be removed from production bundles. This rule only checks XSL, XSD and  WSDL resources. Don't forget to add `.wsdl` as suffix to be analyzed in the XMLPlugin administration. |
@@ -100,7 +100,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| PD001 | Blocker | RouteRules to Targets | RouteRules should map to defined Targets |
 |:heavy_check_mark:| PD002 | Blocker | Unreachable Route Rules - defaults | Only one RouteRule should be present without a condition |
 |:heavy_check_mark:| PD003 | Blocker | Unreachable Route Rules | RouteRule without a condition should be last. |
-|:heavy_check_mark:| PD501 | Major | Too much proxy endpoints | Discourage the declaration of multiple proxy endpoints in a same proxy. |
+|:heavy_check_mark:| PD501 | Major | Too much proxy endpoints | Discourage the declaration of multiple proxy endpoints in a same proxy. The threshold is defined in the Quality Profile. Default value is 2. |
 
 
 ### Target Definition level
@@ -108,7 +108,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:------:| ---- | -------- | ---- | ----------- |
 |:heavy_check_mark:| TD001 | Major | Mgmt Server as Target | Discourage calls to the Management Server from a Proxy via target. |
 |:heavy_check_mark:| TD002 | Major | Use Target Servers | Encourage the use of target servers |
-|:heavy_check_mark:| TD501 | Major | Too much Target Endpoints | Discourage the use of numerous target endpoints |
+|:heavy_check_mark:| TD501 | Major | Too much Target Endpoints | Discourage the use of numerous target endpoints. The threshold is defined in the Quality Profile. Default value is 5. |
 
 
 ### Flow level
@@ -139,7 +139,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| PO009 | Major | Service Callout Target - Mgmt Server | Targeting management server may result in higher than expected latency use with caution. |
 |:heavy_multiplication_x:| PO010 | &nbsp; | Service Callout Target - Target Server | Encourage use of target servers. |
 |:heavy_multiplication_x:| PO011 | &nbsp; | Service Callout Target - Dynamic URLs | Error on dynamic URLs in target server URL tag. |
-|:heavy_multiplication_x:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. |
+|:o:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. This Sonarqube plugin is not a linter. |
 |:o:| PO013 | &nbsp; | Resource Call Out - Javascript | Analyzed by sonar-javascript-plugin. |
 |:o:| PO014 | &nbsp; | Resource Call Out - Java |  Analyzed by sonar-java-plugin. |
 |:o:| PO015 | &nbsp; | Resource Call Out - Python |  Analyzed by sonar-python-plugin. |
@@ -149,9 +149,9 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| PO019 | Major | Reserved words as variables - ServiceCallout Request | Using "request" as the name of a Request may cause unexpected side effects.|
 |:heavy_check_mark:| PO020 | Major | Reserved words as variables - ServiceCallout Response | Using "response" as the name of a Response may cause unexpected side effects.|
 |:heavy_multiplication_x:| PO021 | &nbsp; | Statistics Collector - reserved variables | Warn on insertion of duplicate variables. |
-|:heavy_multiplication_x:| PO022 | &nbsp; | Nondistributed Quota | When using nondistributed quota the number of allowed calls is influenced by the number of Message Processors (MPs) deployed. This may lead to higher than expected transactions for a given quota as MPs now autoscale. |
-|:heavy_multiplication_x:| PO023 | &nbsp; | Quota Policy Reuse | When the same Quota policy is used more than once you must ensure that the conditions of execution are mutually exclusive or that you intend for a call to count more than once per message processed. |
-|:heavy_multiplication_x:| PO024 | &nbsp; | Cache Error Responses | By default the ResponseCache policy will cache non 200 responses. Either create a condition or use policy configuration options to exclude non 200 responses. |
+|:heavy_check_mark:| PO022 | Major | Nondistributed Quota | When using nondistributed quota the number of allowed calls is influenced by the number of Message Processors (MPs) deployed. This may lead to higher than expected transactions for a given quota as MPs now autoscale. |
+|:heavy_check_mark:| PO023 | Major | Quota Policy Reuse | When the same Quota policy is used more than once you must ensure that the conditions of execution are mutually exclusive or that you intend for a call to count more than once per message processed. |
+|:heavy_check_mark:| PO024 | Major | Cache Error Responses | By default the ResponseCache policy will cache non 200 responses. Either create a condition or use policy configuration options to exclude non 200 responses. |
 |:heavy_check_mark:| PO500 | Major | Avoid Python language | Python scripts can introduce performance bottlenecks for simple executions, as it is interpreted at runtime. |
 
 

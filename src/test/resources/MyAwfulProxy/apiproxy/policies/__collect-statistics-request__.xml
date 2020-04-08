@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<StatisticsCollector async="false" continueOnError="false" enabled="true" name="__collect-statistics-request__">
+    <DisplayName>Collect Statistics Request</DisplayName>
+    <Statistics>
+        <Statistic name="column_in_db" ref="myVariable" type="String"/>
+    </Statistics>
+</StatisticsCollector>

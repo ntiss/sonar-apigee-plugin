@@ -41,12 +41,20 @@ Table of supported prefix (case insensitive) :
 		<td>responsecache, rc, cache</td>
 	</tr>
 	<tr>
+		<td>ConcurrentRatelimit</td>
+		<td>concurrentratelimit, crl, cr</td>
+	</tr>
+	<tr>
+		<td>ConnectorCallout</td>
+		<td>connectorcallout, cc</td>
+	</tr>
+	<tr>
 		<td>ExtractVariables</td>
 		<td>extract, ev, vars</td>
 	</tr>
 	<tr>
 		<td>FlowCallout</td>
-		<td>flowcallout, flow, fc</td>
+		<td>flowcallout, flow, fc, sf</td>
 	</tr>
 	<tr>
 		<td>JavaCallout</td>
@@ -65,6 +73,30 @@ Table of supported prefix (case insensitive) :
 		<td>jsontoxml, j2x, jtox</td>
 	</tr>
 	<tr>
+		<td>GenerateJWS</td>
+		<td>jws, gjws, gj</td>
+	</tr>
+	<tr>
+		<td>VerifyJWS</td>
+		<td>jws, vjws, vj</td>
+	</tr>
+	<tr>
+		<td>DecodeJWS</td>
+		<td>jws, djws, dj</td>
+	</tr>
+	<tr>
+		<td>GenerateJWT</td>
+		<td>jwt, gjwt, gj</td>
+	</tr>
+	<tr>
+		<td>VerifyJWT</td>
+		<td>jwt, vjwt, vj</td>
+	</tr>
+	<tr>
+		<td>DecodeJWT</td>
+		<td>jwt, djwt, dj</td>
+	</tr>
+	<tr>
 		<td>KeyValueMapOperations</td>
 		<td>keyvaluemapoperations, kvm, kvmops</td>
 	</tr>
@@ -77,32 +109,40 @@ Table of supported prefix (case insensitive) :
 		<td>messagelogging, logging, ml</td>
 	</tr>
 	<tr>
-		<td>MessageValidation</td>
-		<td>messagevalidation, mv, messval</td>
+		<td>OAuthV2</td>
+		<td>oauthv2, oauth, oa, accesstoken, verify</td>
+	</tr>
+	<tr>
+		<td>GetOAuthV2Info</td>
+		<td>oauthv2info, oauthinfo, oai, accesstoken, getoauth, getoa, go</td>
+	</tr>
+	<tr>
+		<td>SetOAuthV2Info</td>
+		<td>oauthv2info, oauthinfo, oai, accesstoken, setoauth, setoa, so</td>
+	</tr>
+	<tr>
+		<td>DeleteOAuthV2Info</td>
+		<td>oauthv2info, oauthinfo, oai, accesstoken, deloauth, deloa, do</td>
 	</tr>
 	<tr>
 		<td>OAuthV1</td>
 		<td>oauthv1, oauth, oa, accesstoken, verify</td>
 	</tr>
 	<tr>
-		<td>OAuthV2</td>
-		<td>oauthv2, oauth, oa, accesstoken, verify</td>
-	</tr>
-	<tr>
 		<td>GetOAuthV1Info</td>
-		<td>oauthv1, getoauth, getoa</td>
+		<td>oauthv1, getoauth, getoa, go</td>
 	</tr>
 	<tr>
-		<td>GetOAuthV2Info</td>
-		<td>oauthv2info, oauthinfo, oai, accesstoken</td>
+		<td>DeleteOAuthV1Info</td>
+		<td>oauthv1, deloauth, deloa, do</td>
 	</tr>
 	<tr>
-		<td>VerifyAPIKey</td>
-		<td>verifyapikey, apikey, va, verify</td>
-	</tr>
+		<td>Script</td>
+		<td>script, scr, py</td>
+	</tr>	
 	<tr>
-		<td>SpikeArrest</td>
-		<td>spikearrest, spike, sa</td>
+		<td>Quota</td>
+		<td>quota, q, qu</td>
 	</tr>
 	<tr>
 		<td>RaiseFault</td>
@@ -113,24 +153,36 @@ Table of supported prefix (case insensitive) :
 		<td>regex, re, tp</td>
 	</tr>
 	<tr>
+		<td>ResetQuota</td>
+		<td>quota, resetq, rq</td>
+	</tr>
+	<tr>
 		<td>GenerateSAMLAssertion</td>
-		<td>saml, sa</td>
+		<td>saml, sa, gsaml, gs</td>
 	</tr>
 	<tr>
-		<td>Quota</td>
-		<td>quota, q</td>
-	</tr>
-	<tr>
-		<td>Script</td>
-		<td>script, scr</td>
+		<td>ValidateSAMLAssertion</td>
+		<td>saml, sa, vsaml, vs</td>
 	</tr>
 	<tr>
 		<td>ServiceCallout</td>
 		<td>callout, sc</td>
 	</tr>
 	<tr>
+		<td>MessageValidation</td>
+		<td>messagevalidation, mv, messval</td>
+	</tr>
+	<tr>
+		<td>SpikeArrest</td>
+		<td>spikearrest, spike, sa</td>
+	</tr>
+	<tr>
 		<td>StatisticsCollector</td>
 		<td>stats, statcoll</td>
+	</tr>
+	<tr>
+		<td>VerifyAPIKey</td>
+		<td>verifyapikey, apikey, va, verify</td>
 	</tr>
 	<tr>
 		<td>XMLThreatProtection</td>

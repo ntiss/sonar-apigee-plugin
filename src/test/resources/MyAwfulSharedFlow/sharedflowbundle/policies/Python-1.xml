@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Script async="false" continueOnError="false" enabled="true" name="Python-1">
+    <DisplayName>Python-1</DisplayName>
+    <Properties/>
+    <ResourceURL>py://Python-1.py</ResourceURL>
+</Script>

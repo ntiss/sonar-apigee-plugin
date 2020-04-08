@@ -22,11 +22,14 @@ import java.util.Map;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.sonarsource.analyzer.commons.xml.XmlFile;
 import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * This class records each files discovered in the bundle directory
@@ -63,14 +66,14 @@ public class BundleRecorder {
 	    	
 	    	String rootNodeName = document.getDocumentElement().getNodeName();
 	    	
-	    	if("ProxyEndpoint".equals(rootNodeName)) {
-				// ProxyEndpoint storage
+	    	if("ProxyEndpoint".equals(rootNodeName) || "SharedFlow".equals(rootNodeName)) {
+				// ProxyEndpoint and SharedFlow storage
 		    	proxiesEndpoint.put(fileName, xmlFile);
 	    	} else if ("TargetEndpoint".equals(rootNodeName)) {
 				// TargetEndpoint storage
 		    	targetsEndpoint.put(fileName, xmlFile);
-	    	} else if ("APIProxy".equals(rootNodeName) || "Manifest".equals(rootNodeName)) {
-				// APIProxy & Manifest storage
+	    	} else if ("APIProxy".equals(rootNodeName) || "SharedFlowBundle".equals(rootNodeName) || "Manifest".equals(rootNodeName)) {
+				// APIProxy, SharedFlowBundle & Manifest storage
 		    	// No need to store for the moment 
 	    	} else if ("xsl:stylesheet".equals(rootNodeName) || "wsdl:definitions".equals(rootNodeName) || "xs:schema".equals(rootNodeName) ) {
 				// Resource storage
@@ -99,7 +102,7 @@ public class BundleRecorder {
 		fullXmlFile.addAll(targetsEndpoint.values());
 		
 		
-		// Search for "stepName" in both ProxyEndpoint and TargetEndpoint
+		// Search for "stepName" in both ProxyEndpoint, SharedFlow and TargetEndpoint
 		for(XmlFile currentXml : fullXmlFile) {
 			Document document = currentXml.getDocument();
 			try {
@@ -170,6 +173,42 @@ public class BundleRecorder {
 		}
 		
 		return null;
+	}
+	
+	/**
+	 * A policy can be used in several steps.
+	 * This function returns the list of "Step" nodes containing all steps using the stepName.
+	 * @param stepName
+	 * @return
+	 */
+	public static Map<Node, XmlFile> searchStepsByName(String stepName) {
+		
+		Map<Node, XmlFile> matchingNodes = new HashMap<>();
+
+		// Concat full list
+		List<XmlFile> fullXmlFile = new ArrayList<>();
+		fullXmlFile.addAll(proxiesEndpoint.values());
+		fullXmlFile.addAll(targetsEndpoint.values());
+		
+		// Search for "stepName" in both ProxyEndpoint, SharedFlow and TargetEndpoint
+		for(XmlFile currentXml : fullXmlFile) {
+			try {
+			    XPathFactory xPathfactory = XPathFactory.newInstance();
+			    XPath xpath = xPathfactory.newXPath();
+				XPathExpression exprSteps = xpath.compile("//Step[Name[text() = '"+stepName+"']]");	
+				NodeList stepNodes = (NodeList)exprSteps.evaluate(currentXml.getDocument(), XPathConstants.NODESET);
+				if(stepNodes!=null) {
+					for(int i=0; i<stepNodes.getLength();i++) {
+						matchingNodes.put(stepNodes.item(i), currentXml);
+					}
+				}
+
+			} catch (XPathExpressionException e) {
+				// Nothing to do
+			}
+		}
+		
+		return matchingNodes;
 	}
 	
 	/**

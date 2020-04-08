@@ -21,16 +21,15 @@ import java.util.Collection;
 
 import org.junit.Test;
 import org.sonar.api.batch.sensor.issue.Issue;
-import org.sonarsource.analyzer.commons.xml.checks.SonarXmlCheck;
 
 import com.arkea.satd.sonar.xml.checks.TooMuchProxyEndpointsCheck;
 
 public class TooMuchProxyEndpointsCheckTest extends AbstractCheckTester {
 
-	private SonarXmlCheck check = new TooMuchProxyEndpointsCheck();
+	private TooMuchProxyEndpointsCheck check = new TooMuchProxyEndpointsCheck();
 	
 	@Test
-	public void test_ok() throws Exception {
+	public void test_default_ok() throws Exception {
 		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<APIProxy revision=\"1\" name=\"myAPI\">\r\n" + 
 				"    <ProxyEndpoints>\r\n" + 
@@ -45,7 +44,7 @@ public class TooMuchProxyEndpointsCheckTest extends AbstractCheckTester {
 	
 	
 	@Test
-	public void test_ko() throws Exception {
+	public void test_default_ko() throws Exception {
 		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<APIProxy revision=\"1\" name=\"myAPI\">\r\n" + 
 				"    <ProxyEndpoints>\r\n" + 
@@ -58,5 +57,39 @@ public class TooMuchProxyEndpointsCheckTest extends AbstractCheckTester {
 		);
 		assertEquals(1, issues.size());
 	}	
+	
+	@Test
+	public void test_configured_ok() throws Exception {
+		check.setMaxAllowedEndpoints(3);
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<APIProxy revision=\"1\" name=\"myAPI\">\r\n" + 
+				"    <ProxyEndpoints>\r\n" + 
+				"        <ProxyEndpoint>default</ProxyEndpoint>\r\n" + 
+				"        <ProxyEndpoint>public-1</ProxyEndpoint>\r\n" + 
+				"        <ProxyEndpoint>public-2</ProxyEndpoint>\r\n" + 
+				"    </ProxyEndpoints>\r\n" + 
+				"</APIProxy>"
+
+		);
+		assertEquals(0, issues.size());
+	}	
 		
+	@Test
+	public void test_configured_ko() throws Exception {
+		check.setMaxAllowedEndpoints(3);
+		Collection<Issue> issues = getIssues(check, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<APIProxy revision=\"1\" name=\"myAPI\">\r\n" + 
+				"    <ProxyEndpoints>\r\n" + 
+				"        <ProxyEndpoint>default</ProxyEndpoint>\r\n" + 
+				"        <ProxyEndpoint>public-1</ProxyEndpoint>\r\n" + 
+				"        <ProxyEndpoint>public-2</ProxyEndpoint>\r\n" + 
+				"        <ProxyEndpoint>public-3</ProxyEndpoint>\r\n" + 
+				"    </ProxyEndpoints>\r\n" + 
+				"</APIProxy>"
+
+		);
+		assertEquals(1, issues.size());
+	}	
+		
+
 }
