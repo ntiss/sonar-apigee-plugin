@@ -16,7 +16,6 @@
 
 package com.arkea.satd.sonar.xml;
 
-import org.sonar.api.SonarRuntime;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.plugins.xml.Xml;
 import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
@@ -28,20 +27,14 @@ import org.sonarsource.analyzer.commons.BuiltInQualityProfileJsonLoader;
  */
 public final class ApigeeXmlSonarWayProfile implements BuiltInQualityProfilesDefinition {
 
-	private final org.sonar.api.SonarRuntime sonarRuntime;
-
 	public static final String PROFILE_NAME = "Sonar way Apigee";
 
 	private static final String SONAR_WAY_PATH = "org/sonar/l10n/xml/rules/xml/__Sonar_way_apigee_profile.json";
 
-	public ApigeeXmlSonarWayProfile(SonarRuntime sonarRuntime) {
-		this.sonarRuntime = sonarRuntime;
-	}
-
 	@Override
 	public void define(Context context) {
 		NewBuiltInQualityProfile sonarWay = context.createBuiltInQualityProfile(ApigeeXmlSonarWayProfile.PROFILE_NAME, Xml.KEY);
-		BuiltInQualityProfileJsonLoader.load(sonarWay, CheckRepository.REPOSITORY_KEY, ApigeeXmlSonarWayProfile.SONAR_WAY_PATH, Xml.XML_RESOURCE_PATH, sonarRuntime);
+		BuiltInQualityProfileJsonLoader.load(sonarWay, CheckRepository.REPOSITORY_KEY, ApigeeXmlSonarWayProfile.SONAR_WAY_PATH);
 		sonarWay.done();
 	}
 

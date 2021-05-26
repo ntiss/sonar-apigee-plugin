@@ -34,12 +34,11 @@ public class ApigeeXmlSonarWayProfileTest {
 	@Test
 	public void should_create_sonar_way_apigee_profile() {
 
-	    SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(7, 3), SonarQubeSide.SERVER);
 	    ValidationMessages validation = ValidationMessages.create();
 
 	    BuiltInQualityProfilesDefinition.Context context = new BuiltInQualityProfilesDefinition.Context();
 
-	    ApigeeXmlSonarWayProfile definition = new ApigeeXmlSonarWayProfile(sonarRuntime);
+	    ApigeeXmlSonarWayProfile definition = new ApigeeXmlSonarWayProfile();
 	    definition.define(context);
 
 	    BuiltInQualityProfilesDefinition.BuiltInQualityProfile profile = context.profile(Xml.KEY, ApigeeXmlSonarWayProfile.PROFILE_NAME);
