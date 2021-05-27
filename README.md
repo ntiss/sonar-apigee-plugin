@@ -10,7 +10,7 @@ The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/
 All rules are not yet implemented ([see below](#implemented-rules)).
 Apigee Shared Flows are not supported.
 
-This plugin has been successfully tested with Sonarqube : 6.7.1, 6.7.6 LTS, 7.0, 7.3 and 7.7.
+This plugin has been successfully tested with Sonarqube : 6.7.1, 6.7.6 LTS, 7.0, 7.3, 7.7 and 8.2.
 
 WARNING : 
 * If you run older releases of Sonar, please consider upgrading, or stay with the release 1.3.1 of this plugin and with sonar-xml plugin 1.4.3.
