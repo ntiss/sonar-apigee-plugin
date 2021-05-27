@@ -140,10 +140,6 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 					.setRuleKey(RuleKey.of(CheckRepository.REPOSITORY_KEY, check.getSimpleName()))
 					.build()
 					);
-			
-			
-				//.create(RuleKey.of(CheckRepository.REPOSITORY_KEY, check.getSimpleName()))
-				//.activate();	
 		}
 		CheckFactory checkFactory = new CheckFactory(activeRuleBuilder.build());
 

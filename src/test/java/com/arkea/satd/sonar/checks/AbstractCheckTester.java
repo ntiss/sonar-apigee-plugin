@@ -47,7 +47,6 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 						.setRuleKey(RuleKey.of(Xml.KEY, "ruleKey"))
 						.build()
 						)
-				//.activate()
 				.build());		
 		ApigeeXmlSensor.setContext(context);
 	    XmlFile xmlFile = createTempFile("defaultTempFilename", content);
@@ -67,7 +66,6 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 						.setRuleKey(RuleKey.of(Xml.KEY, "ruleKey"))
 						.build()
 						)
-				//.activate()
 				.build());	
 		
 		
