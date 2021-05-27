@@ -102,9 +102,31 @@ public class FaultRuleAndDefaultFaultRuleCheckTest extends AbstractCheckTester {
 		assertEquals(0, issues.size());
 	}
 		
-	
 	@Test
-	public void test_ko() throws Exception {
+	public void test_ok5() throws Exception {
+		Collection<Issue> issues = getIssues(check,
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <FaultRules>\r\n" + 
+				"        <FaultRule name=\"baderror\">\r\n" + 
+				"          <Step>\r\n" + 
+				"            <Name>RF-Raise403</Name>\r\n" + 
+				"          </Step>\r\n" + 
+				"        </FaultRule>\r\n" + 
+				"    </FaultRules>\r\n" + 
+				"    <DefaultFaultRule>\r\n" + 
+				"       <AlwaysEnforce>true</AlwaysEnforce>" +  // No issue is triggered because of <AlwaysEnforce>  (see https://github.com/CreditMutuelArkea/sonar-apigee-plugin/issues/9 ) 
+				"		<Step>\r\n" + 
+				"          <Name>RF-Raise403</Name>\r\n" + 
+				"        </Step>\r\n" + 
+				"    </DefaultFaultRule>\r\n" + 
+				"</ProxyEndpoint>"
+			);
+		assertEquals(0, issues.size());
+	}
+
+	@Test
+	public void test_ko1() throws Exception {
 		Collection<Issue> issues = getIssues(check,
 				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
 				"<ProxyEndpoint name=\"default\">\r\n" + 
@@ -125,5 +147,27 @@ public class FaultRuleAndDefaultFaultRuleCheckTest extends AbstractCheckTester {
 		assertEquals(2, issues.size());
 	}
 
-	
+	@Test
+	public void test_ko2() throws Exception {
+		Collection<Issue> issues = getIssues(check,
+				"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\r\n" + 
+				"<ProxyEndpoint name=\"default\">\r\n" + 
+				"    <FaultRules>\r\n" + 
+				"        <FaultRule name=\"baderror\">\r\n" + 
+				"          <Step>\r\n" + 
+				"            <Name>RF-Raise403</Name>\r\n" + 
+				"          </Step>\r\n" + 
+				"        </FaultRule>\r\n" + 
+				"    </FaultRules>\r\n" + 
+				"    <DefaultFaultRule>\r\n" + 
+				"       <AlwaysEnforce>false</AlwaysEnforce>" + 
+				"		<Step>\r\n" + 
+				"          <Name>RF-Raise403</Name>\r\n" + 
+				"        </Step>\r\n" + 
+				"    </DefaultFaultRule>\r\n" + 
+				"</ProxyEndpoint>"
+			);
+		assertEquals(0, issues.size());
+	}
+
 }
