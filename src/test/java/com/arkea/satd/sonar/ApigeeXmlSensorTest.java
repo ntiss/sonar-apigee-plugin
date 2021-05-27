@@ -37,6 +37,7 @@ import org.sonar.api.batch.fs.internal.FileMetadata;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.xml.Xml;
@@ -134,8 +135,11 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 		ActiveRulesBuilder activeRuleBuilder = new ActiveRulesBuilder();
 		for(Class check : CheckRepository.getCheckClasses()) {
 			activeRuleBuilder
-				.create(RuleKey.of(CheckRepository.REPOSITORY_KEY, check.getSimpleName()))
-				.activate();	
+			.addRule(
+					new NewActiveRule.Builder()
+					.setRuleKey(RuleKey.of(CheckRepository.REPOSITORY_KEY, check.getSimpleName()))
+					.build()
+					);
 		}
 		CheckFactory checkFactory = new CheckFactory(activeRuleBuilder.build());
 

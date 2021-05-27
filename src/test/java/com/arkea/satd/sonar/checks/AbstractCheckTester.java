@@ -24,6 +24,7 @@ import org.sonar.api.batch.fs.InputFile;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
+import org.sonar.api.batch.rule.internal.NewActiveRule;
 import org.sonar.api.batch.sensor.internal.SensorContextTester;
 import org.sonar.api.batch.sensor.issue.Issue;
 import org.sonar.api.rule.RuleKey;
@@ -41,8 +42,11 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 		SensorContextTester context = SensorContextTester
 				.create(Paths.get(""))
 				.setActiveRules((new ActiveRulesBuilder())
-				.create(RuleKey.of(Xml.KEY, "ruleKey"))
-				.activate()
+				.addRule(
+						new NewActiveRule.Builder()
+						.setRuleKey(RuleKey.of(Xml.KEY, "ruleKey"))
+						.build()
+						)
 				.build());		
 		ApigeeXmlSensor.setContext(context);
 	    XmlFile xmlFile = createTempFile("defaultTempFilename", content);
@@ -57,9 +61,15 @@ public abstract class AbstractCheckTester extends AbstractXmlPluginTester {
 		SensorContextTester context = SensorContextTester
 				.create(Paths.get(""))
 				.setActiveRules((new ActiveRulesBuilder())
-				.create(RuleKey.of(Xml.KEY, "ruleKey"))
-				.activate()
-				.build());		
+				.addRule(
+						new NewActiveRule.Builder()
+						.setRuleKey(RuleKey.of(Xml.KEY, "ruleKey"))
+						.build()
+						)
+				.build());	
+		
+		
+		
 		ApigeeXmlSensor.setContext(context);
 	    if(xmlFile!=null) {
 	    	check.scanFile(context, RuleKey.of(Xml.KEY, "ruleKey"), xmlFile);

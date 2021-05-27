@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.arkea.satd.sonar.apigee</groupId>
 	<artifactId>sonar-apigee-plugin</artifactId>
-	<version>2.1.1</version>
+	<version>3.0.0</version>
 	<name>sonar-apigee-plugin</name>
 	<packaging>sonar-plugin</packaging>
 	<description>Sonar Plugin for Apigee</description>
@@ -19,8 +20,8 @@
 		</license>
 	</licenses>
 
-    <organization>
-		<name>Nicolas Tisserand for Crédit Mutuel Arkéa</name>
+	<organization>
+		<name>Crédit Mutuel Arkéa</name>
 		<url>https://github.com/CreditMutuelArkea</url>
 	</organization>
 
@@ -28,6 +29,7 @@
 		<developer>
 			<id>ntiss</id>
 			<name>Nicolas Tisserand</name>
+			<organization>Crédit Mutuel Arkéa</organization>
 		</developer>
 	</developers>
 
@@ -42,13 +44,14 @@
 	</ciManagement>
 
 	<properties>
-		<license.title>SonarQube XML Plugin</license.title>
+		<license.title>SonarQube Apigee Plugin</license.title>
+
 		<!-- backward compatible with LTS -->
 		<maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-		<sonar.version>7.0</sonar.version>
-		<sonar-xml.version>2.0.1.2020</sonar-xml.version>
-		<sslr.version>1.21</sslr.version>
+		<sonar.version>7.9</sonar.version>
+		<sonar-xml.version>2.2.0.2973</sonar-xml.version>
+		<sonar.analyzerCommons.version>1.15.0.699</sonar.analyzerCommons.version>
 
 		<!-- Release: enable publication to Bintray -->
 		<artifactsToPublish>${project.groupId}:sonar-apigee-plugin:jar</artifactsToPublish>
@@ -58,10 +61,22 @@
 	<dependencies>
 
 		<dependency>
+			<groupId>org.sonarsource.analyzer-commons</groupId>
+			<artifactId>sonar-analyzer-commons</artifactId>
+			<version>${sonar.analyzerCommons.version}</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.sonarsource.sonarqube</groupId>
 			<artifactId>sonar-plugin-api</artifactId>
 			<version>${sonar.version}</version>
 			<scope>provided</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.sonarsource.analyzer-commons</groupId>
+			<artifactId>sonar-xml-parsing</artifactId>
+			<version>${sonar.analyzerCommons.version}</version>
 		</dependency>
 
 		<dependency>
@@ -70,79 +85,41 @@
 			<version>${sonar-xml.version}</version>
 			<scope>provided</scope>
 		</dependency>
-		
-		<dependency>
-	        <groupId>com.google.code.gson</groupId>
-	        <artifactId>gson</artifactId>
-	        <version>2.8.0</version>
-		</dependency>
-
 
 		<!-- Test dependencies -->
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.13.1</version>
+			<groupId>org.sonarsource.analyzer-commons</groupId>
+			<artifactId>sonar-analyzer-test-commons</artifactId>
+			<version>${sonar.analyzerCommons.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
-			<groupId>org.sonarsource.sslr</groupId>
-			<artifactId>sslr-testing-harness</artifactId>
-			<version>${sslr.version}</version>
+			<groupId>org.sonarsource.analyzer-commons</groupId>
+			<artifactId>test-sonar-xml-parsing</artifactId>
+			<version>${sonar.analyzerCommons.version}</version>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
-			<groupId>org.sonarsource.sonarqube</groupId>
-			<artifactId>sonar-testing-harness</artifactId>
-			<version>${sonar.version}</version>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.8.0</version>
 			<scope>test</scope>
 		</dependency>
-
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>1.6.2</version>
-			<scope>provided</scope>
-		</dependency>
-
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
-			<version>3.6.1</version>
-			<scope>test</scope>
-		</dependency>
-		
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>0.9.30</version>
-			<scope>test</scope>
-		</dependency>
-	
-		<dependency>
-			<groupId>org.mockito</groupId>
-			<artifactId>mockito-core</artifactId>
-			<version>2.25.0</version>
-			<scope>test</scope>
-		</dependency>
-	
-		<dependency>
-			<groupId>net.bytebuddy</groupId>
-			<artifactId>byte-buddy</artifactId>
-			<version>1.9.12</version>
+			<version>3.19.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.objenesis</groupId>
-			<artifactId>objenesis</artifactId>
-			<version>3.0.1</version>
+			<groupId>org.junit</groupId>
+			<artifactId>junit-bom</artifactId>
+			<version>5.7.0</version>
+			<type>pom</type>
 			<scope>test</scope>
-		</dependency>		
-		
-	</dependencies>
+		</dependency>
 
+	</dependencies>
 
 	<build>
 		<plugins>
@@ -159,23 +136,23 @@
 					<basePlugin>xml</basePlugin>
 					<skipDependenciesPackaging>false</skipDependenciesPackaging>
 					<sonarLintSupported>false</sonarLintSupported>
-					<sonarQubeMinVersion>6.7</sonarQubeMinVersion>
-					<requirePlugins>xml:2.0.1</requirePlugins>
+					<sonarQubeMinVersion>8.8</sonarQubeMinVersion>
+					<requirePlugins>xml:2.1.0</requirePlugins>
 				</configuration>
 			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.0</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-				</configuration>
-			</plugin>
-
-
 		</plugins>
 	</build>
 
+	<profiles>
+		<profile>
+			<!-- Use javac's release flag for Java 8 and higher -->
+			<id>java8+</id>
+			<activation>
+				<jdk>[8,)</jdk>
+			</activation>
+			<properties>
+				<maven.compiler.release>8</maven.compiler.release>
+			</properties>
+		</profile>
+	</profiles>
 </project>

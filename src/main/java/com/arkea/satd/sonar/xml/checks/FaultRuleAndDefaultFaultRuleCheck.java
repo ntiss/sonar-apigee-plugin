@@ -49,7 +49,7 @@ public class FaultRuleAndDefaultFaultRuleCheck extends SonarXmlCheck {
 				Node defaultFaultRuleNode = (Node)xpath.evaluate("//DefaultFaultRule", document, XPathConstants.NODE);
 				Boolean alwaysEnforce = (Boolean)xpath.evaluate("//DefaultFaultRule/AlwaysEnforce/text()", document, XPathConstants.BOOLEAN);
 		    	
-				if(defaultFaultRuleNode!=null && faultRuleNodeList!=null && Boolean.FALSE.equals(alwaysEnforce)) {
+		    	if(defaultFaultRuleNode!=null && faultRuleNodeList!=null && Boolean.FALSE.equals(alwaysEnforce)) {
 		    		
 			    	// Search for a faultRule without any condition
 		    		for(int i=0; i < faultRuleNodeList.getLength(); i++) {
