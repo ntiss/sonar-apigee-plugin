@@ -16,7 +16,7 @@
 package com.arkea.satd.sonar.checks;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
@@ -120,7 +120,7 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 		// assert also the location of the issue
 		Issue iss = issues.toArray(new Issue[] {})[0];
 		DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
-		assertFalse(tempFileName.equals(dif.filename()));
+		assertNotEquals(tempFileName, dif.filename());
 	}
 
 	@Test
@@ -159,8 +159,8 @@ public class CacheCoherenceCheckTest extends AbstractCheckTester {
 		// assert also the location of the issue
 		Issue iss = issues.toArray(new Issue[] {})[0];
 		DefaultInputFile dif = (DefaultInputFile)iss.primaryLocation().inputComponent();
-		assertFalse(tempFileName1.equals(dif.filename()));
-		assertFalse(tempFileName2.equals(dif.filename()));
+		assertNotEquals(tempFileName1, dif.filename());
+		assertNotEquals(tempFileName2, dif.filename());
 		
 	}
 	
