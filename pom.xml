@@ -49,15 +49,14 @@
 		<!-- backward compatible with LTS -->
 		<maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-		<sonar.version>7.4</sonar.version>
-		<sonar-xml.version>2.1.0.2861</sonar-xml.version>
-		<sonar.analyzerCommons.version>1.13.0.662</sonar.analyzerCommons.version>
+		<sonar.version>7.9</sonar.version>
+		<sonar-xml.version>2.2.0.2973</sonar-xml.version>
+		<sonar.analyzerCommons.version>1.15.0.699</sonar.analyzerCommons.version>
 
 		<!-- Release: enable publication to Bintray -->
 		<artifactsToPublish>${project.groupId}:sonar-apigee-plugin:jar</artifactsToPublish>
 
 	</properties>
-
 
 	<dependencies>
 
@@ -86,7 +85,6 @@
 			<version>${sonar-xml.version}</version>
 			<scope>provided</scope>
 		</dependency>
-
 
 		<!-- Test dependencies -->
 		<dependency>
@@ -121,10 +119,7 @@
 			<scope>test</scope>
 		</dependency>
 
-
-
 	</dependencies>
-
 
 	<build>
 		<plugins>
@@ -145,9 +140,6 @@
 					<requirePlugins>xml:2.1.0</requirePlugins>
 				</configuration>
 			</plugin>
-
-
-
 		</plugins>
 	</build>
 
