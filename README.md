@@ -2,18 +2,17 @@
 
 [![Build Status](https://travis-ci.org/CreditMutuelArkea/sonar-apigee-plugin.svg?branch=master)](https://travis-ci.org/CreditMutuelArkea/sonar-apigee-plugin) [![SonarCloud](https://sonarcloud.io/api/project_badges/measure?project=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin) [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin&metric=coverage)](https://sonarcloud.io/dashboard?id=com.arkea.satd.sonar.apigee%3Asonar-apigee-plugin)
 
-This SonarQube Plugin is designed to test Apigee apiproxies.
+This SonarQube Plugin is designed to test Apigee apiproxies and sharedflows.
 The goals is to help  API developers in doing a static analysis and providing issues to the Sonar engine.
 
 The rules are based on the [apigeecs/bundle-linter](https://github.com/apigeecs/bundle-linter) and on this [document about best-practices](https://docs.apigee.com/api-services/content/best-practices-api-proxy-design-and-development). It deals also with some recommendations of these pages : [Introduction to antipatterns](https://docs.apigee.com/api-platform/antipatterns/intro)
-
 All rules are not yet implemented ([see below](#implemented-rules)).
-Apigee Shared Flows are not supported.
 
-This plugin has been successfully tested with Sonarqube : 6.7.1, 6.7.6 LTS, 7.0, 7.3, 7.7 and 8.2.
+This plugin has been successfully tested with several SonarQube releases. Here are the compatibilities :
 
-WARNING : 
-* If you run older releases of Sonar, please consider upgrading, or stay with the release 1.3.1 of this plugin and with sonar-xml plugin 1.4.3.
+* sonar-apigee-plugin 2.1.0: SQ from 7.9 (former LTS) to 8.7.1 included
+* sonar-apigee-plugin 3.0.0: SQ from 8.8 and later, including of course 8.9 LTS
+* If you run older releases of Sonar, please consider upgrading Sonar, or stay with the release 1.3.1 of this plugin and with sonar-xml plugin 1.4.3.
 * If you upgrade sonar-xml from 1.4.3 to 2.0.1-*, you **MUST** upgrade this sonar-apigee-plugin at the same time.
 
 
@@ -36,7 +35,7 @@ As Apigee also deals with Javascript and Python, it would be pertinent to instal
 
 ### Installation
 
- * Check that the sonarXML Plugin is already installed (minimum release 2.0.1.2020)
+ * Check that the sonarXML Plugin is already installed (minimum release 2.1.0.2861). Should be OK, because shipped with SonarQube by default.
  * Use the Marketplace Update Center to install the Apigee plugin :
    ![](images/marketplace.png)
  * Restart the server
@@ -58,7 +57,7 @@ Copy this jar in the directory $SONARQUBE_HOME/extensions/plugins and restart th
 
 
 ## Why this plugin ?
- * because companies, like mine, prefer using a centralized platform like Sonar, instead of an standalone tool
+ * because companies prefer using a centralized platform like Sonar, instead of an standalone tool
  * because SonarQube provides a lot of tools, measures, issue management, ... out-of-the-box
  * because SonarQube is well integrated with CI platform like Jenkins. It's part of continuous delivery.
 
@@ -139,7 +138,7 @@ Other rules start from "500" to not interfer with the first rules. Example : PD5
 |:heavy_check_mark:| PO009 | Major | Service Callout Target - Mgmt Server | Targeting management server may result in higher than expected latency use with caution. |
 |:heavy_multiplication_x:| PO010 | &nbsp; | Service Callout Target - Target Server | Encourage use of target servers. |
 |:heavy_multiplication_x:| PO011 | &nbsp; | Service Callout Target - Dynamic URLs | Error on dynamic URLs in target server URL tag. |
-|:o:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. This Sonarqube plugin is not a linter. |
+|:o:| PO012 | &nbsp; | Service Callout Target - Script Target Node | JSHint, ESLint. This SonarQube plugin is not a linter. |
 |:o:| PO013 | &nbsp; | Resource Call Out - Javascript | Analyzed by sonar-javascript-plugin. |
 |:o:| PO014 | &nbsp; | Resource Call Out - Java |  Analyzed by sonar-java-plugin. |
 |:o:| PO015 | &nbsp; | Resource Call Out - Python |  Analyzed by sonar-python-plugin. |

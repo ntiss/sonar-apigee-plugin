@@ -33,9 +33,7 @@ public class ApigeeXmlRulesDefinitionTest {
 	@Test
 	public void test() {
 		
-	    SonarRuntime sonarRuntime = SonarRuntimeImpl.forSonarQube(Version.create(7, 3), SonarQubeSide.SERVER);
-
-		ApigeeXmlRulesDefinition rulesDefinition = new ApigeeXmlRulesDefinition(sonarRuntime);
+		ApigeeXmlRulesDefinition rulesDefinition = new ApigeeXmlRulesDefinition();
 		RulesDefinition.Context context = new RulesDefinition.Context();
 		rulesDefinition.define(context);
 		RulesDefinition.Repository repository = context.repository("apigee-xml");
