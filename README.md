@@ -10,7 +10,7 @@ All rules are not yet implemented ([see below](#implemented-rules)).
 
 This plugin has been successfully tested with several SonarQube releases. Here are the compatibilities :
 
-* sonar-apigee-plugin 2.1.0: SQ from 7.9 (former LTS) to 8.7.1 included
+* sonar-apigee-plugin 2.1.1: SQ from 7.9 (former LTS) to 8.7.1 included
 * sonar-apigee-plugin 3.0.0: SQ from 8.8 and later, including of course 8.9 LTS
 * If you run older releases of Sonar, please consider upgrading Sonar, or stay with the release 1.3.1 of this plugin and with sonar-xml plugin 1.4.3.
 * If you upgrade sonar-xml from 1.4.3 to 2.0.1-*, you **MUST** upgrade this sonar-apigee-plugin at the same time.
