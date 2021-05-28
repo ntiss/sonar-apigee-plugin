@@ -6,7 +6,7 @@
 
 	<groupId>com.arkea.satd.sonar.apigee</groupId>
 	<artifactId>sonar-apigee-plugin</artifactId>
-	<version>3.0.0</version>
+	<version>3.0.1</version>
 	<name>sonar-apigee-plugin</name>
 	<packaging>sonar-plugin</packaging>
 	<description>Sonar Plugin for Apigee</description>
@@ -137,7 +137,6 @@
 					<skipDependenciesPackaging>false</skipDependenciesPackaging>
 					<sonarLintSupported>false</sonarLintSupported>
 					<sonarQubeMinVersion>8.8</sonarQubeMinVersion>
-					<requirePlugins>xml:2.1.0</requirePlugins>
 				</configuration>
 			</plugin>
 		</plugins>

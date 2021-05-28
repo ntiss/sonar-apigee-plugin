@@ -35,7 +35,6 @@ As Apigee also deals with Javascript and Python, it would be pertinent to instal
 
 ### Installation
 
- * Check that the sonarXML Plugin is already installed (minimum release 2.1.0.2861). Should be OK, because shipped with SonarQube by default.
  * Use the Marketplace Update Center to install the Apigee plugin :
    ![](images/marketplace.png)
  * Restart the server
