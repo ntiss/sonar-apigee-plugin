@@ -14,6 +14,7 @@ This plugin has been successfully tested with several SonarQube releases. Here a
 * sonar-apigee-plugin 3.0.0: SQ from 8.8 and later, including of course 8.9 LTS
 * If you run older releases of Sonar, please consider upgrading Sonar, or stay with the release 1.3.1 of this plugin and with sonar-xml plugin 1.4.3.
 * If you upgrade sonar-xml from 1.4.3 to 2.0.1-*, you **MUST** upgrade this sonar-apigee-plugin at the same time.
+* If you upgrade SonarQube from 8.7.1 or ealier to 8.8 and later, you **MUST** uninstall this sonar-apigee-plugin before upgrading (and reinstall it after)
 
 
 ## Usage
@@ -35,7 +36,6 @@ As Apigee also deals with Javascript and Python, it would be pertinent to instal
 
 ### Installation
 
- * Check that the sonarXML Plugin is already installed (minimum release 2.1.0.2861). Should be OK, because shipped with SonarQube by default.
  * Use the Marketplace Update Center to install the Apigee plugin :
    ![](images/marketplace.png)
  * Restart the server
