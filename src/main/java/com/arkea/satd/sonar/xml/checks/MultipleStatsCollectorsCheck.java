@@ -27,7 +27,6 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonar.check.Rule;
@@ -180,7 +179,7 @@ public class MultipleStatsCollectorsCheck extends SonarXmlCheck {
 						
 						XmlFile stepIXmlFile = collectorsStepsMap.get(stepI);
 						NewIssueLocation locationStepI = issueStepI.newLocation()
-								.on((InputComponent) stepIXmlFile.getInputFile())
+								.on(stepIXmlFile.getInputFile())
 								.at(stepIXmlFile.getInputFile().newRange(textRangeStepI.getStartLine(), textRangeStepI.getStartColumn(), textRangeStepI.getEndLine(), textRangeStepI.getEndColumn()))
 								.message("This policy is attached to a step without a condition. If you have more than two Statistics Collector policies, only the last one in the flow will execute.  Include a condition to make sure the correct one executes.");
 

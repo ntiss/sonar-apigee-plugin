@@ -6,7 +6,7 @@
 
 	<groupId>com.arkea.satd.sonar.apigee</groupId>
 	<artifactId>sonar-apigee-plugin</artifactId>
-	<version>3.0.1</version>
+	<version>3.0.2</version>
 	<name>sonar-apigee-plugin</name>
 	<packaging>sonar-plugin</packaging>
 	<description>Sonar Plugin for Apigee</description>
@@ -49,9 +49,9 @@
 		<!-- backward compatible with LTS -->
 		<maven.test.redirectTestOutputToFile>true</maven.test.redirectTestOutputToFile>
 
-		<sonar.version>7.9</sonar.version>
+		<sonar.version>9.3.0.51899</sonar.version>
 		<sonar-xml.version>2.2.0.2973</sonar-xml.version>
-		<sonar.analyzerCommons.version>1.15.0.699</sonar.analyzerCommons.version>
+		<sonar.analyzerCommons.version>1.28.0.1058</sonar.analyzerCommons.version>
 
 		<!-- Release: enable publication to Bintray -->
 		<artifactsToPublish>${project.groupId}:sonar-apigee-plugin:jar</artifactsToPublish>
@@ -87,6 +87,12 @@
 		</dependency>
 
 		<!-- Test dependencies -->
+		<dependency>
+			<groupId>org.sonarsource.sonarqube</groupId>
+			<artifactId>sonar-plugin-api-impl</artifactId>
+			<version>${sonar.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.sonarsource.analyzer-commons</groupId>
 			<artifactId>sonar-analyzer-test-commons</artifactId>

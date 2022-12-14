@@ -14,6 +14,7 @@
  */
 package com.arkea.satd.sonar.xml;
 
+import org.sonar.api.SonarRuntime;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.plugins.xml.Xml;
 import org.sonarsource.analyzer.commons.RuleMetadataLoader;
@@ -25,12 +26,17 @@ import org.sonarsource.analyzer.commons.RuleMetadataLoader;
  */
 public final class ApigeeXmlRulesDefinition implements RulesDefinition {
 
+	private final SonarRuntime sonarRuntime;
 
+	public ApigeeXmlRulesDefinition(SonarRuntime sonarRuntime) {
+	    this.sonarRuntime = sonarRuntime;
+	}
+	
 	@Override
 	public void define(Context context) {
 		NewRepository repository = context.createRepository(CheckRepository.REPOSITORY_KEY, Xml.KEY).setName(CheckRepository.REPOSITORY_NAME);
 
-		RuleMetadataLoader ruleMetadataLoader = new RuleMetadataLoader(Xml.XML_RESOURCE_PATH, Xml.SONAR_WAY_PATH);
+		RuleMetadataLoader ruleMetadataLoader = new RuleMetadataLoader(Xml.XML_RESOURCE_PATH, Xml.SONAR_WAY_PATH, sonarRuntime);
 
 		// add the new checks
 		ruleMetadataLoader.addRulesByAnnotatedClass(repository, CheckRepository.getCheckClasses());

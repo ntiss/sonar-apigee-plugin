@@ -28,7 +28,6 @@ import org.sonar.api.batch.rule.Checks;
 import org.sonar.api.batch.sensor.Sensor;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.SensorDescriptor;
-import org.sonar.api.internal.google.common.annotations.VisibleForTesting;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.plugins.xml.Xml;
 import org.sonarsource.analyzer.commons.ProgressReport;
@@ -54,7 +53,7 @@ public class ApigeeXmlSensor implements Sensor {
 	}
 	
 	public ApigeeXmlSensor(FileSystem fileSystem, CheckFactory checkFactory) {		
-		this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY).addAnnotatedChecks((Iterable<?>) CheckRepository.getCheckClasses());
+		this.checks = checkFactory.create(CheckRepository.REPOSITORY_KEY).addAnnotatedChecks(CheckRepository.getCheckClasses());
 		this.fileSystem = fileSystem;
 		this.mainFilesPredicate = fileSystem.predicates().and(
 		fileSystem.predicates().hasType(InputFile.Type.MAIN),
@@ -68,7 +67,7 @@ public class ApigeeXmlSensor implements Sensor {
 	      .forEach(check -> runCheck(context, check, checks.ruleKey(check), newXmlFile));
 	}
 	
-	@VisibleForTesting
+	// Visible for testing
 	  void runCheck(SensorContext context, SonarXmlCheck check, RuleKey ruleKey, XmlFile newXmlFile) {
 	    try {
 	      check.scanFile(context, ruleKey, newXmlFile);
