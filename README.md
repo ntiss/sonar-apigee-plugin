@@ -14,7 +14,7 @@ This plugin has been successfully tested with several SonarQube releases. Here a
 * sonar-apigee-plugin 3.0.0: SQ from 8.8 and later, including of course 8.9 LTS
 * If you run older releases of Sonar, please consider upgrading Sonar, or stay with the release 1.3.1 of this plugin and with sonar-xml plugin 1.4.3.
 * If you upgrade sonar-xml from 1.4.3 to 2.0.1-*, you **MUST** upgrade this sonar-apigee-plugin at the same time.
-* If you upgrade SonarQube from 8.7.1 or ealier to 8.8 and later, you **MUST** uninstall this sonar-apigee-plugin before upgrading (and reinstall it after)
+* If you upgrade SonarQube from 9.6.1 or ealier to 9.7 and later, you **MUST** uninstall this sonar-apigee-plugin before upgrading (and reinstall it after)
 
 
 ## Usage
