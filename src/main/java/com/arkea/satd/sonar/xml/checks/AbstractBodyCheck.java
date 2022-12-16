@@ -25,7 +25,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import org.sonar.api.batch.fs.InputComponent;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import org.sonarsource.analyzer.commons.xml.XmlFile;
@@ -94,7 +93,7 @@ public abstract class AbstractBodyCheck extends SonarXmlCheck {
 						final XmlTextRange textRange = XmlFile.nodeLocation(currentStep);
 						
 						NewIssueLocation location = issue.newLocation()
-								.on((InputComponent) currentXmlFile.getInputFile())
+								.on(currentXmlFile.getInputFile())
 								.at(currentXmlFile.getInputFile().newRange(textRange.getStartLine(), textRange.getStartColumn(), textRange.getEndLine(), textRange.getEndColumn()))
 								.message("An appropriate check for a message body was not found on the enclosing Step or Flow.");
 

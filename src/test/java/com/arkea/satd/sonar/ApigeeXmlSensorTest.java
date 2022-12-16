@@ -34,6 +34,7 @@ import org.sonar.api.batch.fs.InputFile.Type;
 import org.sonar.api.batch.fs.internal.DefaultFileSystem;
 import org.sonar.api.batch.fs.internal.DefaultInputFile;
 import org.sonar.api.batch.fs.internal.FileMetadata;
+import org.sonar.api.batch.fs.internal.Metadata;
 import org.sonar.api.batch.fs.internal.TestInputFileBuilder;
 import org.sonar.api.batch.rule.CheckFactory;
 import org.sonar.api.batch.rule.internal.ActiveRulesBuilder;
@@ -153,9 +154,13 @@ public class ApigeeXmlSensorTest extends AbstractXmlPluginTester {
 				.setLanguage(Xml.KEY)
 				.setCharset(StandardCharsets.UTF_8).build();
 
+		Metadata metadata = new FileMetadata(s -> {
+	    }).readMetadata(new FileInputStream(inputFile.file()), StandardCharsets.UTF_8, inputFile.absolutePath());
+	    return inputFile.setMetadata(metadata);
+	    /*
 		inputFile.setMetadata(new FileMetadata().readMetadata(new FileInputStream(inputFile.file()),
 				StandardCharsets.UTF_8, inputFile.absolutePath()));
-		return inputFile;
+		return inputFile;*/
 	}
 
 }

@@ -18,12 +18,8 @@ package com.arkea.satd.sonar;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
-import org.sonar.api.SonarQubeSide;
-import org.sonar.api.SonarRuntime;
-import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.server.profile.BuiltInQualityProfilesDefinition;
 import org.sonar.api.utils.ValidationMessages;
-import org.sonar.api.utils.Version;
 import org.sonar.plugins.xml.Xml;
 import org.sonar.plugins.xml.checks.CheckList;
 
@@ -45,8 +41,8 @@ public class ApigeeXmlSonarWayProfileTest {
 
 	    assertThat(profile.language()).isEqualTo(Xml.KEY);
 	    assertThat(profile.name()).isEqualTo(ApigeeXmlSonarWayProfile.PROFILE_NAME);
-	    assertThat(profile.rules().size()).isGreaterThanOrEqualTo(30); // At least 30 rules
-	    assertThat(profile.rules().size()).isGreaterThanOrEqualTo(CheckList.getCheckClasses().size());
+	    assertThat(profile.rules()).hasSizeGreaterThanOrEqualTo(30); // At least 30 rules
+	    assertThat(profile.rules()).hasSizeGreaterThanOrEqualTo(CheckList.getCheckClasses().size());
 	    assertThat(validation.hasErrors()).isFalse();				
 	}
 

@@ -18,8 +18,6 @@ package com.arkea.satd.sonar;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.Test;
-import org.sonar.api.SonarQubeSide;
-import org.sonar.api.SonarRuntime;
 import org.sonar.api.internal.SonarRuntimeImpl;
 import org.sonar.api.server.rule.RulesDefinition;
 import org.sonar.api.server.rule.RulesDefinition.Rule;
@@ -33,7 +31,7 @@ public class ApigeeXmlRulesDefinitionTest {
 	@Test
 	public void test() {
 		
-		ApigeeXmlRulesDefinition rulesDefinition = new ApigeeXmlRulesDefinition();
+		ApigeeXmlRulesDefinition rulesDefinition = new ApigeeXmlRulesDefinition(SonarRuntimeImpl.forSonarLint(Version.create(9, 6)));
 		RulesDefinition.Context context = new RulesDefinition.Context();
 		rulesDefinition.define(context);
 		RulesDefinition.Repository repository = context.repository("apigee-xml");
